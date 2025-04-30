@@ -1,0 +1,204 @@
+[gd_scene load_steps=16 format=3 uid="uid://b7uggrpfv7dq"]
+
+[ext_resource type="Script" uid="uid://b0dssaqs4uo5x" path="res://src/Gameplay/Characters/Tanger/Model.cs" id="1_5ddt7"]
+[ext_resource type="PackedScene" uid="uid://cok1n2mub6m14" path="res://src/Assets/Hyprs/Tanger.tscn" id="2_bka7s"]
+[ext_resource type="Texture2D" uid="uid://eywyexrm0lps" path="res://src/Assets/Hyprs/Tanger/Skillset/NA.png" id="3_5ddt7"]
+[ext_resource type="Texture2D" uid="uid://b43q5xht8hfpf" path="res://src/Assets/Hyprs/Tanger/Skillset/Signature.png" id="4_opnio"]
+[ext_resource type="Texture2D" uid="uid://cyqnsrkflydqd" path="res://src/Assets/Hyprs/Tanger/Skillset/Alternate.png" id="5_utroe"]
+[ext_resource type="Texture2D" uid="uid://b07yf6h3gc2qm" path="res://src/Assets/Hyprs/Tanger/Skillset/Exclusive.png" id="6_d2dik"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r6sek"]
+size = Vector3(0.70784, 1.78745, 0.750793)
+
+[sub_resource type="Gradient" id="Gradient_r6sek"]
+colors = PackedColorArray(0.956863, 0.698039, 0.431373, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_r6sek"]
+gradient = SubResource("Gradient_r6sek")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bka7s"]
+lifetime_randomness = 0.5
+emission_shape_scale = Vector3(0.5, 0.5, 0.5)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 0, -1)
+spread = 5.0
+initial_velocity_max = 4.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.1
+scale_max = 0.5
+color_ramp = SubResource("GradientTexture1D_r6sek")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bka7s"]
+shading_mode = 0
+diffuse_mode = 3
+albedo_color = Color(1, 1, 1, 0.588235)
+disable_receive_shadows = true
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_am4i2"]
+material = SubResource("StandardMaterial3D_bka7s")
+size = Vector2(0.2, 0.2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqyj2"]
+bg_color = Color(0.639216, 0.945098, 0.933333, 0.588235)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6fqib"]
+bg_color = Color(1, 1, 1, 0.588235)
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpvwy"]
+bg_color = Color(0.632048, 0.613274, 0.354541, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Tanger" type="CharacterBody3D"]
+script = ExtResource("1_5ddt7")
+MoveSpeed = 4.5
+BlendSmoothSpeed = 20.0
+
+[node name="Tanger" parent="." instance=ExtResource("2_bka7s")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0129368, 0.891708, 0.034033)
+shape = SubResource("BoxShape3D_r6sek")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01889, -0.512382)
+emitting = false
+amount = 30
+lifetime = 1.5
+one_shot = true
+speed_scale = 3.0
+explosiveness = 0.7
+process_material = SubResource("ParticleProcessMaterial_bka7s")
+draw_pass_1 = SubResource("QuadMesh_am4i2")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HP" type="ProgressBar" parent="Control"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 30.0
+offset_right = 260.0
+offset_bottom = 53.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_wqyj2")
+value = 100.0
+show_percentage = false
+
+[node name="Shield" type="ProgressBar" parent="Control"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 57.0
+offset_right = 260.0
+offset_bottom = 69.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_6fqib")
+value = 100.0
+show_percentage = false
+
+[node name="Energy" type="ProgressBar" parent="Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 38.0
+offset_top = -53.0
+offset_right = 255.0
+offset_bottom = -34.0
+grow_vertical = 0
+theme_override_styles/fill = SubResource("StyleBoxFlat_gpvwy")
+value = 100.0
+show_percentage = false
+
+[node name="Control" type="Control" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="NA" type="TextureRect" parent="Control/Control"]
+modulate = Color(1, 1, 1, 0.588235)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.782031
+anchor_top = 0.975
+anchor_right = 0.782031
+anchor_bottom = 0.975
+offset_left = -64.0
+offset_top = -72.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("3_5ddt7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Signature" type="TextureRect" parent="Control/Control"]
+modulate = Color(1, 1, 1, 0.588235)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.846094
+anchor_top = 0.975
+anchor_right = 0.846094
+anchor_bottom = 0.975
+offset_left = -64.0
+offset_top = -72.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("4_opnio")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Alternate" type="TextureRect" parent="Control/Control"]
+modulate = Color(1, 1, 1, 0.588235)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.910156
+anchor_top = 0.975
+anchor_right = 0.910156
+anchor_bottom = 0.975
+offset_left = -64.0
+offset_top = -72.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("5_utroe")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Exclusive" type="TextureRect" parent="Control/Control"]
+modulate = Color(1, 1, 1, 0.588235)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.972656
+anchor_top = 0.975
+anchor_right = 0.972656
+anchor_bottom = 0.975
+offset_left = -64.0
+offset_top = -72.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("6_d2dik")
+expand_mode = 1
+stretch_mode = 5

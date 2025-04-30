@@ -1,0 +1,327 @@
+[gd_scene load_steps=44 format=3 uid="uid://cok1n2mub6m14"]
+
+[ext_resource type="PackedScene" uid="uid://c0hqe8wpnt227" path="res://src/Assets/Hyprs/Tanger/Tanger.glb" id="1_mqy6r"]
+[ext_resource type="Texture2D" uid="uid://dt1qrxrfqfrjx" path="res://src/Assets/Hyprs/Tanger/Tanger_midtone.png" id="2_tt2om"]
+[ext_resource type="Texture2D" uid="uid://clj8ilxks1scc" path="res://src/Assets/Hyprs/Tanger/Tanger_black.png" id="3_i3wun"]
+[ext_resource type="Texture2D" uid="uid://bppt0s1ntf8m8" path="res://src/Assets/Hyprs/Tanger/Tanger_TangerHairTex.png" id="4_il5ur"]
+[ext_resource type="Texture2D" uid="uid://deyj07rokdc1x" path="res://src/Assets/Hyprs/Tanger/Tanger_SkinTex.png" id="5_7huvc"]
+[ext_resource type="Texture2D" uid="uid://b8rete36x4kcv" path="res://src/Assets/Hyprs/Tanger/Tanger_FaceTex.png" id="6_mm5kj"]
+
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_tt2om"]
+shading_mode = 0
+diffuse_mode = 3
+albedo_color = Color(0.56776, 0.847049, 0.992136, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i3wun"]
+diffuse_mode = 3
+albedo_texture = ExtResource("2_tt2om")
+roughness = 0.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tt2om"]
+lifetime_randomness = 0.8
+emission_shape_scale = Vector3(0.2, 0.2, 0.2)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_max = 1.0
+angular_velocity_min = -120.0
+angular_velocity_max = 120.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.1
+scale_max = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x0764"]
+diffuse_mode = 3
+albedo_color = Color(1, 1, 1, 0.588235)
+disable_receive_shadows = true
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_i3wun"]
+material = SubResource("StandardMaterial3D_x0764")
+size = Vector2(0.2, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_508w8"]
+diffuse_mode = 3
+albedo_texture = ExtResource("3_i3wun")
+metallic_specular = 0.0
+roughness = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cd6es"]
+diffuse_mode = 3
+albedo_texture = ExtResource("4_il5ur")
+metallic_specular = 0.0
+roughness = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3chix"]
+diffuse_mode = 3
+albedo_texture = ExtResource("5_7huvc")
+roughness = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jb32n"]
+albedo_texture = ExtResource("6_mm5kj")
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d4nws"]
+animation = &"Alternate"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_len4f"]
+
+[sub_resource type="AnimationNodeBlend3" id="AnimationNodeBlend3_c51oa"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lrq5m"]
+animation = &"NA1"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_il5ur"]
+animation = &"NA1"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8lx1f"]
+animation = &"NA2"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7huvc"]
+animation = &"NA2"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mm5kj"]
+animation = &"NA3"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l41ui"]
+animation = &"Exclusive"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_5ot3s"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tt2om"]
+animation = &"Fall"
+
+[sub_resource type="AnimationNodeBlend3" id="AnimationNodeBlend3_jb32n"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cbw6g"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_e78ig"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_f3hvs"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_so7fa"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i3wun"]
+animation = &"Jump"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jb32n"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mqy6r"]
+animation = &"Run"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_tt2om"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_jb32n")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_mqy6r")
+blend_point_1/pos = 1.0
+min_space = 0.0
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_mqy6r"]
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_m5jv7"]
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_57dvb"]
+
+[sub_resource type="AnimationNodeBlend3" id="AnimationNodeBlend3_7huvc"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mpogc"]
+animation = &"Signature"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_el5ul"]
+
+[sub_resource type="AnimationNodeBlend3" id="AnimationNodeBlend3_x55ys"]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_jb32n"]
+nodes/ALT/node = SubResource("AnimationNodeAnimation_d4nws")
+nodes/ALT/position = Vector2(-155.556, -377.778)
+nodes/Alternative/node = SubResource("AnimationNodeOneShot_len4f")
+nodes/Alternative/position = Vector2(0, -422.222)
+nodes/Attack/node = SubResource("AnimationNodeBlend3_c51oa")
+nodes/Attack/position = Vector2(400, 88.8889)
+nodes/BA1/node = SubResource("AnimationNodeAnimation_il5ur")
+nodes/BA1/position = Vector2(-333.333, 511.111)
+"nodes/BA1 2/node" = SubResource("AnimationNodeAnimation_lrq5m")
+"nodes/BA1 2/position" = Vector2(-333.333, 666.667)
+nodes/BA2/node = SubResource("AnimationNodeAnimation_7huvc")
+nodes/BA2/position = Vector2(-333.333, 844.444)
+"nodes/BA2 2/node" = SubResource("AnimationNodeAnimation_8lx1f")
+"nodes/BA2 2/position" = Vector2(-333.333, 1022.22)
+nodes/BA3/node = SubResource("AnimationNodeAnimation_mm5kj")
+nodes/BA3/position = Vector2(-333.333, 1200)
+nodes/EX/node = SubResource("AnimationNodeAnimation_l41ui")
+nodes/EX/position = Vector2(-155.556, -88.8889)
+nodes/Exclusive/node = SubResource("AnimationNodeOneShot_5ot3s")
+nodes/Exclusive/position = Vector2(0, -133.333)
+nodes/Fall/node = SubResource("AnimationNodeAnimation_tt2om")
+nodes/Fall/position = Vector2(-577.778, 422.222)
+nodes/Ground/node = SubResource("AnimationNodeBlend3_jb32n")
+nodes/Ground/position = Vector2(-333.333, 88.8889)
+nodes/ID1/node = SubResource("AnimationNodeAnimation_cbw6g")
+nodes/ID1/position = Vector2(-311.111, -644.444)
+nodes/ID2/node = SubResource("AnimationNodeAnimation_e78ig")
+nodes/ID2/position = Vector2(-333.333, -377.778)
+nodes/ID3/node = SubResource("AnimationNodeAnimation_f3hvs")
+nodes/ID3/position = Vector2(-333.333, -88.8889)
+nodes/Idle/node = SubResource("AnimationNodeAnimation_so7fa")
+nodes/Idle/position = Vector2(-333.333, 333.333)
+nodes/Jump/node = SubResource("AnimationNodeAnimation_i3wun")
+nodes/Jump/position = Vector2(-577.778, 244.444)
+nodes/Move/node = SubResource("AnimationNodeBlendSpace1D_tt2om")
+nodes/Move/position = Vector2(-577.778, 44.4444)
+nodes/NA1/node = SubResource("AnimationNodeOneShot_mqy6r")
+nodes/NA1/position = Vector2(-155.556, 377.778)
+nodes/NA2/node = SubResource("AnimationNodeOneShot_m5jv7")
+nodes/NA2/position = Vector2(-155.556, 666.667)
+nodes/NA3/node = SubResource("AnimationNodeOneShot_57dvb")
+nodes/NA3/position = Vector2(-155.556, 955.556)
+nodes/Normal/node = SubResource("AnimationNodeBlend3_7huvc")
+nodes/Normal/position = Vector2(44.4444, 244.444)
+nodes/SIG/node = SubResource("AnimationNodeAnimation_mpogc")
+nodes/SIG/position = Vector2(-155.556, -644.444)
+nodes/Signature/node = SubResource("AnimationNodeOneShot_el5ul")
+nodes/Signature/position = Vector2(0, -711.111)
+nodes/Skill/node = SubResource("AnimationNodeBlend3_x55ys")
+nodes/Skill/position = Vector2(222.222, -133.333)
+nodes/output/position = Vector2(733.333, 88.8889)
+node_connections = [&"Alternative", 0, &"ID2", &"Alternative", 1, &"ALT", &"Attack", 0, &"Skill", &"Attack", 1, &"Ground", &"Attack", 2, &"Normal", &"Exclusive", 0, &"ID3", &"Exclusive", 1, &"EX", &"Ground", 0, &"Move", &"Ground", 1, &"Jump", &"Ground", 2, &"Fall", &"NA1", 0, &"Idle", &"NA1", 1, &"BA1", &"NA2", 0, &"BA1 2", &"NA2", 1, &"BA2", &"NA3", 0, &"BA2 2", &"NA3", 1, &"BA3", &"Normal", 0, &"NA1", &"Normal", 1, &"NA2", &"Normal", 2, &"NA3", &"Signature", 0, &"ID1", &"Signature", 1, &"SIG", &"Skill", 0, &"Signature", &"Skill", 1, &"Alternative", &"Skill", 2, &"Exclusive", &"output", 0, &"Attack"]
+
+[node name="Tanger" instance=ExtResource("1_mqy6r")]
+
+[node name="Skeleton3D" parent="Tanger-Rig" index="0"]
+bones/0/position = Vector3(-7.10543e-15, 0.892788, -0.0460305)
+bones/0/rotation = Quaternion(0.110003, -0.633308, 0.0647257, 0.763303)
+bones/1/rotation = Quaternion(-0.0333471, -0.188876, 0.0446781, 0.980417)
+bones/2/rotation = Quaternion(-0.153874, -0.000396785, 0.00310585, 0.988085)
+bones/3/rotation = Quaternion(-0.0644139, -0.104564, -0.00794099, 0.992398)
+bones/4/rotation = Quaternion(0.140631, 7.14411e-05, -0.0010382, 0.990062)
+bones/5/rotation = Quaternion(0.0459657, 0.668601, -0.0725482, 0.738645)
+bones/6/position = Vector3(3.75893e-08, 0.0149208, -0.110079)
+bones/6/rotation = Quaternion(-1.60551e-07, -0.0220254, 0.999757, -8.14571e-10)
+bones/6/scale = Vector3(1, 0.998058, 1)
+bones/7/rotation = Quaternion(0.026924, 3.37256e-08, 6.15249e-09, 0.999637)
+bones/7/scale = Vector3(1, 0.945081, 1)
+bones/8/rotation = Quaternion(-0.0221437, -2.43531e-09, -2.89262e-09, 0.999755)
+bones/8/scale = Vector3(1, 0.953122, 1)
+bones/9/rotation = Quaternion(0.0184628, -8.04793e-09, 3.54184e-09, 0.99983)
+bones/9/scale = Vector3(1, 0.969971, 1)
+bones/10/rotation = Quaternion(-0.428426, -0.420239, -0.238988, 0.763371)
+bones/11/position = Vector3(0.00568192, 0.130127, -0.0425887)
+bones/11/rotation = Quaternion(-0.296802, 0.322086, -0.797866, 0.41422)
+bones/12/rotation = Quaternion(0.16942, -0.0040154, -0.584873, 0.793224)
+bones/13/rotation = Quaternion(0.0423861, 0.833867, -0.153724, 0.528431)
+bones/14/rotation = Quaternion(-0.0247312, 0.714092, 0.038674, 0.698545)
+bones/15/position = Vector3(0.000659638, 0.0548295, 0.00342593)
+bones/15/rotation = Quaternion(0.103631, 0.0479043, -0.0145709, 0.993355)
+bones/16/rotation = Quaternion(0.0802105, -0.00719455, 0.0259483, 0.996414)
+bones/17/rotation = Quaternion(0.25845, -0.0361502, 0.0571272, 0.963656)
+bones/18/rotation = Quaternion(-0.188203, 0.645887, 0.235015, 0.701554)
+bones/19/rotation = Quaternion(0.151142, 0.0279658, 0.0781887, 0.985018)
+bones/20/rotation = Quaternion(0.180715, 0.00219587, -0.000354074, 0.983533)
+bones/22/rotation = Quaternion(0.12274, 0.0170576, 0.0254122, 0.991967)
+bones/23/rotation = Quaternion(0.181342, -0.0442393, 0.00189298, 0.982423)
+bones/24/rotation = Quaternion(0.106698, -0.0233011, 0.0409815, 0.993173)
+bones/26/rotation = Quaternion(0.133478, -0.00608191, 0.0618826, 0.989099)
+bones/27/rotation = Quaternion(0.142885, -0.0258467, -0.0280042, 0.989005)
+bones/29/rotation = Quaternion(0.0330627, 0.685177, -0.1252, 0.716774)
+bones/30/rotation = Quaternion(0.0601681, -0.0940899, 0.0214421, 0.993513)
+bones/31/rotation = Quaternion(0.257385, -0.013239, 0.0134929, 0.966124)
+bones/32/rotation = Quaternion(0.12893, -0.0312866, -0.0194893, 0.990968)
+bones/33/rotation = Quaternion(-0.602679, 0.17331, 0.23555, 0.742467)
+bones/34/position = Vector3(-0.00693702, 0.137791, -0.00658415)
+bones/34/rotation = Quaternion(-0.323525, -0.356261, 0.275617, 0.832133)
+bones/35/rotation = Quaternion(0.432284, -0.0599256, 0.29523, 0.849928)
+bones/36/rotation = Quaternion(-0.0410505, 0.582165, 0.112837, 0.804156)
+bones/38/rotation = Quaternion(0.648839, -0.0860692, -0.18106, 0.734042)
+bones/39/rotation = Quaternion(0.0802104, 0.00719455, -0.0259483, 0.996414)
+bones/41/position = Vector3(0.00335982, -0.0120168, 0.0170529)
+bones/41/rotation = Quaternion(0.27263, -0.614305, -0.549959, 0.49583)
+bones/42/rotation = Quaternion(0.0942594, -0.353862, 0.125951, 0.921972)
+bones/43/rotation = Quaternion(0.427469, -0.0731738, 0.199127, 0.878786)
+bones/45/rotation = Quaternion(0.695952, 0.0107909, -0.0356383, 0.717122)
+bones/46/rotation = Quaternion(0.326471, -0.0381102, -0.0366183, 0.943728)
+bones/47/rotation = Quaternion(0.233273, -0.0848901, -0.0995981, 0.963565)
+bones/49/rotation = Quaternion(0.525705, -0.114911, -0.107606, 0.835973)
+bones/50/rotation = Quaternion(0.54652, 0.0145762, -0.105312, 0.83067)
+bones/52/rotation = Quaternion(0.0330628, -0.685177, 0.1252, 0.716774)
+bones/53/rotation = Quaternion(0.305119, 0.0856191, 0.173372, 0.932477)
+bones/56/rotation = Quaternion(0.933335, -0.00797082, -0.303177, 0.192108)
+bones/57/rotation = Quaternion(0.101429, 0.126823, -0.0375883, 0.98601)
+bones/58/rotation = Quaternion(-0.488821, -0.0283773, 0.00343092, 0.871916)
+bones/59/rotation = Quaternion(1.21671e-07, 0.95776, -0.287567, 4.19124e-07)
+bones/61/position = Vector3(-0.0854525, 0.0357055, -0.0140754)
+bones/61/rotation = Quaternion(0.982487, -0.0760397, 0.013581, 0.169569)
+bones/62/rotation = Quaternion(0.199042, -0.0253883, -0.0865568, 0.975831)
+bones/63/rotation = Quaternion(-0.495965, 0.107422, 0.044388, 0.860528)
+bones/64/rotation = Quaternion(-0.0166936, 0.938966, -0.343516, -0.00785319)
+bones/65/rotation = Quaternion(0.700666, -0.633952, 0.260671, 0.198049)
+bones/66/position = Vector3(-0.241404, 0.188052, 0.0708007)
+bones/66/rotation = Quaternion(-0.41895, -0.340643, 0.609506, 0.580471)
+
+[node name="Hammer" parent="Tanger-Rig/Skeleton3D" index="0"]
+transform = Transform3D(-0.121985, -0.585739, -0.801268, 0.988462, 0.00134373, -0.151466, 0.0897962, -0.810499, 0.578816, 0.148332, 1.1247, -0.475663)
+
+[node name="Hammer" parent="Tanger-Rig/Skeleton3D/Hammer" index="0"]
+surface_material_override/0 = SubResource("ORMMaterial3D_tt2om")
+surface_material_override/1 = SubResource("StandardMaterial3D_i3wun")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Tanger-Rig/Skeleton3D/Hammer/Hammer" index="0"]
+transform = Transform3D(0.999259, 0.0171938, 0.0344259, -0.0143668, 0.996631, -0.0807463, -0.0356983, 0.0801921, 0.99614, -0.0186859, 0.0180161, -0.463489)
+light_color = Color(0.568627, 0.847059, 0.992157, 1)
+light_energy = 0.3
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Tanger-Rig/Skeleton3D/Hammer/Hammer" index="1"]
+transform = Transform3D(1, 2.23517e-08, 3.72529e-09, 1.49012e-08, 1, 5.96046e-08, -1.11759e-08, -5.96046e-08, 1, 0.0174381, -0.0260245, -0.40785)
+emitting = false
+amount = 200
+speed_scale = 0.5
+process_material = SubResource("ParticleProcessMaterial_tt2om")
+draw_pass_1 = SubResource("QuadMesh_i3wun")
+
+[node name="Body" parent="Tanger-Rig/Skeleton3D" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00066328, -0.00327766, 0.000325561)
+surface_material_override/0 = SubResource("StandardMaterial3D_508w8")
+surface_material_override/2 = SubResource("StandardMaterial3D_cd6es")
+surface_material_override/3 = SubResource("StandardMaterial3D_3chix")
+surface_material_override/5 = SubResource("StandardMaterial3D_jb32n")
+
+[node name="Circle" parent="." index="1"]
+transform = Transform3D(1.38729e-07, 0.775831, 4.62431e-08, 0, 4.62431e-08, -0.775831, -0.775831, 1.38729e-07, 8.26891e-15, 0.000946045, 0, -0.00432014)
+
+[node name="AnimationPlayer" parent="." index="2"]
+autoplay = "idle"
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="3"]
+tree_root = SubResource("AnimationNodeBlendTree_jb32n")
+anim_player = NodePath("../AnimationPlayer")
+parameters/Alternative/active = false
+parameters/Alternative/internal_active = false
+parameters/Alternative/request = 0
+parameters/Attack/blend_amount = 0.0
+parameters/Exclusive/active = false
+parameters/Exclusive/internal_active = false
+parameters/Exclusive/request = 0
+parameters/Ground/blend_amount = -1.0
+parameters/Move/blend_position = 0.000376387
+parameters/NA1/active = false
+parameters/NA1/internal_active = false
+parameters/NA1/request = 0
+parameters/NA2/active = false
+parameters/NA2/internal_active = false
+parameters/NA2/request = 0
+parameters/NA3/active = false
+parameters/NA3/internal_active = false
+parameters/NA3/request = 0
+parameters/Normal/blend_amount = -1.0
+parameters/Signature/active = false
+parameters/Signature/internal_active = false
+parameters/Signature/request = 0
+parameters/Skill/blend_amount = 0.0

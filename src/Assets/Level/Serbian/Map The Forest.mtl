@@ -1,0 +1,70 @@
+# Created by Kenney (www.kenney.nl)
+
+newmtl nature_kits-woodBarkDark(Clone)
+Kd 0.8 0.463 0.369
+
+newmtl nature_kits-leafsDark(Clone)
+Kd 0.169 0.667 0.224
+
+newmtl nature_kits-grass(Clone)
+Kd 0.091 0.607 0.319
+
+newmtl nature_kits-stone(Clone)
+Kd 0.722 0.886 0.91
+
+newmtl nature_kits-_defaultMat(Clone)
+Kd 1 1 1
+
+newmtl nature_kits-woodBark(Clone)
+Kd 0.886 0.514 0.341
+
+newmtl nature_kits-wood(Clone)
+Kd 1 0.557 0.384
+
+newmtl nature_kits-woodDark(Clone)
+Kd 0.769 0.427 0.294
+
+newmtl nature_kits-colorPurple(Clone)
+Kd 0.624 0.537 1
+
+newmtl nature_kits-colorWhite(Clone)
+Kd 1 1 1
+
+newmtl nature_kits-colorRed(Clone)
+Kd 0.878 0.29 0.314
+
+newmtl nature_kits-colorRedDark(Clone)
+Kd 0.757 0.212 0.231
+
+newmtl survival_kit-colormap(Clone)
+Kd 1 1 1
+map_Kd Textures/survival_kit-colormap(Clone).png
+
+newmtl nature_kits-woodInner(Clone)
+Kd 0.961 0.843 0.733
+
+newmtl nature_kits-dirt(Clone)
+Kd 0.886 0.514 0.341
+
+newmtl nature_kits-dirtDark(Clone)
+Kd 0.71 0.408 0.271
+
+newmtl nature_kits-stoneDark(Clone)
+Kd 0.604 0.71 0.729
+
+newmtl metalPurple(Clone)
+Kd 0.498 0.404 0.933
+
+newmtl _defaultMat(Clone)
+Kd 0.939 0.953 1
+
+newmtl nature_kits-colorTan(Clone)
+Kd 1 0.682 0.435
+
+newmtl platformer_kits-colormap(Clone)
+Kd 1 1 1
+map_Kd Textures/platformer_kits-colormap(Clone).png
+
+newmtl woodDark(Clone)
+Kd 0.698 0.316 0.194
+
