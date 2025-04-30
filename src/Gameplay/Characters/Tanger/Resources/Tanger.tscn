@@ -1,8 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://b7uggrpfv7dq"]
+[gd_scene load_steps=17 format=3 uid="uid://b7uggrpfv7dq"]
 
 [ext_resource type="Script" uid="uid://b0dssaqs4uo5x" path="res://src/Gameplay/Characters/Tanger/Model.cs" id="1_5ddt7"]
 [ext_resource type="PackedScene" uid="uid://cok1n2mub6m14" path="res://src/Assets/Hyprs/Tanger.tscn" id="2_bka7s"]
 [ext_resource type="Texture2D" uid="uid://eywyexrm0lps" path="res://src/Assets/Hyprs/Tanger/Skillset/NA.png" id="3_5ddt7"]
+[ext_resource type="Script" uid="uid://cpsugaks0eg73" path="res://src/Gameplay/View/Camera.cs" id="3_dnjiu"]
 [ext_resource type="Texture2D" uid="uid://b43q5xht8hfpf" path="res://src/Assets/Hyprs/Tanger/Skillset/Signature.png" id="4_opnio"]
 [ext_resource type="Texture2D" uid="uid://cyqnsrkflydqd" path="res://src/Assets/Hyprs/Tanger/Skillset/Alternate.png" id="5_utroe"]
 [ext_resource type="Texture2D" uid="uid://b07yf6h3gc2qm" path="res://src/Assets/Hyprs/Tanger/Skillset/Exclusive.png" id="6_d2dik"]
@@ -82,6 +83,10 @@ speed_scale = 3.0
 explosiveness = 0.7
 process_material = SubResource("ParticleProcessMaterial_bka7s")
 draw_pass_1 = SubResource("QuadMesh_am4i2")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.24731, 2.03596)
+script = ExtResource("3_dnjiu")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3

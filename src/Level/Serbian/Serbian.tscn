@@ -1,7 +1,6 @@
-[gd_scene load_steps=15 format=3 uid="uid://doln8mdo418y0"]
+[gd_scene load_steps=14 format=3 uid="uid://doln8mdo418y0"]
 
 [ext_resource type="ArrayMesh" uid="uid://c3lvx0asbupb0" path="res://src/Assets/Level/Serbian/Serbian.obj" id="1_0k8ew"]
-[ext_resource type="Script" uid="uid://cpsugaks0eg73" path="res://src/Gameplay/View/FollowCamera.cs" id="1_ak8tf"]
 [ext_resource type="PackedScene" uid="uid://b7uggrpfv7dq" path="res://src/Gameplay/Characters/Tanger/Resources/Tanger.tscn" id="2_fdacg"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7xwko"]
@@ -309,19 +308,9 @@ shadow_enabled = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.2297, 7.66892, 13.9428)
 omni_range = 45.299
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66.6106, 7.59908, 65.7278)
-script = ExtResource("1_ak8tf")
-TargetPath = NodePath("../Tanger")
-VerticalRotationSpeed = 0.1
-HorizontalRotationSpeed = 0.1
-FollowSpeed = 15.0
-MinPitch = -80.0
-MaxPitch = 48.0
-
 [node name="Tanger" parent="." node_paths=PackedStringArray("Camera", "AnimationTree", "AnimationPlayer", "Particles") instance=ExtResource("2_fdacg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.0685, 0.606279, 5.45576)
-Camera = NodePath("../Camera3D")
+Camera = NodePath("Camera3D")
 AnimationTree = NodePath("Tanger/AnimationTree")
 AnimationPlayer = NodePath("Tanger/AnimationPlayer")
 Particles = NodePath("GPUParticles3D")
