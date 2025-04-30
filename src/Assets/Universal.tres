@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://gcd6i4cul14f"]
+
+[ext_resource type="FontFile" uid="uid://dnhfoionbjpls" path="res://src/Assets/Font/QualyNeue-Bold.ttf" id="1_2x4cm"]
+
+[resource]
+default_font = ExtResource("1_2x4cm")
+default_font_size = 14

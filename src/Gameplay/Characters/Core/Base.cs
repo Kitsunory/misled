@@ -43,9 +43,21 @@ public abstract partial class CharacterBase : CharacterBody3D {
     }
 
     public override void _PhysicsProcess(double delta) {
+        if (!IsMultiplayerAuthority()) {
+            return;
+        }
         var dt = (float)delta;
         _movement?.Update(dt);
         _normal?.Update(dt);
         _animator?.UpdatePhysicsProcessDeltaTime(dt);
+
+        Rpc(nameof(SendMovement), GlobalTransform.Origin, Velocity, Rotation);
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.Authority)]
+    public void SendMovement(Vector3 position, Vector3 velocity, Vector3 rotation) {
+        if (!IsMultiplayerAuthority()) {
+            GlobalTransform = new Transform3D(Basis.Identity.Rotated(Vector3.Up, rotation.Y), position);
+        }
     }
 }

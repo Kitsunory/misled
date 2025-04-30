@@ -62,8 +62,12 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[node name="Tanger" type="CharacterBody3D"]
+[node name="Tanger" type="CharacterBody3D" node_paths=PackedStringArray("Camera", "AnimationTree", "AnimationPlayer", "Particles")]
 script = ExtResource("1_5ddt7")
+Camera = NodePath("Camera3D")
+AnimationTree = NodePath("Tanger/AnimationTree")
+AnimationPlayer = NodePath("Tanger/AnimationPlayer")
+Particles = NodePath("GPUParticles3D")
 MoveSpeed = 4.5
 BlendSmoothSpeed = 20.0
 

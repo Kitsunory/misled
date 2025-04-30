@@ -1,7 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://doln8mdo418y0"]
+[gd_scene load_steps=18 format=3 uid="uid://doln8mdo418y0"]
 
 [ext_resource type="ArrayMesh" uid="uid://c3lvx0asbupb0" path="res://src/Assets/Level/Serbian/Serbian.obj" id="1_0k8ew"]
 [ext_resource type="PackedScene" uid="uid://b7uggrpfv7dq" path="res://src/Gameplay/Characters/Tanger/Resources/Tanger.tscn" id="2_fdacg"]
+[ext_resource type="Theme" uid="uid://gcd6i4cul14f" path="res://src/Assets/Universal.tres" id="3_ak8tf"]
+[ext_resource type="Script" uid="uid://cgl5gygr2jyht" path="res://src/Gameplay/System/DeveloperMode.cs" id="3_im5pd"]
+[ext_resource type="Script" uid="uid://c5se7xr2ysi1h" path="res://src/Gameplay/System/NetworkManager.cs" id="4_mly6v"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7xwko"]
 sky_top_color = Color(0.063928, 0.118461, 0.20204, 1)
@@ -70,7 +73,21 @@ particles_anim_loop = false
 material = SubResource("StandardMaterial3D_7xwko")
 size = Vector2(0.5, 0.5)
 
-[node name="Node" type="Node3D"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fdacg"]
+bg_color = Color(0.0887341, 0.0887341, 0.088734, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.198287, 0.198287, 0.198287, 1)
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_size = 5
+
+[node name="World" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_km1yn")
@@ -308,10 +325,112 @@ shadow_enabled = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.2297, 7.66892, 13.9428)
 omni_range = 45.299
 
-[node name="Tanger" parent="." node_paths=PackedStringArray("Camera", "AnimationTree", "AnimationPlayer", "Particles") instance=ExtResource("2_fdacg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.0685, 0.606279, 5.45576)
-Camera = NodePath("Camera3D")
-AnimationTree = NodePath("Tanger/AnimationTree")
-AnimationPlayer = NodePath("Tanger/AnimationPlayer")
-Particles = NodePath("GPUParticles3D")
-MoveSpeed = 7.0
+[node name="WindowTitle" type="RichTextLabel" parent="."]
+offset_left = 24.0
+offset_top = 29.0
+offset_right = 331.0
+offset_bottom = 53.0
+theme = ExtResource("3_ak8tf")
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+text = "Misled Debugger (#1)"
+fit_content = true
+
+[node name="Window" type="Window" parent="." node_paths=PackedStringArray("Host", "Join", "WindowTitle", "DebugTitle", "NetworkManager")]
+disable_3d = true
+transparent_bg = true
+position = Vector2i(20, 72)
+size = Vector2i(360, 500)
+unresizable = true
+always_on_top = true
+transparent = true
+theme_override_styles/embedded_border = SubResource("StyleBoxFlat_fdacg")
+theme_override_styles/embedded_unfocused_border = SubResource("StyleBoxFlat_fdacg")
+script = ExtResource("3_im5pd")
+Host = NodePath("Host")
+Join = NodePath("Join")
+WindowTitle = NodePath("../WindowTitle")
+DebugTitle = NodePath("Title")
+NetworkManager = NodePath("../NetworkManager")
+
+[node name="Title" type="RichTextLabel" parent="Window"]
+offset_left = 24.0
+offset_top = 29.0
+offset_right = 331.0
+offset_bottom = 53.0
+theme = ExtResource("3_ak8tf")
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+text = "Misled Debugger (#1)"
+fit_content = true
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="Window"]
+offset_left = 24.0
+offset_top = 405.0
+offset_right = 160.0
+offset_bottom = 431.0
+theme = ExtResource("3_ak8tf")
+bbcode_enabled = true
+text = "Multiplayer State"
+fit_content = true
+
+[node name="Join" type="Button" parent="Window"]
+offset_left = 108.0
+offset_top = 438.0
+offset_right = 176.0
+offset_bottom = 475.0
+theme = ExtResource("3_ak8tf")
+text = "Join"
+
+[node name="Host" type="Button" parent="Window"]
+offset_left = 24.0
+offset_top = 438.0
+offset_right = 92.0
+offset_bottom = 475.0
+theme = ExtResource("3_ak8tf")
+text = "Host
+"
+
+[node name="CheckButton" type="CheckButton" parent="Window"]
+offset_left = 14.0
+offset_top = 83.0
+offset_right = 344.0
+offset_bottom = 131.0
+theme = ExtResource("3_ak8tf")
+button_pressed = true
+text = "Hold state beyond timetick"
+
+[node name="CheckButton2" type="CheckButton" parent="Window"]
+offset_left = 14.0
+offset_top = 139.0
+offset_right = 344.0
+offset_bottom = 187.0
+theme = ExtResource("3_ak8tf")
+theme_override_colors/font_color = Color(1, 0.31686, 0.0961545, 1)
+text = "Redraw camera viewport"
+
+[node name="CheckButton3" type="CheckButton" parent="Window"]
+offset_left = 14.0
+offset_top = 195.0
+offset_right = 344.0
+offset_bottom = 243.0
+theme = ExtResource("3_ak8tf")
+button_pressed = true
+text = "Use experimental API"
+
+[node name="CheckButton4" type="CheckButton" parent="Window"]
+offset_left = 14.0
+offset_top = 251.0
+offset_right = 344.0
+offset_bottom = 299.0
+theme = ExtResource("3_ak8tf")
+text = "I have no idea what tf does 
+this do"
+
+[node name="NetworkManager" type="Node" parent="."]
+script = ExtResource("4_mly6v")
+TangerScene = ExtResource("2_fdacg")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://b7uggrpfv7dq")
+spawn_path = NodePath("..")
