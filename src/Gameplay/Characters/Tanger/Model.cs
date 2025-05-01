@@ -14,6 +14,5 @@ public partial class Model : CharacterBase {
         base._Ready();
 
         InitSystems();
-        GD.Print("Tanger ready!");
     }
 }

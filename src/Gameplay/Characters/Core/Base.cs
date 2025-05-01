@@ -16,11 +16,11 @@ public abstract partial class CharacterBase : CharacterBody3D {
     [Export] public AnimationPlayer? AnimationPlayer;
     [Export] public GpuParticles3D? Particles;
 
-    [Export] public float MoveSpeed = 7f;
-    [Export] public float JumpForce = 6f;
+    [Export] public float MoveSpeed = 7.0f;
+    [Export] public float JumpForce = 6.0f;
     [Export] public float Acceleration = 10f;
     [Export] public float Deceleration = 8f;
-    [Export] public float BlendSmoothSpeed = 5f;
+    [Export] public float BlendSmoothSpeed = 20f;
     [Export] public int MaxJumps = 2;
 
     public override void _Ready() {
@@ -35,6 +35,8 @@ public abstract partial class CharacterBase : CharacterBody3D {
         if (_state != null) {
             InitSystems();
         }
+
+        Multiplayer.MultiplayerPeer.SetTransferMode(MultiplayerPeer.TransferModeEnum.UnreliableOrdered);
     }
 
     protected void InitSystems() {

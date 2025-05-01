@@ -1,55 +1,123 @@
 namespace Misled.Gameplay.System;
 using Godot;
+using Godot.Collections;
 
 public partial class NetworkManager : Node {
-    [Export] public PackedScene? TangerScene;
+    public static NetworkManager? Instance { get; private set; }
 
-    public void Host() {
-        var peer = new ENetMultiplayerPeer();
-        peer.CreateServer(31415);
-        Multiplayer.MultiplayerPeer = peer;
-        GD.Print("Hosting...");
-        Multiplayer.PeerConnected += OnPeerConnected;
-        SpawnPlayer(Multiplayer.GetUniqueId());
+    [Signal]
+    public delegate void PlayerConnectedEventHandler(int peerId, Dictionary<string, string> playerInfo);
+    [Signal]
+    public delegate void PlayerDisconnectedEventHandler(int peerId);
+
+    [Export]
+    public Dictionary<string, PackedScene> CharacterScenes = [];
+
+    private const int PORT = 7000;
+    private const string DEFAULT_SERVER = "127.0.0.1";
+
+    private Dictionary<long, Dictionary<string, string>> _players = [];
+
+    private Dictionary<string, string> _playerInfo = new()
+    {
+        { "Name", "Demo" },
+        { "Hyprs", "Tanger" },
+    };
+
+    public override void _Ready() {
+        Instance = this;
+
+        Multiplayer.PeerConnected += OnPlayerConnected;
+        Multiplayer.PeerDisconnected += OnPlayerDisconnected;
+        Multiplayer.ConnectedToServer += OnConnectedToServer;
+        Multiplayer.ConnectionFailed += () => Multiplayer.MultiplayerPeer = null;
+        Multiplayer.ServerDisconnected += OnServerDisconnected;
     }
 
-    public void Join(string ip) {
+    public Error Host() {
         var peer = new ENetMultiplayerPeer();
-        peer.CreateClient(ip, 31415);
-        Multiplayer.MultiplayerPeer = peer;
-        GD.Print("Joining server...");
+        var error = peer.CreateServer(PORT, 20);
+        if (error != Error.Ok) {
+            return error;
+        }
 
-        Multiplayer.ConnectedToServer += OnConnectedToServer;
+        Multiplayer.MultiplayerPeer = peer;
+        _players[1] = _playerInfo;
+        EmitSignal(SignalName.PlayerConnected, 1, _playerInfo);
+        return Error.Ok;
+    }
+
+    public Error Join(string address = DEFAULT_SERVER) {
+        var peer = new ENetMultiplayerPeer();
+        var error = peer.CreateClient(address, PORT);
+        if (error != Error.Ok) {
+            return error;
+        }
+
+        Multiplayer.MultiplayerPeer = peer;
+        return Error.Ok;
     }
 
     private void OnConnectedToServer() {
-        GD.Print("Connected to server!");
-        RpcId(1, nameof(RequestSpawn), Multiplayer.GetUniqueId());
+        var myId = Multiplayer.GetUniqueId();
+        _players[myId] = _playerInfo;
+        EmitSignal(SignalName.PlayerConnected, myId, _playerInfo);
     }
 
-    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    public void RequestSpawn(long id) {
-        GD.Print($"Spawn requested by peer {id}");
-        SpawnPlayer(id);
+    private void OnServerDisconnected() {
+        Multiplayer.MultiplayerPeer = null;
+        _players.Clear();
+    }
 
-        foreach (var peerId in Multiplayer.GetPeers()) {
-            if (peerId != id) {
-                RpcId(id, nameof(SpawnPlayer), peerId);
-            }
+    private void OnPlayerConnected(long id) =>
+        RpcId(id, MethodName.RegisterPlayer, _playerInfo);
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+    private void RegisterPlayer(Dictionary<string, string> newPlayerInfo) {
+        var senderId = Multiplayer.GetRemoteSenderId();
+        _players[senderId] = newPlayerInfo;
+        EmitSignal(SignalName.PlayerConnected, senderId, newPlayerInfo);
+    }
+
+    private void OnPlayerDisconnected(long id) {
+        _players.Remove(id);
+        EmitSignal(SignalName.PlayerDisconnected, id);
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
+    public void SpawnPlayer(long id) {
+        if (!_players.TryGetValue(id, out var playerData)) {
+            return;
+        }
+
+        if (!playerData.TryGetValue("Hyprs", out var characterKey)) {
+            return;
+        }
+
+        if (!CharacterScenes.TryGetValue(characterKey, out var scene)) {
+            return;
+        }
+
+        if (scene.Instantiate() is not Node3D player) {
+            return;
+        }
+
+        player.Name = $"Player_{id}";
+        (player as CharacterBody3D)?.SetMultiplayerAuthority((int)id);
+
+        var world = GetTree().Root.GetNode("World");
+        world.AddChild(player);
+    }
+
+    public void SpawnAllPlayers() {
+        foreach (var id in _players.Keys) {
+            Rpc(nameof(SpawnPlayer), id);
         }
     }
 
-    private void OnPeerConnected(long id) {
-        GD.Print($"Player {id} connected");
-        Rpc(nameof(SpawnPlayer), id);
-    }
+    public Dictionary<long, Dictionary<string, string>> GetAllPlayers() => _players;
 
-    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    public void SpawnPlayer(long id) {
-        if (TangerScene == null) { return; }
-        var player = TangerScene.Instantiate() as Node3D;
-        player!.Name = $"Player_{id}";
-        GetTree().Root.GetNode("World").AddChild(player);
-        (player as CharacterBody3D)!.SetMultiplayerAuthority((int)id);
-    }
+    public void SetPlayerInfo(string key, string value) => _playerInfo[key] = value;
+
+    public string? GetPlayerInfo(string key) => _playerInfo.TryGetValue(key, out var value) ? value : null;
 }

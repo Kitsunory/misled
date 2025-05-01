@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://b7uggrpfv7dq"]
+[gd_scene load_steps=18 format=3 uid="uid://b7uggrpfv7dq"]
 
 [ext_resource type="Script" uid="uid://b0dssaqs4uo5x" path="res://src/Gameplay/Characters/Tanger/Model.cs" id="1_5ddt7"]
 [ext_resource type="PackedScene" uid="uid://cok1n2mub6m14" path="res://src/Assets/Hyprs/Tanger.tscn" id="2_bka7s"]
@@ -62,14 +62,17 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_dnjiu"]
+properties/0/path = NodePath("GPUParticles3D:emitting")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
 [node name="Tanger" type="CharacterBody3D" node_paths=PackedStringArray("Camera", "AnimationTree", "AnimationPlayer", "Particles")]
 script = ExtResource("1_5ddt7")
 Camera = NodePath("Camera3D")
 AnimationTree = NodePath("Tanger/AnimationTree")
 AnimationPlayer = NodePath("Tanger/AnimationPlayer")
 Particles = NodePath("GPUParticles3D")
-MoveSpeed = 4.5
-BlendSmoothSpeed = 20.0
 
 [node name="Tanger" parent="." instance=ExtResource("2_bka7s")]
 
@@ -211,3 +214,6 @@ grow_vertical = 0
 texture = ExtResource("6_d2dik")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_dnjiu")

@@ -1,11 +1,13 @@
 namespace Misled.Gameplay.System;
+
 using Godot;
 
 public partial class DeveloperMode : Window {
     [Export] public Button? Host;
     [Export] public Button? Join;
-    [Export] public RichTextLabel? WindowTitle;
+    [Export] public Button? Output;
     [Export] public RichTextLabel? DebugTitle;
+    [Export] public TextEdit? PlayerName;
     [Export] public Node? NetworkManager;
 
     private NetworkManager? _networkManager;
@@ -14,16 +16,23 @@ public partial class DeveloperMode : Window {
         var time = Time.GetUnixTimeFromSystem().ToString().Substring(12, 3);
         base._Ready();
         _networkManager = (NetworkManager)NetworkManager!;
-        WindowTitle!.Text = $"#{time}";
-        DebugTitle!.Text = $"Misled Developer Mode #{time}";
+        DebugTitle!.Text = $"Misled Debug #{time}";
         Host!.Pressed += OnHostPressed;
         Join!.Pressed += OnJoinPressed;
+        Output!.Pressed += OnOutputPressed;
     }
 
-    private void OnHostPressed() => _networkManager!.Host();
+    private void OnOutputPressed() {
+        GD.Print(_networkManager!.GetAllPlayers());
+        _networkManager!.SpawnAllPlayers();
+    }
 
-    private void OnJoinPressed() => _networkManager!.Join("127.0.0.1");
-
-    public override void _Process(double delta) {
+    private void OnHostPressed() {
+        _networkManager!.SetPlayerInfo("Name", PlayerName!.Text);
+        _networkManager!.Host();
+    }
+    private void OnJoinPressed() {
+        _networkManager!.SetPlayerInfo("Name", PlayerName!.Text);
+        _networkManager!.Join("127.0.0.1");
     }
 }
