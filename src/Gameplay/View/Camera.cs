@@ -72,7 +72,7 @@ public partial class Camera : Camera3D {
 
     private void HandleMouseMotion(InputEventMouseMotion motion) {
         _yaw -= motion.Relative.X * HorizontalRotationSpeed;
-        _pitch = Mathf.Clamp(_pitch - (motion.Relative.Y * VerticalRotationSpeed), MinPitch, MaxPitch);
+        _pitch = Mathf.Clamp(_pitch + (motion.Relative.Y * VerticalRotationSpeed), MinPitch, MaxPitch);
     }
 
     private void HandleMouseButton(InputEventMouseButton button) {

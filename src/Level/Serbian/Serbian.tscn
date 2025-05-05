@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://doln8mdo418y0"]
+[gd_scene load_steps=21 format=3 uid="uid://doln8mdo418y0"]
 
 [ext_resource type="ArrayMesh" uid="uid://c3lvx0asbupb0" path="res://src/Assets/Level/Serbian/Serbian.obj" id="1_0k8ew"]
 [ext_resource type="PackedScene" uid="uid://b7uggrpfv7dq" path="res://src/Gameplay/Characters/Tanger/Resources/Tanger.tscn" id="2_fdacg"]
@@ -25,15 +25,22 @@ background_energy_multiplier = 0.8
 sky = SubResource("Sky_88eoc")
 tonemap_mode = 1
 tonemap_exposure = 2.0
-tonemap_white = 2.0
+ssr_fade_in = 1.11964
 glow_enabled = true
 glow_normalized = true
 glow_intensity = 2.0
+glow_strength = 1.2
 glow_mix = 0.165
 glow_blend_mode = 1
+fog_mode = 1
+fog_light_color = Color(0.0722705, 0.094043, 0.160472, 1)
+fog_density = 1.0
+fog_depth_begin = 6.0
+fog_depth_end = 50.0
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ynf36"]
-size = Vector3(93.9215, 0.53125, 78.5117)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s0om0"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_82mhl"]
 size = Vector3(1, 9.12675, 1)
@@ -73,6 +80,16 @@ particles_anim_loop = false
 material = SubResource("StandardMaterial3D_7xwko")
 size = Vector2(0.5, 0.5)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_im5pd"]
+albedo_color = Color(1.2514e-06, 0.579434, 0.342548, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_im5pd"]
+material = SubResource("StandardMaterial3D_im5pd")
+size = Vector2(1000, 1000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ynf36"]
+size = Vector3(93.9215, 0.53125, 78.5117)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fdacg"]
 bg_color = Color(0.0887341, 0.0887341, 0.088734, 1)
 border_width_left = 4
@@ -102,12 +119,10 @@ directional_shadow_mode = 0
 
 [node name="MapTheForest" type="MeshInstance3D" parent="."]
 mesh = ExtResource("1_0k8ew")
+surface_material_override/2 = SubResource("StandardMaterial3D_s0om0")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="MapTheForest"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MapTheForest/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.6452, 0.215942, 36.1484)
-shape = SubResource("BoxShape3D_ynf36")
+visible = false
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="MapTheForest/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.348803, 5.07489, 10.558)
@@ -325,85 +340,189 @@ shadow_enabled = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.2297, 7.66892, 13.9428)
 omni_range = 45.299
 
-[node name="Window" type="Window" parent="." node_paths=PackedStringArray("Host", "Join", "Output", "DebugTitle", "PlayerName", "NetworkManager")]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MapTheForest"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("PlaneMesh_im5pd")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MapTheForest/MeshInstance3D"]
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MapTheForest/MeshInstance3D/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.645, -0.2, 36.148)
+shape = SubResource("BoxShape3D_ynf36")
+
+[node name="Window" type="Window" parent="." node_paths=PackedStringArray("Host", "Join", "Output", "DebugTitle", "Frame", "FPS", "ConnectionStatus", "PlayerName", "Address", "Port", "NetworkManager")]
 disable_3d = true
 transparent_bg = true
 position = Vector2i(20, 72)
-size = Vector2i(360, 500)
+size = Vector2i(360, 800)
 unresizable = true
 always_on_top = true
 transparent = true
 theme_override_styles/embedded_border = SubResource("StyleBoxFlat_fdacg")
 theme_override_styles/embedded_unfocused_border = SubResource("StyleBoxFlat_fdacg")
 script = ExtResource("3_im5pd")
-Host = NodePath("Host")
-Join = NodePath("Join")
-Output = NodePath("Output")
-DebugTitle = NodePath("Title")
-PlayerName = NodePath("Name")
+Host = NodePath("ScrollContainer/VBoxContainer/Host")
+Join = NodePath("ScrollContainer/VBoxContainer/Join")
+Output = NodePath("ScrollContainer/VBoxContainer/Output")
+DebugTitle = NodePath("ScrollContainer/VBoxContainer/Title")
+Frame = NodePath("ScrollContainer/VBoxContainer/Frame")
+FPS = NodePath("ScrollContainer/VBoxContainer/FPS")
+ConnectionStatus = NodePath("ScrollContainer/VBoxContainer/ConnStatus")
+PlayerName = NodePath("ScrollContainer/VBoxContainer/Name")
+Address = NodePath("ScrollContainer/VBoxContainer/Address")
+Port = NodePath("ScrollContainer/VBoxContainer/Port")
 NetworkManager = NodePath("../NetworkManager")
 
-[node name="Title" type="RichTextLabel" parent="Window"]
-offset_left = 24.0
-offset_top = 29.0
-offset_right = 331.0
-offset_bottom = 53.0
+[node name="ScrollContainer" type="ScrollContainer" parent="Window"]
+anchors_preset = -1
+anchor_left = 0.08
+anchor_top = 0.04
+anchor_right = 0.92
+anchor_bottom = 0.92
+offset_right = -3.05176e-05
+offset_bottom = 36.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("3_ak8tf")
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Window/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Margin1" type="MarginContainer" parent="Window/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="Title" type="RichTextLabel" parent="Window/ScrollContainer/VBoxContainer"]
+layout_mode = 2
 theme = ExtResource("3_ak8tf")
 theme_override_font_sizes/normal_font_size = 16
 bbcode_enabled = true
-text = "Misled Debugger (#1)"
+text = "Developer Mode
+[font_size=12]Misled[/font_size]"
 fit_content = true
 
-[node name="Join" type="Button" parent="Window"]
-offset_left = 108.0
-offset_top = 438.0
-offset_right = 176.0
-offset_bottom = 475.0
-theme = ExtResource("3_ak8tf")
-text = "Join"
+[node name="Margin2" type="MarginContainer" parent="Window/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
 
-[node name="Output" type="Button" parent="Window"]
-offset_left = 192.0
-offset_top = 438.0
-offset_right = 315.0
-offset_bottom = 475.0
-theme = ExtResource("3_ak8tf")
-text = "Output"
-
-[node name="Host" type="Button" parent="Window"]
-offset_left = 24.0
-offset_top = 438.0
-offset_right = 92.0
-offset_bottom = 475.0
-theme = ExtResource("3_ak8tf")
-text = "Host
-"
-
-[node name="A1" type="CheckButton" parent="Window"]
-offset_left = 15.0
-offset_top = 81.0
-offset_right = 345.0
-offset_bottom = 129.0
+[node name="A1" type="CheckButton" parent="Window/ScrollContainer/VBoxContainer"]
+layout_mode = 2
 theme = ExtResource("3_ak8tf")
 button_pressed = true
 text = "Use experimental API"
 
-[node name="A2" type="CheckButton" parent="Window"]
-offset_left = 15.0
-offset_top = 137.0
-offset_right = 345.0
-offset_bottom = 185.0
+[node name="A2" type="CheckButton" parent="Window/ScrollContainer/VBoxContainer"]
+layout_mode = 2
 theme = ExtResource("3_ak8tf")
 button_pressed = true
 text = "Use multiplexer"
 
-[node name="Name" type="TextEdit" parent="Window"]
-offset_left = 24.0
-offset_top = 387.0
-offset_right = 315.0
-offset_bottom = 424.0
+[node name="A3" type="CheckButton" parent="Window/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_ak8tf")
+button_pressed = true
+text = "Attach hitbox into
+BoneAttachment3D"
+
+[node name="A4" type="CheckButton" parent="Window/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_ak8tf")
+toggle_mode = false
+text = "Use demo profile"
+
+[node name="A5" type="CheckButton" parent="Window/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_ak8tf")
+disabled = true
+toggle_mode = false
+text = "Use TCP/HTTP API for
+Realtime processing.
+Extremely slow!"
+
+[node name="A6" type="CheckButton" parent="Window/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_ak8tf")
+button_pressed = true
+text = "Allow user with invalid
+SSL certificate to register"
+
+[node name="Margin3" type="MarginContainer" parent="Window/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="Frame" type="RichTextLabel" parent="Window/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_ak8tf")
+bbcode_enabled = true
+text = "Frame loss during hitbox lerp:
+12ms"
+fit_content = true
+
+[node name="FPS" type="RichTextLabel" parent="Window/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_ak8tf")
+bbcode_enabled = true
+text = "FPS:
+60"
+fit_content = true
+
+[node name="Position" type="RichTextLabel" parent="Window/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_ak8tf")
+bbcode_enabled = true
+text = "Position:
+[color=crimson]X (0)[/color] [color=pale_green]Y (0)[/color] [color=sky_blue]Z (0)[/color]"
+fit_content = true
+
+[node name="ConnStatus" type="RichTextLabel" parent="Window/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_ak8tf")
+bbcode_enabled = true
+text = "Connection Status:
+Offline
+"
+fit_content = true
+
+[node name="Name" type="TextEdit" parent="Window/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
 theme = ExtResource("3_ak8tf")
 placeholder_text = "Name"
+
+[node name="Address" type="TextEdit" parent="Window/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme = ExtResource("3_ak8tf")
+text = "0.0.0.0"
+placeholder_text = "IP"
+
+[node name="Port" type="TextEdit" parent="Window/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme = ExtResource("3_ak8tf")
+text = "31415
+"
+placeholder_text = "Port"
+
+[node name="Join" type="Button" parent="Window/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_ak8tf")
+text = "Join"
+
+[node name="Host" type="Button" parent="Window/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_ak8tf")
+text = "Host
+"
+
+[node name="Output" type="Button" parent="Window/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_ak8tf")
+text = "Initiate"
 
 [node name="NetworkManager" type="Node" parent="."]
 script = ExtResource("4_mly6v")

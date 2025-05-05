@@ -13,8 +13,8 @@ public partial class NetworkManager : Node {
     [Export]
     public Dictionary<string, PackedScene> CharacterScenes = [];
 
-    private const int PORT = 7000;
-    private const string DEFAULT_SERVER = "127.0.0.1";
+    public string DefaultServer { get; set; } = "0.0.0.0";
+    public int Port { get; set; } = 31415;
 
     private Dictionary<long, Dictionary<string, string>> _players = [];
 
@@ -36,7 +36,7 @@ public partial class NetworkManager : Node {
 
     public Error Host() {
         var peer = new ENetMultiplayerPeer();
-        var error = peer.CreateServer(PORT, 20);
+        var error = peer.CreateServer(Port, 20);
         if (error != Error.Ok) {
             return error;
         }
@@ -47,10 +47,12 @@ public partial class NetworkManager : Node {
         return Error.Ok;
     }
 
-    public Error Join(string address = DEFAULT_SERVER) {
+    public Error Join() {
+        GD.Print("Y");
         var peer = new ENetMultiplayerPeer();
-        var error = peer.CreateClient(address, PORT);
+        var error = peer.CreateClient(DefaultServer, Port);
         if (error != Error.Ok) {
+            GD.Print("No");
             return error;
         }
 
