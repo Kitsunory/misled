@@ -21,7 +21,7 @@ public partial class NetworkManager : Node {
     private Dictionary<string, string> _playerInfo = new()
     {
         { "Name", "Demo" },
-        { "Hyprs", "Tanger" },
+        { "Hyprs", "Osage" },
     };
 
     public override void _Ready() {

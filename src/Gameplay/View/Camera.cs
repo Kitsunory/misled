@@ -21,12 +21,7 @@ public partial class Camera : Camera3D {
     public override void _Ready() {
         _target = GetParent() as CharacterBody3D;
         SetAsTopLevel(true);
-        if (_target?.IsMultiplayerAuthority() == true) {
-            Current = true;
-        }
-        else {
-            Current = false;
-        }
+        Current = _target?.IsMultiplayerAuthority() == true;
     }
 
     public override void _UnhandledInput(InputEvent @event) {

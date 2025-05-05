@@ -1,5 +1,4 @@
-namespace Misled.Characters.Playables;
-using Godot;
+namespace Misled.Characters.Tanger;
 using Misled.Characters.Core;
 using Misled.Characters.Universal;
 

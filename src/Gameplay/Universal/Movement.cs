@@ -7,6 +7,7 @@ public class Movement(
     Animator animator,
     GpuParticles3D particles,
     Camera3D camera,
+    AudioStreamPlayer3D audioPlayer,
     float moveSpeed,
     float jumpForce,
     float acceleration,
@@ -61,6 +62,9 @@ public class Movement(
         }
 
         animator.UpdateMovementBlend(velocity, body.IsOnFloor());
+
+        // Play/Stop walking audio based on actual movement
+        HandleWalkingAudio(velocity);
     }
 
     private void HandleJump(ref Vector3 velocity) {
@@ -117,5 +121,17 @@ public class Movement(
 
         velocity.X = horizontal.X;
         velocity.Z = horizontal.Z;
+    }
+
+    private void HandleWalkingAudio(Vector3 velocity) {
+        var horizontalVelocity = new Vector2(velocity.X, velocity.Z);
+        var isMoving = horizontalVelocity.LengthSquared() > 1f;
+
+        if (body.IsOnFloor() && isMoving && !audioPlayer.IsPlaying()) {
+            audioPlayer.Play();
+        }
+        else if ((!body.IsOnFloor() || !isMoving) && audioPlayer.IsPlaying()) {
+            audioPlayer.Stop();
+        }
     }
 }

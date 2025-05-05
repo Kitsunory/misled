@@ -1,0 +1,345 @@
+[gd_scene load_steps=39 format=3 uid="uid://ctxal2h4riryf"]
+
+[ext_resource type="PackedScene" uid="uid://u07lxrmdhe6b" path="res://src/Assets/Hyprs/Osage/Osage.glb" id="1_2jlv2"]
+[ext_resource type="Texture2D" uid="uid://dsktu5ro5rxac" path="res://src/Assets/Hyprs/Osage/Osage_OsageFace.png" id="2_l5nqh"]
+[ext_resource type="Texture2D" uid="uid://bwsiot556jgxj" path="res://src/Assets/Hyprs/Osage/Osage_osageHair.png" id="3_g4403"]
+[ext_resource type="Texture2D" uid="uid://bv0k56rq52h4o" path="res://src/Assets/Hyprs/Osage/Osage_osageOutfit.png" id="4_k0ur8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g4403"]
+diffuse_mode = 3
+albedo_color = Color(0.724178, 0.724178, 0.724178, 1)
+albedo_texture = ExtResource("2_l5nqh")
+metallic_specular = 0.0
+roughness = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k0ur8"]
+diffuse_mode = 3
+albedo_texture = ExtResource("3_g4403")
+metallic_specular = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l1b3c"]
+diffuse_mode = 3
+albedo_color = Color(0.724178, 0.724178, 0.724177, 1)
+albedo_texture = ExtResource("2_l5nqh")
+metallic_specular = 0.0
+roughness = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wbobw"]
+diffuse_mode = 3
+albedo_color = Color(0.87068, 0.87068, 0.87068, 1)
+albedo_texture = ExtResource("4_k0ur8")
+metallic_specular = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ii0du"]
+diffuse_mode = 3
+albedo_texture = ExtResource("3_g4403")
+metallic_specular = 0.0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d4nws"]
+animation = &"Alternate"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_len4f"]
+
+[sub_resource type="AnimationNodeBlend3" id="AnimationNodeBlend3_c51oa"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lrq5m"]
+animation = &"NA1"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_il5ur"]
+animation = &"NA1"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8lx1f"]
+animation = &"NA2"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7huvc"]
+animation = &"NA2"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mm5kj"]
+animation = &"NA3"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l41ui"]
+animation = &"Exclusive1"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_5ot3s"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tt2om"]
+animation = &"Fall"
+
+[sub_resource type="AnimationNodeBlend3" id="AnimationNodeBlend3_jb32n"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cbw6g"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_e78ig"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_f3hvs"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_so7fa"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i3wun"]
+animation = &"Jump"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_k0ur8"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l1b3c"]
+animation = &"Run"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_tt2om"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_k0ur8")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_l1b3c")
+blend_point_1/pos = 1.0
+min_space = 0.0
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_mqy6r"]
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_m5jv7"]
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_57dvb"]
+
+[sub_resource type="AnimationNodeBlend3" id="AnimationNodeBlend3_7huvc"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mpogc"]
+animation = &"Signature"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_el5ul"]
+
+[sub_resource type="AnimationNodeBlend3" id="AnimationNodeBlend3_x55ys"]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ii0du"]
+graph_offset = Vector2(-452.615, 5.89145)
+nodes/ALT/node = SubResource("AnimationNodeAnimation_d4nws")
+nodes/ALT/position = Vector2(-155.556, -377.778)
+nodes/Alternative/node = SubResource("AnimationNodeOneShot_len4f")
+nodes/Alternative/position = Vector2(0, -422.222)
+nodes/Attack/node = SubResource("AnimationNodeBlend3_c51oa")
+nodes/Attack/position = Vector2(400, 88.8889)
+nodes/BA1/node = SubResource("AnimationNodeAnimation_il5ur")
+nodes/BA1/position = Vector2(-333.333, 511.111)
+"nodes/BA1 2/node" = SubResource("AnimationNodeAnimation_lrq5m")
+"nodes/BA1 2/position" = Vector2(-333.333, 666.667)
+nodes/BA2/node = SubResource("AnimationNodeAnimation_7huvc")
+nodes/BA2/position = Vector2(-333.333, 844.444)
+"nodes/BA2 2/node" = SubResource("AnimationNodeAnimation_8lx1f")
+"nodes/BA2 2/position" = Vector2(-333.333, 1022.22)
+nodes/BA3/node = SubResource("AnimationNodeAnimation_mm5kj")
+nodes/BA3/position = Vector2(-333.333, 1200)
+nodes/EX/node = SubResource("AnimationNodeAnimation_l41ui")
+nodes/EX/position = Vector2(-155.556, -88.8889)
+nodes/Exclusive/node = SubResource("AnimationNodeOneShot_5ot3s")
+nodes/Exclusive/position = Vector2(0, -133.333)
+nodes/Fall/node = SubResource("AnimationNodeAnimation_tt2om")
+nodes/Fall/position = Vector2(-577.778, 422.222)
+nodes/Ground/node = SubResource("AnimationNodeBlend3_jb32n")
+nodes/Ground/position = Vector2(-333.333, 88.8889)
+nodes/ID1/node = SubResource("AnimationNodeAnimation_cbw6g")
+nodes/ID1/position = Vector2(-311.111, -644.444)
+nodes/ID2/node = SubResource("AnimationNodeAnimation_e78ig")
+nodes/ID2/position = Vector2(-333.333, -377.778)
+nodes/ID3/node = SubResource("AnimationNodeAnimation_f3hvs")
+nodes/ID3/position = Vector2(-333.333, -88.8889)
+nodes/Idle/node = SubResource("AnimationNodeAnimation_so7fa")
+nodes/Idle/position = Vector2(-333.333, 333.333)
+nodes/Jump/node = SubResource("AnimationNodeAnimation_i3wun")
+nodes/Jump/position = Vector2(-577.778, 244.444)
+nodes/Move/node = SubResource("AnimationNodeBlendSpace1D_tt2om")
+nodes/Move/position = Vector2(-577.778, 44.4444)
+nodes/NA1/node = SubResource("AnimationNodeOneShot_mqy6r")
+nodes/NA1/position = Vector2(-155.556, 377.778)
+nodes/NA2/node = SubResource("AnimationNodeOneShot_m5jv7")
+nodes/NA2/position = Vector2(-155.556, 666.667)
+nodes/NA3/node = SubResource("AnimationNodeOneShot_57dvb")
+nodes/NA3/position = Vector2(-155.556, 955.556)
+nodes/Normal/node = SubResource("AnimationNodeBlend3_7huvc")
+nodes/Normal/position = Vector2(44.4444, 244.444)
+nodes/SIG/node = SubResource("AnimationNodeAnimation_mpogc")
+nodes/SIG/position = Vector2(-155.556, -644.444)
+nodes/Signature/node = SubResource("AnimationNodeOneShot_el5ul")
+nodes/Signature/position = Vector2(0, -711.111)
+nodes/Skill/node = SubResource("AnimationNodeBlend3_x55ys")
+nodes/Skill/position = Vector2(222.222, -133.333)
+nodes/output/position = Vector2(733.333, 88.8889)
+node_connections = [&"Alternative", 0, &"ID2", &"Alternative", 1, &"ALT", &"Attack", 0, &"Skill", &"Attack", 1, &"Ground", &"Attack", 2, &"Normal", &"Exclusive", 0, &"ID3", &"Exclusive", 1, &"EX", &"Ground", 0, &"Move", &"Ground", 1, &"Jump", &"Ground", 2, &"Fall", &"NA1", 0, &"Idle", &"NA1", 1, &"BA1", &"NA2", 0, &"BA1 2", &"NA2", 1, &"BA2", &"NA3", 0, &"BA2 2", &"NA3", 1, &"BA3", &"Normal", 0, &"NA1", &"Normal", 1, &"NA2", &"Normal", 2, &"NA3", &"Signature", 0, &"ID1", &"Signature", 1, &"SIG", &"Skill", 0, &"Signature", &"Skill", 1, &"Alternative", &"Skill", 2, &"Exclusive", &"output", 0, &"Attack"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_k0ur8"]
+properties/0/path = NodePath("AnimationTree:parameters/Alternative/active")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("AnimationTree:parameters/Alternative/request")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("AnimationTree:parameters/Attack/blend_amount")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("AnimationTree:parameters/Exclusive/active")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("AnimationTree:parameters/Exclusive/request")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath("AnimationTree:parameters/Ground/blend_amount")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath("AnimationTree:parameters/Move/blend_position")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+properties/7/path = NodePath("AnimationTree:parameters/NA1/active")
+properties/7/spawn = true
+properties/7/replication_mode = 1
+properties/8/path = NodePath("AnimationTree:parameters/NA1/request")
+properties/8/spawn = true
+properties/8/replication_mode = 1
+properties/9/path = NodePath("AnimationTree:parameters/NA2/active")
+properties/9/spawn = true
+properties/9/replication_mode = 1
+properties/10/path = NodePath("AnimationTree:parameters/NA2/request")
+properties/10/spawn = true
+properties/10/replication_mode = 1
+properties/11/path = NodePath("AnimationTree:parameters/NA3/active")
+properties/11/spawn = true
+properties/11/replication_mode = 1
+properties/12/path = NodePath("AnimationTree:parameters/NA3/request")
+properties/12/spawn = true
+properties/12/replication_mode = 1
+properties/13/path = NodePath("AnimationTree:parameters/Normal/blend_amount")
+properties/13/spawn = true
+properties/13/replication_mode = 1
+properties/14/path = NodePath("AnimationTree:parameters/Signature/active")
+properties/14/spawn = true
+properties/14/replication_mode = 1
+properties/15/path = NodePath("AnimationTree:parameters/Signature/request")
+properties/15/spawn = true
+properties/15/replication_mode = 1
+properties/16/path = NodePath("AnimationTree:parameters/Skill/blend_amount")
+properties/16/spawn = true
+properties/16/replication_mode = 1
+
+[node name="Osage" instance=ExtResource("1_2jlv2")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="Osage-Rig" parent="." index="0"]
+transform = Transform3D(-1, 0, -3.89414e-07, 0, 1, 0, 3.89414e-07, 0, -1, 0, 0.0108841, 0)
+
+[node name="Coin" parent="Osage-Rig" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.84323, 0)
+
+[node name="Revolver" parent="Osage-Rig" index="1"]
+visible = false
+
+[node name="Skeleton3D" parent="Osage-Rig" index="2"]
+bones/0/position = Vector3(-0.000356173, 0.873283, -0.0457663)
+bones/0/rotation = Quaternion(0.10057, -0.615832, 0.0796728, 0.77736)
+bones/1/rotation = Quaternion(-0.0359726, -0.000582006, -0.00246239, 0.99935)
+bones/2/rotation = Quaternion(-0.148118, 0.000114183, 0.00237375, 0.988967)
+bones/3/rotation = Quaternion(-0.0633185, -0.000151723, 0.00102954, 0.997993)
+bones/5/rotation = Quaternion(-0.0190303, 0.527562, -0.0118221, 0.849221)
+bones/6/position = Vector3(0.0922309, 0.0333016, 0.00655705)
+bones/6/rotation = Quaternion(-0.495577, -0.0531525, 0.852674, -0.15661)
+bones/6/scale = Vector3(1, 1, 1)
+bones/7/rotation = Quaternion(0.0399594, -0.00528596, -0.0547691, 0.997685)
+bones/8/rotation = Quaternion(0.0128205, 0.000711793, -0.0312428, 0.999429)
+bones/9/rotation = Quaternion(0.0919542, 0.00261703, -0.0534542, 0.994324)
+bones/10/position = Vector3(-0.0401965, 0.0243821, -0.106437)
+bones/10/rotation = Quaternion(-0.362231, -0.222181, 0.89142, -0.157465)
+bones/11/rotation = Quaternion(0.0485772, -0.00782864, 0.0700796, 0.996327)
+bones/12/rotation = Quaternion(0.169616, 0.0283436, -0.074052, 0.982315)
+bones/13/rotation = Quaternion(0.137134, -0.00187455, -0.0822332, 0.987131)
+bones/15/position = Vector3(0.00693702, 0.137791, -0.00658421)
+bones/15/rotation = Quaternion(-0.274543, 0.706125, -0.494281, 0.426263)
+bones/16/rotation = Quaternion(0.144165, 0.0517504, -0.000604804, 0.988199)
+bones/19/rotation = Quaternion(0.103631, 0.0479043, -0.014571, 0.993355)
+bones/20/rotation = Quaternion(0.0802104, -0.00719454, 0.0259483, 0.996414)
+bones/21/rotation = Quaternion(0.25845, -0.0361502, 0.0571272, 0.963656)
+bones/23/rotation = Quaternion(0.151142, 0.0279658, 0.0781887, 0.985018)
+bones/24/rotation = Quaternion(0.180715, 0.00219594, -0.000354114, 0.983533)
+bones/26/rotation = Quaternion(0.12274, 0.0170576, 0.0254123, 0.991967)
+bones/27/rotation = Quaternion(0.181342, -0.0442393, 0.00189298, 0.982423)
+bones/30/rotation = Quaternion(0.133478, -0.00608194, 0.0618827, 0.989099)
+bones/31/rotation = Quaternion(0.142885, -0.0258467, -0.0280042, 0.989005)
+bones/34/rotation = Quaternion(0.0601681, -0.09409, 0.0214421, 0.993513)
+bones/35/rotation = Quaternion(0.257385, -0.0132391, 0.0134929, 0.966124)
+bones/37/rotation = Quaternion(-0.547332, 0.296332, 0.385673, 0.681081)
+bones/38/position = Vector3(-0.00693703, 0.137791, -0.00658417)
+bones/38/rotation = Quaternion(-0.485272, -0.781513, 0.291855, 0.261858)
+bones/39/rotation = Quaternion(0.627769, -0.0787729, -0.113845, 0.765989)
+bones/40/rotation = Quaternion(-0.000968269, 0.00806316, -0.0529432, 0.998564)
+bones/42/rotation = Quaternion(0.103631, -0.0479041, 0.0145709, 0.993355)
+bones/43/rotation = Quaternion(0.0802104, 0.00719445, -0.0259483, 0.996414)
+bones/45/position = Vector3(0.00335977, -0.0120168, 0.0170529)
+bones/45/rotation = Quaternion(-0.188203, -0.645887, -0.235015, 0.701554)
+bones/46/rotation = Quaternion(0.151142, -0.027966, -0.0781887, 0.985018)
+bones/47/rotation = Quaternion(0.180715, -0.00219577, 0.000354023, 0.983533)
+bones/49/rotation = Quaternion(0.12274, -0.0170576, -0.0254122, 0.991967)
+bones/50/rotation = Quaternion(0.181342, 0.0442393, -0.00189295, 0.982423)
+bones/51/rotation = Quaternion(0.106698, 0.0233012, -0.0409815, 0.993173)
+bones/53/rotation = Quaternion(0.133478, 0.00608217, -0.0618826, 0.989099)
+bones/54/rotation = Quaternion(0.142885, 0.0258466, 0.0280042, 0.989005)
+bones/57/rotation = Quaternion(0.0601681, 0.09409, -0.0214421, 0.993513)
+bones/58/rotation = Quaternion(0.257385, 0.0132391, -0.0134929, 0.966124)
+bones/60/position = Vector3(-0.0180612, 0.0344784, -0.022275)
+bones/60/rotation = Quaternion(0.383299, 0.73884, 0.302766, 0.464253)
+bones/61/position = Vector3(0.0854525, 0.0459399, 0.0248162)
+bones/61/rotation = Quaternion(0.947805, -0.0269693, -0.309257, 0.0727919)
+bones/62/rotation = Quaternion(0.00767244, -0.00861147, 0.00544393, 0.999919)
+bones/63/rotation = Quaternion(-0.495067, -0.0182059, 0.0362627, 0.867907)
+bones/64/rotation = Quaternion(-0.011377, 0.919531, -0.386442, 0.0706836)
+bones/66/position = Vector3(-0.0854525, 0.0459399, 0.0248161)
+bones/66/rotation = Quaternion(0.985962, 0.0269659, 0.055925, 0.154996)
+bones/67/rotation = Quaternion(0.0780388, -0.0037582, 0.0164984, 0.996807)
+bones/68/rotation = Quaternion(-0.492244, 0.015929, -0.0248597, 0.869956)
+bones/69/rotation = Quaternion(-1.48466e-07, 0.95776, -0.287567, -4.19435e-07)
+bones/71/rotation = Quaternion(0.970038, 0.239661, 0.0104621, -0.0384589)
+bones/72/position = Vector3(-0.919585, -0.301146, -0.0715525)
+bones/72/rotation = Quaternion(0.605687, -0.483815, -0.3229, 0.542957)
+bones/73/rotation = Quaternion(1.37406e-09, 1.73849e-07, 0.386188, 0.92242)
+bones/74/rotation = Quaternion(3.89106e-06, 1.33385e-06, 0.92289, -0.385063)
+bones/76/position = Vector3(0.0528581, 0.124655, 2.88982e-08)
+bones/83/position = Vector3(0.125448, -10.6886, 0.257971)
+bones/83/rotation = Quaternion(-0.408046, 0.401206, 0.779724, -0.254093)
+
+[node name="Body" parent="Osage-Rig/Skeleton3D" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_g4403")
+
+[node name="Hair" parent="Osage-Rig/Skeleton3D" index="1"]
+surface_material_override/0 = SubResource("StandardMaterial3D_k0ur8")
+
+[node name="Head" parent="Osage-Rig/Skeleton3D" index="2"]
+surface_material_override/0 = SubResource("StandardMaterial3D_l1b3c")
+
+[node name="Legs" parent="Osage-Rig/Skeleton3D" index="3"]
+surface_material_override/0 = SubResource("StandardMaterial3D_wbobw")
+surface_material_override/1 = SubResource("StandardMaterial3D_ii0du")
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="3"]
+tree_root = SubResource("AnimationNodeBlendTree_ii0du")
+anim_player = NodePath("../AnimationPlayer")
+parameters/Alternative/active = false
+parameters/Alternative/internal_active = false
+parameters/Alternative/request = 0
+parameters/Attack/blend_amount = 0.0
+parameters/Exclusive/active = false
+parameters/Exclusive/internal_active = false
+parameters/Exclusive/request = 0
+parameters/Ground/blend_amount = -1.0
+parameters/Move/blend_position = 0.0
+parameters/NA1/active = false
+parameters/NA1/internal_active = false
+parameters/NA1/request = 0
+parameters/NA2/active = false
+parameters/NA2/internal_active = false
+parameters/NA2/request = 0
+parameters/NA3/active = false
+parameters/NA3/internal_active = false
+parameters/NA3/request = 0
+parameters/Normal/blend_amount = -1.0
+parameters/Signature/active = false
+parameters/Signature/internal_active = false
+parameters/Signature/request = 0
+parameters/Skill/blend_amount = 0.0
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." index="4"]
+replication_config = SubResource("SceneReplicationConfig_k0ur8")

@@ -1,10 +1,13 @@
-[gd_scene load_steps=21 format=3 uid="uid://doln8mdo418y0"]
+[gd_scene load_steps=24 format=3 uid="uid://doln8mdo418y0"]
 
 [ext_resource type="ArrayMesh" uid="uid://c3lvx0asbupb0" path="res://src/Assets/Level/Serbian/Serbian.obj" id="1_0k8ew"]
 [ext_resource type="PackedScene" uid="uid://b7uggrpfv7dq" path="res://src/Gameplay/Characters/Tanger/Resources/Tanger.tscn" id="2_fdacg"]
 [ext_resource type="Theme" uid="uid://gcd6i4cul14f" path="res://src/Assets/Universal.tres" id="3_ak8tf"]
 [ext_resource type="Script" uid="uid://cgl5gygr2jyht" path="res://src/Gameplay/System/DeveloperMode.cs" id="3_im5pd"]
 [ext_resource type="Script" uid="uid://c5se7xr2ysi1h" path="res://src/Gameplay/System/NetworkManager.cs" id="4_mly6v"]
+[ext_resource type="AudioStream" uid="uid://bx6vkk0olperh" path="res://src/Assets/Audio/Firecrack.wav" id="6_s0om0"]
+[ext_resource type="PackedScene" uid="uid://b2035qfi2b1my" path="res://src/Gameplay/Characters/Osage/Resources/Osage.tscn" id="6_s3464"]
+[ext_resource type="AudioStream" uid="uid://cqu50wphx0ls2" path="res://src/Assets/Audio/Night.mp3" id="7_6i4pf"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7xwko"]
 sky_top_color = Color(0.063928, 0.118461, 0.20204, 1)
@@ -32,6 +35,7 @@ glow_intensity = 2.0
 glow_strength = 1.2
 glow_mix = 0.165
 glow_blend_mode = 1
+fog_enabled = true
 fog_mode = 1
 fog_light_color = Color(0.0722705, 0.094043, 0.160472, 1)
 fog_density = 1.0
@@ -351,7 +355,7 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.645, -0.2, 36.148)
 shape = SubResource("BoxShape3D_ynf36")
 
-[node name="Window" type="Window" parent="." node_paths=PackedStringArray("Host", "Join", "Output", "DebugTitle", "Frame", "FPS", "ConnectionStatus", "PlayerName", "Address", "Port", "NetworkManager")]
+[node name="Window" type="Window" parent="." node_paths=PackedStringArray("Host", "Join", "Output", "DebugTitle", "Frame", "FPS", "ConnectionStatus", "PlayerName", "Address", "Port", "Hyprs", "NetworkManager")]
 disable_3d = true
 transparent_bg = true
 position = Vector2i(20, 72)
@@ -372,6 +376,7 @@ ConnectionStatus = NodePath("ScrollContainer/VBoxContainer/ConnStatus")
 PlayerName = NodePath("ScrollContainer/VBoxContainer/Name")
 Address = NodePath("ScrollContainer/VBoxContainer/Address")
 Port = NodePath("ScrollContainer/VBoxContainer/Port")
+Hyprs = NodePath("ScrollContainer/VBoxContainer/Hyprs")
 NetworkManager = NodePath("../NetworkManager")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Window"]
@@ -385,6 +390,7 @@ offset_bottom = 36.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("3_ak8tf")
+scroll_vertical = 211
 metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Window/ScrollContainer"]
@@ -524,8 +530,28 @@ layout_mode = 2
 theme = ExtResource("3_ak8tf")
 text = "Initiate"
 
+[node name="Hyprs" type="OptionButton" parent="Window/ScrollContainer/VBoxContainer"]
+z_index = 1
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Tanger"
+popup/item_0/id = 0
+popup/item_1/text = "Osage"
+popup/item_1/id = 1
+
 [node name="NetworkManager" type="Node" parent="."]
 script = ExtResource("4_mly6v")
 CharacterScenes = Dictionary[String, PackedScene]({
+"Osage": ExtResource("6_s3464"),
 "Tanger": ExtResource("2_fdacg")
 })
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51, 1.30565, 32)
+stream = ExtResource("6_s0om0")
+autoplay = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_6i4pf")
+autoplay = true

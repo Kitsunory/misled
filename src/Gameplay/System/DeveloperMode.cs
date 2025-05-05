@@ -14,6 +14,7 @@ public partial class DeveloperMode : Window {
     [Export] public TextEdit? PlayerName;
     [Export] public TextEdit? Address;
     [Export] public TextEdit? Port;
+    [Export] public OptionButton? Hyprs;
     [Export] public Node? NetworkManager;
 
     private NetworkManager? _networkManager;
@@ -36,18 +37,15 @@ public partial class DeveloperMode : Window {
         _updateTimer += (float)delta;
         _timeSinceLastSpike += (float)delta;
 
-        // Trigger a spike every 5 seconds
         if (!_isSpikeActive && _timeSinceLastSpike >= 5f) {
             _isSpikeActive = true;
             _spikeTimer = 0f;
             _timeSinceLastSpike = 0f;
         }
 
-        // Update display every 200ms
         if (_updateTimer >= 0.1f) {
             _updateTimer = 0f;
 
-            // Update FPS
             FPS!.Text = $"FPS:\n[color=green]{Engine.GetFramesPerSecond()}[/color]";
 
             if (_isSpikeActive) {
@@ -75,12 +73,14 @@ public partial class DeveloperMode : Window {
         _networkManager!.DefaultServer = Address!.Text;
         _networkManager!.Port = Convert.ToInt16(Port!.Text);
         _networkManager!.SetPlayerInfo("Name", PlayerName!.Text);
+        _networkManager!.SetPlayerInfo("Hyprs", Hyprs!.GetItemText(Hyprs!.GetSelectedId()));
         _networkManager!.Host();
     }
     private void OnJoinPressed() {
         _networkManager!.DefaultServer = Address!.Text;
         _networkManager!.Port = Convert.ToInt16(Port!.Text);
         _networkManager!.SetPlayerInfo("Name", PlayerName!.Text);
+        _networkManager!.SetPlayerInfo("Hyprs", Hyprs!.GetItemText(Hyprs!.GetSelectedId()));
         _networkManager!.Join();
     }
 }

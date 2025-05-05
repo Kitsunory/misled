@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://b7uggrpfv7dq"]
+[gd_scene load_steps=19 format=3 uid="uid://b7uggrpfv7dq"]
 
 [ext_resource type="Script" uid="uid://b0dssaqs4uo5x" path="res://src/Gameplay/Characters/Tanger/Model.cs" id="1_5ddt7"]
 [ext_resource type="PackedScene" uid="uid://cok1n2mub6m14" path="res://src/Assets/Hyprs/Tanger.tscn" id="2_bka7s"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://b43q5xht8hfpf" path="res://src/Assets/Hyprs/Tanger/Skillset/Signature.png" id="4_opnio"]
 [ext_resource type="Texture2D" uid="uid://cyqnsrkflydqd" path="res://src/Assets/Hyprs/Tanger/Skillset/Alternate.png" id="5_utroe"]
 [ext_resource type="Texture2D" uid="uid://b07yf6h3gc2qm" path="res://src/Assets/Hyprs/Tanger/Skillset/Exclusive.png" id="6_d2dik"]
+[ext_resource type="AudioStream" uid="uid://slu0vuuuyg6e" path="res://src/Assets/Audio/GrassStep.wav" id="8_umuva"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_r6sek"]
 size = Vector3(0.70784, 1.78745, 0.750793)
@@ -66,13 +67,17 @@ corner_radius_bottom_left = 4
 properties/0/path = NodePath("GPUParticles3D:emitting")
 properties/0/spawn = true
 properties/0/replication_mode = 1
+properties/1/path = NodePath("AudioStreamPlayer3D:playing")
+properties/1/spawn = true
+properties/1/replication_mode = 1
 
-[node name="Tanger" type="CharacterBody3D" node_paths=PackedStringArray("Camera", "AnimationTree", "AnimationPlayer", "Particles")]
+[node name="Tanger" type="CharacterBody3D" node_paths=PackedStringArray("Camera", "AnimationTree", "AnimationPlayer", "Particles", "AudioPlayer")]
 script = ExtResource("1_5ddt7")
 Camera = NodePath("Camera3D")
 AnimationTree = NodePath("Tanger/AnimationTree")
 AnimationPlayer = NodePath("Tanger/AnimationPlayer")
 Particles = NodePath("GPUParticles3D")
+AudioPlayer = NodePath("AudioStreamPlayer3D")
 
 [node name="Tanger" parent="." instance=ExtResource("2_bka7s")]
 
@@ -216,4 +221,8 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_interval = 0.3
 replication_config = SubResource("SceneReplicationConfig_dnjiu")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("8_umuva")

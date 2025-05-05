@@ -15,6 +15,7 @@ public abstract partial class CharacterBase : CharacterBody3D {
     [Export] public AnimationTree? AnimationTree;
     [Export] public AnimationPlayer? AnimationPlayer;
     [Export] public GpuParticles3D? Particles;
+    [Export] public AudioStreamPlayer3D? AudioPlayer;
 
     [Export] public float MoveSpeed = 7.0f;
     [Export] public float JumpForce = 6.0f;
@@ -40,7 +41,7 @@ public abstract partial class CharacterBase : CharacterBody3D {
     }
 
     protected void InitSystems() {
-        _movement = new Movement(_state!, this, _animator!, Particles!, Camera!, MoveSpeed, JumpForce, Acceleration, Deceleration, MaxJumps);
+        _movement = new Movement(_state!, this, _animator!, Particles!, Camera!, AudioPlayer!, MoveSpeed, JumpForce, Acceleration, Deceleration, MaxJumps);
         _normal = new Normal(_state!, AnimationTree!, AnimationPlayer!, _state!.NormalConfig!);
     }
 
