@@ -1,13 +1,16 @@
-[gd_scene load_steps=19 format=3 uid="uid://b2035qfi2b1my"]
+[gd_scene load_steps=27 format=3 uid="uid://b2035qfi2b1my"]
 
 [ext_resource type="Script" uid="uid://dyp3f15ir1lt4" path="res://src/Gameplay/Characters/Osage/Model.cs" id="1_rmynq"]
 [ext_resource type="PackedScene" uid="uid://d0b3iocwkxbqd" path="res://src/Assets/Hyprs/Osage.tscn" id="2_rmynq"]
 [ext_resource type="Script" uid="uid://cpsugaks0eg73" path="res://src/Gameplay/View/Camera.cs" id="3_oas3s"]
-[ext_resource type="Texture2D" uid="uid://eywyexrm0lps" path="res://src/Assets/Hyprs/Tanger/Skillset/NA.png" id="4_or38s"]
-[ext_resource type="Texture2D" uid="uid://b43q5xht8hfpf" path="res://src/Assets/Hyprs/Tanger/Skillset/Signature.png" id="5_s0iy8"]
-[ext_resource type="Texture2D" uid="uid://cyqnsrkflydqd" path="res://src/Assets/Hyprs/Tanger/Skillset/Alternate.png" id="6_351ed"]
-[ext_resource type="Texture2D" uid="uid://b07yf6h3gc2qm" path="res://src/Assets/Hyprs/Tanger/Skillset/Exclusive.png" id="7_dpm5b"]
+[ext_resource type="Texture2D" uid="uid://d05ie5oohjb8w" path="res://src/Assets/Hyprs/Osage/Skillset/NA.png" id="4_rmynq"]
+[ext_resource type="Script" uid="uid://baj6q2g8ru35u" path="res://src/Gameplay/Universal/UI.cs" id="4_ts01c"]
+[ext_resource type="Texture2D" uid="uid://bms2imwrhlrcy" path="res://src/Assets/Hyprs/Osage/Skillset/Signature.png" id="5_rmynq"]
+[ext_resource type="Texture2D" uid="uid://cb2015k7atpdv" path="res://src/Assets/Hyprs/Osage/Skillset/Alternate.png" id="6_btmdy"]
+[ext_resource type="Texture2D" uid="uid://b3ravdn1wlmt5" path="res://src/Assets/Hyprs/Osage/Skillset/Exclusive.png" id="7_ex23g"]
 [ext_resource type="AudioStream" uid="uid://slu0vuuuyg6e" path="res://src/Assets/Audio/GrassStep.wav" id="8_2y1tq"]
+[ext_resource type="Texture2D" uid="uid://cgmjo03uge10h" path="res://src/Assets/Hyprs/Osage/Panel/Osage.png" id="8_ex23g"]
+[ext_resource type="Texture2D" uid="uid://bn37xd1pnq5h8" path="res://src/Assets/Gameplay/Panel.png" id="10_ldeuu"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_r6sek"]
 size = Vector3(0.70784, 1.78745, 0.750793)
@@ -46,22 +49,24 @@ particles_anim_loop = false
 material = SubResource("StandardMaterial3D_bka7s")
 size = Vector2(0.2, 0.2)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqyj2"]
-bg_color = Color(0.639216, 0.945098, 0.933333, 0.588235)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6fqib"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vljyo"]
 bg_color = Color(1, 1, 1, 0.588235)
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpvwy"]
-bg_color = Color(0.632048, 0.613274, 0.354541, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xi2fk"]
+bg_color = Color(0.639216, 0.945098, 0.933333, 0.588235)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+
+[sub_resource type="Gradient" id="Gradient_1w2hk"]
+colors = PackedColorArray(0.634049, 0.578253, 0.369656, 1, 0.800068, 0.807112, 0.445078, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jm5m4"]
+gradient = SubResource("Gradient_1w2hk")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fly1n"]
+texture = SubResource("GradientTexture1D_jm5m4")
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_dnjiu"]
 properties/0/path = NodePath("GPUParticles3D:emitting")
@@ -70,6 +75,23 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath("AudioStreamPlayer3D:playing")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ex23g"]
+viewport_path = NodePath("Panel/SubViewport")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_582x0"]
+bg_color = Color(0.405577, 0.644085, 0.696062, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b0wu2"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
 
 [node name="Osage" type="CharacterBody3D" node_paths=PackedStringArray("Camera", "AnimationTree", "AnimationPlayer", "Particles", "AudioPlayer", "Animator")]
 script = ExtResource("1_rmynq")
@@ -109,117 +131,168 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-
-[node name="HP" type="ProgressBar" parent="Control"]
-layout_mode = 0
-offset_left = 30.0
-offset_top = 30.0
-offset_right = 260.0
-offset_bottom = 53.0
-theme_override_styles/fill = SubResource("StyleBoxFlat_wqyj2")
-value = 100.0
-show_percentage = false
-
-[node name="Shield" type="ProgressBar" parent="Control"]
-layout_mode = 0
-offset_left = 30.0
-offset_top = 57.0
-offset_right = 260.0
-offset_bottom = 69.0
-theme_override_styles/fill = SubResource("StyleBoxFlat_6fqib")
-value = 100.0
-show_percentage = false
-
-[node name="Energy" type="ProgressBar" parent="Control"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 38.0
-offset_top = -53.0
-offset_right = 255.0
-offset_bottom = -34.0
-grow_vertical = 0
-theme_override_styles/fill = SubResource("StyleBoxFlat_gpvwy")
-value = 100.0
-show_percentage = false
+script = ExtResource("4_ts01c")
+metadata/_edit_lock_ = true
 
 [node name="Control" type="Control" parent="Control"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = 0.689844
+anchor_top = 0.8125
+anchor_right = 0.99375
+anchor_bottom = 0.977778
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+metadata/_edit_use_anchors_ = true
 
 [node name="NA" type="TextureRect" parent="Control/Control"]
-modulate = Color(1, 1, 1, 0.588235)
+modulate = Color(1, 1, 1, 0.784314)
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.782031
 anchor_top = 0.975
 anchor_right = 0.782031
 anchor_bottom = 0.975
-offset_left = -64.0
-offset_top = -72.0
-offset_bottom = -8.0
+offset_left = -258.21
+offset_top = -87.025
+offset_right = -194.21
+offset_bottom = -23.025
 grow_horizontal = 0
 grow_vertical = 0
-texture = ExtResource("4_or38s")
+texture = ExtResource("4_rmynq")
 expand_mode = 1
 stretch_mode = 5
+metadata/_edit_use_anchors_ = true
 
 [node name="Signature" type="TextureRect" parent="Control/Control"]
-modulate = Color(1, 1, 1, 0.588235)
+modulate = Color(1, 1, 1, 0.784314)
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.846094
 anchor_top = 0.975
 anchor_right = 0.846094
 anchor_bottom = 0.975
-offset_left = -64.0
-offset_top = -72.0
-offset_bottom = -8.0
+offset_left = -201.13
+offset_top = -87.025
+offset_right = -137.13
+offset_bottom = -23.025
 grow_horizontal = 0
 grow_vertical = 0
-texture = ExtResource("5_s0iy8")
+texture = ExtResource("5_rmynq")
 expand_mode = 1
 stretch_mode = 5
+metadata/_edit_use_anchors_ = true
 
 [node name="Alternate" type="TextureRect" parent="Control/Control"]
-modulate = Color(1, 1, 1, 0.588235)
+modulate = Color(1, 1, 1, 0.784314)
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.910156
 anchor_top = 0.975
 anchor_right = 0.910156
 anchor_bottom = 0.975
-offset_left = -64.0
-offset_top = -72.0
-offset_bottom = -8.0
+offset_left = -144.051
+offset_top = -87.025
+offset_right = -80.0509
+offset_bottom = -23.025
 grow_horizontal = 0
 grow_vertical = 0
-texture = ExtResource("6_351ed")
+texture = ExtResource("6_btmdy")
 expand_mode = 1
 stretch_mode = 5
+metadata/_edit_use_anchors_ = true
 
 [node name="Exclusive" type="TextureRect" parent="Control/Control"]
-modulate = Color(1, 1, 1, 0.588235)
+modulate = Color(1, 1, 1, 0.784314)
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.972656
 anchor_top = 0.975
 anchor_right = 0.972656
 anchor_bottom = 0.975
-offset_left = -64.0
-offset_top = -72.0
-offset_bottom = -8.0
+offset_left = -88.3634
+offset_top = -87.025
+offset_right = -24.3634
+offset_bottom = -23.025
 grow_horizontal = 0
 grow_vertical = 0
-texture = ExtResource("7_dpm5b")
+texture = ExtResource("7_ex23g")
 expand_mode = 1
 stretch_mode = 5
+metadata/_edit_use_anchors_ = true
+
+[node name="UI" type="Control" parent="Control"]
+layout_mode = 1
+anchor_left = 0.0257812
+anchor_top = 0.825
+anchor_right = 0.266406
+anchor_bottom = 0.952778
+metadata/_edit_use_anchors_ = true
+
+[node name="Tanger" type="TextureRect" parent="Control/UI"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -148.0
+offset_right = 312.0
+grow_vertical = 0
+texture = ExtResource("8_ex23g")
+metadata/_edit_lock_ = true
+
+[node name="Shield" type="ProgressBar" parent="Control/UI"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 131.0
+offset_top = -23.0
+offset_right = 298.0
+offset_bottom = -14.0
+grow_vertical = 0
+theme_override_styles/fill = SubResource("StyleBoxFlat_vljyo")
+value = 100.0
+show_percentage = false
+
+[node name="HP" type="ProgressBar" parent="Control/UI"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 131.0
+offset_top = -41.0
+offset_right = 298.0
+offset_bottom = -26.0
+grow_vertical = 0
+theme_override_styles/fill = SubResource("StyleBoxFlat_xi2fk")
+value = 100.0
+show_percentage = false
+
+[node name="Stamina" type="Control" parent="Control"]
+layout_mode = 1
+anchor_left = 0.55
+anchor_top = 0.5625
+anchor_right = 0.58125
+anchor_bottom = 0.705555
+metadata/_edit_use_anchors_ = true
+
+[node name="Bar" type="ProgressBar" parent="Control/Stamina"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = 30.5
+offset_right = 55.0
+offset_bottom = 38.5
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -1.5708
+theme_override_styles/fill = SubResource("StyleBoxTexture_fly1n")
+value = 100.0
+show_percentage = false
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_interval = 0.3
@@ -227,3 +300,37 @@ replication_config = SubResource("SceneReplicationConfig_dnjiu")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("8_2y1tq")
+
+[node name="Panel" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00474644, 2.02637, -0.00160944)
+pixel_size = 0.004
+billboard = 2
+texture = SubResource("ViewportTexture_ex23g")
+
+[node name="SubViewport" type="SubViewport" parent="Panel"]
+transparent_bg = true
+size = Vector2i(210, 75)
+
+[node name="Panel" type="TextureRect" parent="Panel/SubViewport"]
+offset_right = 210.0
+offset_bottom = 75.0
+texture = ExtResource("10_ldeuu")
+
+[node name="HP" type="ProgressBar" parent="Panel/SubViewport"]
+offset_left = 10.0
+offset_top = 41.0
+offset_right = 198.0
+offset_bottom = 53.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_582x0")
+value = 100.0
+show_percentage = false
+
+[node name="Shield" type="ProgressBar" parent="Panel/SubViewport"]
+offset_left = 11.0
+offset_top = 57.0
+offset_right = 198.0
+offset_bottom = 65.0
+scale = Vector2(1, 0.8)
+theme_override_styles/fill = SubResource("StyleBoxFlat_b0wu2")
+value = 100.0
+show_percentage = false

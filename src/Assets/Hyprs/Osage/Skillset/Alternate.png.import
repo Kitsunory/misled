@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bhn1bn56ykys6"
-path="res://.godot/imported/NA.png-31730ae6a148de8e56b929f1d1da47a9.ctex"
+uid="uid://cb2015k7atpdv"
+path="res://.godot/imported/Alternate.png-c33b2004e95e7b1b136a3bc7c3f8499a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/Assets/Hyprs/Tanger/Skillset/NA.png"
-dest_files=["res://.godot/imported/NA.png-31730ae6a148de8e56b929f1d1da47a9.ctex"]
+source_file="res://src/Assets/Hyprs/Osage/Skillset/Alternate.png"
+dest_files=["res://.godot/imported/Alternate.png-c33b2004e95e7b1b136a3bc7c3f8499a.ctex"]
 
 [params]
 

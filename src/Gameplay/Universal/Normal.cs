@@ -1,7 +1,7 @@
 namespace Misled.Characters.Universal;
 
 using Godot;
-using Misled.Gameplay.Models;
+using Misled.Gameplay.Model;
 
 public class Normal {
     private readonly State _state;
@@ -82,7 +82,7 @@ public class Normal {
         var animationLength = _animator.AnimationTree.GetAnimation(animationName).Length;
         _config.AttackResetTime = animationLength;
 
-        _animator.PlayAnimation(animationName);
+        _animator.PlayNormal(animationName);
     }
 
 
@@ -93,7 +93,7 @@ public class Normal {
         _currentAttackIndex = 0;
         _attackTimer = 0f;
 
-        _animator.ResetAttack();
+        _animator.ResetNormal();
         _animator.AnimationTree!.Set("parameters/Mode/blend_amount", 0f);
     }
 }

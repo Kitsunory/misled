@@ -34,6 +34,10 @@ public partial class DeveloperMode : Window {
     }
 
     public override void _Process(double delta) {
+        if (Input.IsActionJustPressed("Debug")) {
+            Visible = !Visible;
+        }
+
         _updateTimer += (float)delta;
         _timeSinceLastSpike += (float)delta;
 

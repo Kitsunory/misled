@@ -1,4 +1,4 @@
-namespace Misled.Gameplay.Models;
+namespace Misled.Gameplay.Model;
 
 using Godot.Collections;
 
