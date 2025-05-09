@@ -80,7 +80,7 @@ public class Movement(
         }
 
         var current = body.GlobalTransform;
-        var targetBasis = Basis.LookingAt(-direction, Vector3.Up);
+        var targetBasis = Basis.LookingAt(direction, Vector3.Up);
 
         var newRotation = new Quaternion(current.Basis).Slerp(new Quaternion(targetBasis), 8f * delta);
         current.Basis = new Basis(newRotation);
@@ -102,7 +102,7 @@ public class Movement(
         velocity.Z = dashDirection.Z * dashStrength;
 
         var current = body.GlobalTransform;
-        var targetBasis = Basis.LookingAt(-dashDirection, Vector3.Up);
+        var targetBasis = Basis.LookingAt(dashDirection, Vector3.Up);
         current.Basis = targetBasis;
         body.GlobalTransform = current;
     }

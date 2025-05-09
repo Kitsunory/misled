@@ -1,102 +1,99 @@
 namespace Misled.Characters.Universal;
-using System.Collections.Generic;
+
 using Godot;
+using Misled.Gameplay.Models;
 
-public class NormalConfig {
-    public float DelayTime { get; init; } = 0.6f;
-    public float DefaultResetTime { get; init; } = 1.6f;
-    public int MaxComboCount { get; init; } = 3;
+public class Normal {
+    private readonly State _state;
+    private readonly NormalConfig _config;
+    private readonly Animator _animator;
 
-    public Dictionary<int, string> AnimationMap { get; init; } = new()
-    {
-        { 1, "NA1" },
-        { 2, "NA2" },
-        { 3, "NA3" }
-    };
-}
+    private float _attackTimer;
+    private int _currentAttackIndex;
+    private bool _nextAttackBuffered;
 
-public class Normal(
-    State state,
-    AnimationTree tree,
-    AnimationPlayer player,
-    NormalConfig config
-) {
-    private readonly AnimationTree _tree = tree;
-    private readonly AnimationPlayer _player = player;
-    private readonly NormalConfig _config = config;
+    public Normal(
+        State state,
+        Animator animator,
+        NormalConfig config
+    ) {
+        _state = state;
+        _animator = animator;
+        _config = config;
+    }
 
-    private float _resetTime;
-    private float _timer;
-
-    public int AttackIndex { get; private set; }
-
-    private bool _bufferedNextAttack;
 
     private void HandleAttackInput() {
-        if (!Input.IsActionJustPressed("Attack")) {
-            return;
+        if (Input.IsActionJustPressed("Normal")) {
+            if (!_state.IsAttacking) {
+                StartNewAttackCombo();
+            }
+            else {
+                // Already attacking, buffer next attack
+                _nextAttackBuffered = true;
+            }
         }
-
-        if (!state.IsAttacking) {
-            AttackIndex = 1;
-            StartAttack(AttackIndex);
-            state.IsAttacking = true;
-            _timer = 0f;
-            return;
-        }
-
-        // Already attacking, buffer next attack
-        _bufferedNextAttack = true;
     }
 
     public void Update(float delta) {
         HandleAttackInput();
 
-        if (state.IsResetAttack) {
+        if (_state.IsResetAttack) {
             ResetAttack();
             return;
         }
 
-        if (!state.IsAttacking) {
+        if (!_state.IsAttacking) {
             return;
         }
 
-        _timer += delta;
+        _attackTimer += delta;
 
         // Only allow chaining after delay time
-        if (_bufferedNextAttack && _timer > _config.DelayTime && AttackIndex < _config.MaxComboCount) {
-            AttackIndex++;
-            StartAttack(AttackIndex);
-            _bufferedNextAttack = false;
-            _timer = 0f;
+        if (_nextAttackBuffered && _attackTimer > _config.InputBufferTime && _currentAttackIndex < _config.MaxComboCount) {
+            ContinueAttackCombo();
         }
 
-        if (_timer > _resetTime) {
+        if (_attackTimer > _config.AttackResetTime) {
             ResetAttack();
         }
     }
 
-    private void StartAttack(int index) {
-        if (!_config.AnimationMap.TryGetValue(index, out var animationName) || string.IsNullOrEmpty(animationName)) {
+    private void StartNewAttackCombo() {
+        _currentAttackIndex = 1;
+        StartAttack(_currentAttackIndex);
+        _state.IsAttacking = true;
+        _attackTimer = 0f;
+    }
+
+    private void ContinueAttackCombo() {
+        _currentAttackIndex++;
+        StartAttack(_currentAttackIndex);
+        _nextAttackBuffered = false;
+        _attackTimer = 0f;
+    }
+
+    private void StartAttack(int attackIndex) {
+        _animator.AnimationTree!.Set("parameters/Mode/blend_amount", 1f);
+        if (!_config.AnimationMap.TryGetValue(attackIndex, out var animationName) || string.IsNullOrEmpty(animationName)) {
             return;
         }
 
-        _resetTime = _player.GetAnimation(animationName).Length;
+        var animationLength = _animator.AnimationTree.GetAnimation(animationName).Length;
+        _config.AttackResetTime = animationLength;
 
-        _tree.Set("parameters/Attack/blend_amount", 1f);
-        _tree.Set("parameters/Normal/blend_amount", index - 2f);
-
-        var path = $"parameters/{animationName}/request";
-        _tree.Set(path, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+        _animator.PlayAnimation(animationName);
     }
 
-    public void ResetAttack() {
-        state.IsResetAttack = false;
-        state.IsAttacking = false;
-        AttackIndex = 0;
-        _timer = 0f;
 
-        _tree.Set("parameters/Attack/blend_amount", 0f);
-        _tree.Set("parameters/Normal/blend_amount", -1f);
+
+    public void ResetAttack() {
+        _state.IsResetAttack = false;
+        _state.IsAttacking = false;
+        _currentAttackIndex = 0;
+        _attackTimer = 0f;
+
+        _animator.ResetAttack();
+        _animator.AnimationTree!.Set("parameters/Mode/blend_amount", 0f);
     }
 }

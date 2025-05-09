@@ -16,6 +16,7 @@ public abstract partial class CharacterBase : CharacterBody3D {
     [Export] public AnimationPlayer? AnimationPlayer;
     [Export] public GpuParticles3D? Particles;
     [Export] public AudioStreamPlayer3D? AudioPlayer;
+    [Export] public Node? Animator;
 
     [Export] public float MoveSpeed = 7.0f;
     [Export] public float JumpForce = 6.0f;
@@ -30,9 +31,8 @@ public abstract partial class CharacterBase : CharacterBody3D {
             return;
         }
 
-        _animator = new Animator(AnimationTree, BlendSmoothSpeed);
+        _animator = Animator! as Animator;
 
-        // Don't create Movement or NormalConfig yet if _state isn't ready
         if (_state != null) {
             InitSystems();
         }
@@ -42,13 +42,14 @@ public abstract partial class CharacterBase : CharacterBody3D {
 
     protected void InitSystems() {
         _movement = new Movement(_state!, this, _animator!, Particles!, Camera!, AudioPlayer!, MoveSpeed, JumpForce, Acceleration, Deceleration, MaxJumps);
-        _normal = new Normal(_state!, AnimationTree!, AnimationPlayer!, _state!.NormalConfig!);
+        _normal = new Normal(_state!, _animator!, _state!.NormalConfig!);
     }
 
     public override void _PhysicsProcess(double delta) {
         if (!IsMultiplayerAuthority()) {
             return;
         }
+
         var dt = (float)delta;
         _movement?.Update(dt);
         _normal?.Update(dt);

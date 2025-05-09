@@ -36,9 +36,8 @@ glow_strength = 1.2
 glow_mix = 0.165
 glow_blend_mode = 1
 fog_enabled = true
-fog_mode = 1
-fog_light_color = Color(0.0722705, 0.094043, 0.160472, 1)
-fog_density = 1.0
+fog_light_color = Color(0.0370111, 0.121007, 0.187944, 1)
+fog_density = 0.02
 fog_depth_begin = 6.0
 fog_depth_end = 50.0
 
@@ -115,7 +114,7 @@ environment = SubResource("Environment_km1yn")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
 transform = Transform3D(0.544856, 0.748133, 0.37872, -0.676665, 0.12554, 0.725509, 0.495233, -0.651565, 0.574637, 22.5984, 14.669, 2.56851)
-light_color = Color(0.115136, 0.191326, 0.374827, 1)
+light_color = Color(0.113725, 0.192157, 0.376471, 1)
 shadow_enabled = true
 shadow_opacity = 0.7
 shadow_blur = 0.0
@@ -359,7 +358,8 @@ shape = SubResource("BoxShape3D_ynf36")
 disable_3d = true
 transparent_bg = true
 position = Vector2i(20, 72)
-size = Vector2i(360, 800)
+size = Vector2i(300, 600)
+transient = true
 unresizable = true
 always_on_top = true
 transparent = true
@@ -390,7 +390,6 @@ offset_bottom = 36.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("3_ak8tf")
-scroll_vertical = 211
 metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Window/ScrollContainer"]
@@ -399,7 +398,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Margin1" type="MarginContainer" parent="Window/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 32)
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
 [node name="Title" type="RichTextLabel" parent="Window/ScrollContainer/VBoxContainer"]
@@ -503,7 +502,7 @@ placeholder_text = "Name"
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme = ExtResource("3_ak8tf")
-text = "0.0.0.0"
+text = "127.0.0.1"
 placeholder_text = "IP"
 
 [node name="Port" type="TextEdit" parent="Window/ScrollContainer/VBoxContainer"]

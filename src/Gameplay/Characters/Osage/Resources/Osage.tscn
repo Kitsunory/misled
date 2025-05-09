@@ -1,7 +1,7 @@
 [gd_scene load_steps=19 format=3 uid="uid://b2035qfi2b1my"]
 
 [ext_resource type="Script" uid="uid://dyp3f15ir1lt4" path="res://src/Gameplay/Characters/Osage/Model.cs" id="1_rmynq"]
-[ext_resource type="PackedScene" uid="uid://ctxal2h4riryf" path="res://src/Assets/Hyprs/Osage.tscn" id="2_rmynq"]
+[ext_resource type="PackedScene" uid="uid://d0b3iocwkxbqd" path="res://src/Assets/Hyprs/Osage.tscn" id="2_rmynq"]
 [ext_resource type="Script" uid="uid://cpsugaks0eg73" path="res://src/Gameplay/View/Camera.cs" id="3_oas3s"]
 [ext_resource type="Texture2D" uid="uid://eywyexrm0lps" path="res://src/Assets/Hyprs/Tanger/Skillset/NA.png" id="4_or38s"]
 [ext_resource type="Texture2D" uid="uid://b43q5xht8hfpf" path="res://src/Assets/Hyprs/Tanger/Skillset/Signature.png" id="5_s0iy8"]
@@ -23,7 +23,7 @@ lifetime_randomness = 0.5
 emission_shape_scale = Vector3(0.5, 0.5, 0.5)
 emission_shape = 3
 emission_box_extents = Vector3(1, 1, 1)
-direction = Vector3(0, 0, -1)
+direction = Vector3(0, 0, 1)
 spread = 5.0
 initial_velocity_max = 4.0
 gravity = Vector3(0, 0, 0)
@@ -71,13 +71,14 @@ properties/1/path = NodePath("AudioStreamPlayer3D:playing")
 properties/1/spawn = true
 properties/1/replication_mode = 1
 
-[node name="Osage" type="CharacterBody3D" node_paths=PackedStringArray("Camera", "AnimationTree", "AnimationPlayer", "Particles", "AudioPlayer")]
+[node name="Osage" type="CharacterBody3D" node_paths=PackedStringArray("Camera", "AnimationTree", "AnimationPlayer", "Particles", "AudioPlayer", "Animator")]
 script = ExtResource("1_rmynq")
 Camera = NodePath("Camera3D")
 AnimationTree = NodePath("Osage/AnimationTree")
 AnimationPlayer = NodePath("Osage/AnimationPlayer")
 Particles = NodePath("GPUParticles3D")
 AudioPlayer = NodePath("AudioStreamPlayer3D")
+Animator = NodePath("Osage/Animator")
 
 [node name="Osage" parent="." instance=ExtResource("2_rmynq")]
 
@@ -86,7 +87,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0129368, 0.891708, 0.034033
 shape = SubResource("BoxShape3D_r6sek")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01889, -0.512382)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 emitting = false
 amount = 30
 lifetime = 1.5

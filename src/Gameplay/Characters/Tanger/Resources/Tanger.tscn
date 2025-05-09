@@ -23,7 +23,7 @@ lifetime_randomness = 0.5
 emission_shape_scale = Vector3(0.5, 0.5, 0.5)
 emission_shape = 3
 emission_box_extents = Vector3(1, 1, 1)
-direction = Vector3(0, 0, -1)
+direction = Vector3(0, 0, 1)
 spread = 5.0
 initial_velocity_max = 4.0
 gravity = Vector3(0, 0, 0)
@@ -71,13 +71,14 @@ properties/1/path = NodePath("AudioStreamPlayer3D:playing")
 properties/1/spawn = true
 properties/1/replication_mode = 1
 
-[node name="Tanger" type="CharacterBody3D" node_paths=PackedStringArray("Camera", "AnimationTree", "AnimationPlayer", "Particles", "AudioPlayer")]
+[node name="Tanger" type="CharacterBody3D" node_paths=PackedStringArray("Camera", "AnimationTree", "AnimationPlayer", "Particles", "AudioPlayer", "Animator")]
 script = ExtResource("1_5ddt7")
 Camera = NodePath("Camera3D")
 AnimationTree = NodePath("Tanger/AnimationTree")
 AnimationPlayer = NodePath("Tanger/AnimationPlayer")
 Particles = NodePath("GPUParticles3D")
 AudioPlayer = NodePath("AudioStreamPlayer3D")
+Animator = NodePath("Tanger/Animator")
 
 [node name="Tanger" parent="." instance=ExtResource("2_bka7s")]
 
@@ -86,7 +87,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0129368, 0.891708, 0.034033
 shape = SubResource("BoxShape3D_r6sek")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01889, -0.512382)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.019, 0)
 emitting = false
 amount = 30
 lifetime = 1.5

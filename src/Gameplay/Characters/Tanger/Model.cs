@@ -1,6 +1,7 @@
 namespace Misled.Characters.Tanger;
 using Misled.Characters.Core;
 using Misled.Characters.Universal;
+using Misled.Gameplay.Models;
 
 public partial class Model : CharacterBase {
     public override string CharacterId => "Tanger";

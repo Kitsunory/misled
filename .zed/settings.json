@@ -43,6 +43,5 @@
   },
   "file_scan_exclusions": [
     "*.uid",
-    "*.tscn"
   ]
 }
