@@ -1,163 +1,200 @@
 namespace Misled.Gameplay.Universal;
 using Godot;
 
-public class Movement(
-    State state,
-    CharacterBody3D body,
-    Animator animator,
-    GpuParticles3D particles,
-    Camera3D camera,
-    AudioStreamPlayer3D audioPlayer,
-    float moveSpeed,
-    float jumpForce,
-    float acceleration,
-    float deceleration,
-    int maxJumps
-) {
+/// <summary>
+/// Handles character movement logic, including jumping, rotation, dashing, and applying movement forces.
+/// </summary>
+public class Movement {
+    private readonly State _state;
+    private readonly CharacterBody3D _body;
+    private readonly Animator _animator;
+    private readonly GpuParticles3D _particles;
+    private readonly Camera3D _camera;
+    private readonly AudioStreamPlayer3D _audioPlayer;
+    private readonly float _moveSpeed;
+    private readonly float _jumpForce;
+    private readonly float _acceleration;
+    private readonly float _deceleration;
+    private readonly int _maxJumps;
     private int _jumpCount;
 
-    public void Ready() =>
-        state.OnAttackStarted += HandleAttackStarted;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Movement"/> class.
+    /// </summary>
+    /// <param name="state">The character's state.</param>
+    /// <param name="body">The character's body.</param>
+    /// <param name="animator">The animator.</param>
+    /// <param name="particles">The particle system.</param>
+    /// <param name="camera">The camera.</param>
+    /// <param name="audioPlayer">The audio player.</param>
+    /// <param name="moveSpeed">The movement speed.</param>
+    /// <param name="jumpForce">The jump force.</param>
+    /// <param name="acceleration">The acceleration.</param>
+    /// <param name="deceleration">The deceleration.</param>
+    /// <param name="maxJumps">The maximum number of jumps.</param>
+    public Movement(
+        State state,
+        CharacterBody3D body,
+        Animator animator,
+        GpuParticles3D particles,
+        Camera3D camera,
+        AudioStreamPlayer3D audioPlayer,
+        float moveSpeed,
+        float jumpForce,
+        float acceleration,
+        float deceleration,
+        int maxJumps
+    ) {
+        _state = state;
+        _body = body;
+        _animator = animator;
+        _particles = particles;
+        _camera = camera;
+        _audioPlayer = audioPlayer;
+        _moveSpeed = moveSpeed;
+        _jumpForce = jumpForce;
+        _acceleration = acceleration;
+        _deceleration = deceleration;
+        _maxJumps = maxJumps;
+    }
 
+    /// <summary>
+    /// Called when the node enters the scene tree.
+    /// </summary>
+    public void Ready() => _state.OnAttackStarted += HandleAttackStarted;
+
+    /// <summary>
+    /// Updates the movement logic.
+    /// </summary>
+    /// <param name="delta">The time elapsed since the previous frame.</param>
     public void Update(float delta) {
-        if (state == null) {
+        if (_state == null) {
             GD.PrintErr("State system not assigned.");
             return;
         }
 
-        var velocity = body.Velocity;
+        var velocity = _body.Velocity;
 
-        // Apply gravity
-        if (!body.IsOnFloor()) {
-            if (state.IsAttacking) {
-                velocity.Y = 0f;
-            }
-            else {
-                velocity += body.GetGravity() * delta;
-            }
-        }
+        ApplyGravity(ref velocity, delta);
 
-        // Movement input
-        var inputVec = Input.GetVector("Left", "Right", "Up", "Down");
+        var direction = GetMovementDirection();
 
-        var forward = camera.GlobalTransform.Basis.Z;
-        var right = camera.GlobalTransform.Basis.X;
-
-        forward.Y = 0;
-        right.Y = 0;
-
-        var direction = ((right * inputVec.X) + (forward * inputVec.Y)).Normalized();
-
-        // Rotation and jump logic (only if not attacking)
-        if (!state.IsAttacking) {
+        if (!_state.IsAttacking) {
             HandleJump(ref velocity);
             RotateCharacterToward(direction, delta);
         }
 
-        // Dash input
         if (Input.IsActionJustPressed("Dash")) {
             HandleDash(ref velocity, direction);
         }
 
-        // Horizontal movement (only if not attacking or dashing)
         ApplyMovement(ref velocity, direction, delta);
 
-        body.Velocity = velocity;
-        body.MoveAndSlide();
+        _body.Velocity = velocity;
+        _body.MoveAndSlide();
 
-        if (body.IsOnFloor()) {
-            _jumpCount = 0;
-        }
-
-        animator.UpdateMovementBlend(velocity, body.IsOnFloor());
-
-        // Play/Stop walking audio based on actual movement
+        UpdateJumpCount();
+        UpdateAnimator(velocity);
         HandleWalkingAudio(velocity);
     }
 
-    private async void HandleAttackStarted() {
-        var cameraDirection = -camera.GlobalTransform.Basis.Z;
-        cameraDirection.Y = 0;
-        cameraDirection = cameraDirection.Normalized();
-
-        var targetBasis = Basis.LookingAt(cameraDirection, Vector3.Up);
-        body.GlobalTransform = body.GlobalTransform with { Basis = targetBasis };
-
-        var attackMoveDistance = moveSpeed * 0.1f;
-        var targetPosition = body.GlobalPosition + (cameraDirection * attackMoveDistance);
-
-        var start = body.GlobalPosition;
-        var duration = 0.5f;
-        var elapsed = 0f;
-
-        while (elapsed < duration) {
-            var t = elapsed / duration;
-            var easedT = 1f - Mathf.Pow(1f - t, 3f);
-            body.GlobalPosition = start.Lerp(targetPosition, easedT);
-            await body.ToSignal(body.GetTree(), "process_frame");
-            elapsed += (float)body.GetProcessDeltaTime();
+    /// <summary>
+    /// Applies gravity to the character.
+    /// </summary>
+    /// <param name="velocity">The character's velocity.</param>
+    /// <param name="delta">The time elapsed since the previous frame.</param>
+    private void ApplyGravity(ref Vector3 velocity, float delta) {
+        if (!_body.IsOnFloor()) {
+            velocity.Y = _state.IsAttacking ? 0f : velocity.Y + (_body.GetGravity().Y * delta);
         }
-
-        body.GlobalPosition = targetPosition;
     }
 
+    /// <summary>
+    /// Gets the movement direction based on player input.
+    /// </summary>
+    /// <returns>The movement direction.</returns>
+    private Vector3 GetMovementDirection() {
+        var inputVec = Input.GetVector("Left", "Right", "Up", "Down");
 
+        var forward = _camera.GlobalTransform.Basis.Z;
+        var right = _camera.GlobalTransform.Basis.X;
 
+        forward.Y = 0;
+        right.Y = 0;
+
+        return ((right * inputVec.X) + (forward * inputVec.Y)).Normalized();
+    }
+
+    /// <summary>
+    /// Handles the jump action.
+    /// </summary>
+    /// <param name="velocity">The character's velocity.</param>
     private void HandleJump(ref Vector3 velocity) {
-        if (Input.IsActionJustPressed("Jump") && _jumpCount < maxJumps) {
-            velocity.Y = jumpForce;
+        if (Input.IsActionJustPressed("Jump") && _jumpCount < _maxJumps) {
+            velocity.Y = _jumpForce;
             _jumpCount++;
         }
     }
 
+    /// <summary>
+    /// Rotates the character towards the movement direction.
+    /// </summary>
+    /// <param name="direction">The movement direction.</param>
+    /// <param name="delta">The time elapsed since the previous frame.</param>
     private void RotateCharacterToward(Vector3 direction, float delta) {
         if (direction == Vector3.Zero) {
             return;
         }
 
-        var current = body.GlobalTransform;
+        var current = _body.GlobalTransform;
         var targetBasis = Basis.LookingAt(direction, Vector3.Up);
 
         var newRotation = new Quaternion(current.Basis).Slerp(new Quaternion(targetBasis), 8f * delta);
         current.Basis = new Basis(newRotation);
-        body.GlobalTransform = current;
+        _body.GlobalTransform = current;
     }
 
+    /// <summary>
+    /// Handles the dash action.
+    /// </summary>
+    /// <param name="velocity">The character's velocity.</param>
+    /// <param name="direction">The movement direction.</param>
     private void HandleDash(ref Vector3 velocity, Vector3 direction) {
-        particles.Restart();
-        state.ResetAttack();
+        _particles.Restart();
+        _state.ResetAttack();
 
         var dashDirection = direction == Vector3.Zero
-            ? -camera.GlobalTransform.Basis.Z with { Y = 0 }
+            ? -_camera.GlobalTransform.Basis.Z with { Y = 0 }
             : direction;
 
         dashDirection = dashDirection.Normalized();
-        var dashStrength = moveSpeed * 5f;
+        var dashStrength = _moveSpeed * 5f;
 
         velocity.X = dashDirection.X * dashStrength;
         velocity.Z = dashDirection.Z * dashStrength;
 
-        var current = body.GlobalTransform;
+        var current = _body.GlobalTransform;
         var targetBasis = Basis.LookingAt(dashDirection, Vector3.Up);
         current.Basis = targetBasis;
-        body.GlobalTransform = current;
+        _body.GlobalTransform = current;
     }
 
+    /// <summary>
+    /// Applies movement forces to the character.
+    /// </summary>
+    /// <param name="velocity">The character's velocity.</param>
+    /// <param name="direction">The movement direction.</param>
+    /// <param name="delta">The time elapsed since the previous frame.</param>
     private void ApplyMovement(ref Vector3 velocity, Vector3 direction, float delta) {
         var horizontal = velocity with { Y = 0 };
 
-        // No movement when attacking
-        if (state.IsAttacking) {
+        if (_state.IsAttacking) {
             horizontal = Vector3.Zero;
         }
         else {
             var shouldMove = direction != Vector3.Zero;
-
-            var targetVelocity = shouldMove
-                ? direction * moveSpeed
-                : Vector3.Zero;
-
-            var blend = shouldMove ? acceleration : deceleration;
+            var targetVelocity = shouldMove ? direction * _moveSpeed : Vector3.Zero;
+            var blend = shouldMove ? _acceleration : _deceleration;
             horizontal = horizontal.Lerp(targetVelocity, blend * delta);
         }
 
@@ -165,15 +202,61 @@ public class Movement(
         velocity.Z = horizontal.Z;
     }
 
+    /// <summary>
+    /// Handles the walking audio.
+    /// </summary>
+    /// <param name="velocity">The character's velocity.</param>
     private void HandleWalkingAudio(Vector3 velocity) {
         var horizontalVelocity = new Vector2(velocity.X, velocity.Z);
         var isMoving = horizontalVelocity.LengthSquared() > 1f;
 
-        if (body.IsOnFloor() && isMoving && !audioPlayer.IsPlaying()) {
-            audioPlayer.Play();
+        if (_body.IsOnFloor() && isMoving && !_audioPlayer.IsPlaying()) {
+            _audioPlayer.Play();
         }
-        else if ((!body.IsOnFloor() || !isMoving) && audioPlayer.IsPlaying()) {
-            audioPlayer.Stop();
+        else if ((!_body.IsOnFloor() || !isMoving) && _audioPlayer.IsPlaying()) {
+            _audioPlayer.Stop();
         }
+    }
+
+    /// <summary>
+    /// Updates the jump count when the character lands on the floor.
+    /// </summary>
+    private void UpdateJumpCount() {
+        if (_body.IsOnFloor()) {
+            _jumpCount = 0;
+        }
+    }
+
+    /// <summary>
+    /// Updates the animator with the current velocity and grounded state.
+    /// </summary>
+    /// <param name="velocity">The character's velocity.</param>
+    private void UpdateAnimator(Vector3 velocity) => _animator.UpdateMovementBlend(velocity, _body.IsOnFloor());
+
+    private async void HandleAttackStarted() {
+        var cameraDirection = -_camera.GlobalTransform.Basis.Z;
+        cameraDirection.Y = 0;
+        cameraDirection = cameraDirection.Normalized();
+
+        var targetBasis = Basis.LookingAt(cameraDirection, Vector3.Up);
+        _body.GlobalTransform = _body.GlobalTransform with { Basis = targetBasis };
+
+        var attackMoveDistance = _moveSpeed * 0.1f;
+        var targetPosition = _body.GlobalPosition + (cameraDirection * attackMoveDistance);
+
+        var start = _body.GlobalPosition;
+        var duration = 0.5f;
+        var elapsed = 0f;
+
+        while (elapsed < duration) {
+            if (!_state.IsAttacking) { return; }
+            var t = elapsed / duration;
+            var easedT = 1f - Mathf.Pow(1f - t, 3f);
+            _body.GlobalPosition = start.Lerp(targetPosition, easedT);
+            await _body.ToSignal(_body.GetTree(), "process_frame");
+            elapsed += (float)_body.GetProcessDeltaTime();
+        }
+
+        _body.GlobalPosition = targetPosition;
     }
 }

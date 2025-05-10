@@ -2,9 +2,9 @@
 
 [ext_resource type="ArrayMesh" uid="uid://c3lvx0asbupb0" path="res://src/Assets/Level/Serbian/Serbian.obj" id="1_0k8ew"]
 [ext_resource type="PackedScene" uid="uid://b7uggrpfv7dq" path="res://src/Gameplay/Characters/Tanger/Resources/Tanger.tscn" id="2_fdacg"]
+[ext_resource type="Script" uid="uid://cc8p2e1c7lf3c" path="res://src/Gameplay/Core/DeveloperMode.cs" id="2_s3464"]
 [ext_resource type="Theme" uid="uid://gcd6i4cul14f" path="res://src/Assets/Universal.tres" id="3_ak8tf"]
-[ext_resource type="Script" uid="uid://cgl5gygr2jyht" path="res://src/Gameplay/System/DeveloperMode.cs" id="3_im5pd"]
-[ext_resource type="Script" uid="uid://c5se7xr2ysi1h" path="res://src/Gameplay/System/NetworkManager.cs" id="4_mly6v"]
+[ext_resource type="Script" uid="uid://ckfr3q8ybprsl" path="res://src/Gameplay/Core/NetworkManager.cs" id="4_75gv3"]
 [ext_resource type="AudioStream" uid="uid://bx6vkk0olperh" path="res://src/Assets/Audio/Firecrack.wav" id="6_s0om0"]
 [ext_resource type="PackedScene" uid="uid://b2035qfi2b1my" path="res://src/Gameplay/Characters/Osage/Resources/Osage.tscn" id="6_s3464"]
 [ext_resource type="AudioStream" uid="uid://cqu50wphx0ls2" path="res://src/Assets/Audio/Night.mp3" id="7_6i4pf"]
@@ -365,7 +365,7 @@ always_on_top = true
 transparent = true
 theme_override_styles/embedded_border = SubResource("StyleBoxFlat_fdacg")
 theme_override_styles/embedded_unfocused_border = SubResource("StyleBoxFlat_fdacg")
-script = ExtResource("3_im5pd")
+script = ExtResource("2_s3464")
 Host = NodePath("ScrollContainer/VBoxContainer/Host")
 Join = NodePath("ScrollContainer/VBoxContainer/Join")
 Output = NodePath("ScrollContainer/VBoxContainer/Output")
@@ -540,7 +540,7 @@ popup/item_1/text = "Osage"
 popup/item_1/id = 1
 
 [node name="NetworkManager" type="Node" parent="."]
-script = ExtResource("4_mly6v")
+script = ExtResource("4_75gv3")
 CharacterScenes = Dictionary[String, PackedScene]({
 "Osage": ExtResource("6_s3464"),
 "Tanger": ExtResource("2_fdacg")

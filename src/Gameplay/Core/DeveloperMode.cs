@@ -1,6 +1,6 @@
-namespace Misled.Gameplay.System;
+namespace Misled.Gameplay.Core;
 
-using global::System;
+using System;
 using Godot;
 
 public partial class DeveloperMode : Window {
@@ -67,10 +67,8 @@ public partial class DeveloperMode : Window {
         }
     }
 
-    private void OnOutputPressed() {
-        GD.Print(_networkManager!.GetAllPlayers());
+    private void OnOutputPressed() =>
         _networkManager!.SpawnAllPlayers();
-    }
 
     private void OnHostPressed() {
         _networkManager!.DefaultServer = Address!.Text;
