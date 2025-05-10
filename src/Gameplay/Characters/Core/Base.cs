@@ -93,6 +93,39 @@ public abstract partial class Base : CharacterBody3D {
         }
     }
 
+    protected State? GetPlayerState(long peerId) {
+        var world = GetTree().Root.GetNode("World");
+
+        var enemyBody = world.GetNodeOrNull<CharacterBody3D>(peerId.ToString());
+        if (enemyBody == null) {
+            GD.PrintErr("Enemy body not found");
+            return null;
+        }
+
+        var enemyState = enemyBody.GetNodeOrNull<State>("State");
+        if (enemyState == null) {
+            GD.PrintErr("Enemy state not found");
+            return null;
+        }
+
+        return enemyState;
+    }
+
+    public CharacterBody3D? GetPlayerNode(long peerId) {
+        var world = GetTree().Root.GetNode("World");
+
+        var enemyBody = world.GetNodeOrNull<CharacterBody3D>(peerId.ToString());
+        if (enemyBody == null) {
+            GD.PrintErr("Enemy body not found");
+            return null;
+        }
+
+        return enemyBody;
+    }
+
+    protected bool IsInvalidHitscan(Node body) =>
+            !body.IsInGroup("Players") || long.Parse(body.Name) == Multiplayer.GetUniqueId();
+
     /// <summary>
     /// Validates that all required exported nodes are assigned.
     /// </summary>

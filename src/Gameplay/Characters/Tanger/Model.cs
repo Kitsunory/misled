@@ -1,12 +1,23 @@
 namespace Misled.Gameplay.Tanger;
+
 using Godot;
 using Misled.Gameplay.Core;
 using Misled.Gameplay.Model;
+using Misled.Gameplay.Universal;
 
 /// <summary>
 /// Represents the Tanger character model in the game.
 /// </summary>
 public partial class Model : Base {
+    [Export]
+    public Area3D? Dynamic;
+
+    [Export]
+    public Area3D? Whole;
+
+    [Export]
+    public Area3D? Big;
+
     private bool _isAttacking;
     private float _attackTimer;
     private float _attackResetTime;
@@ -20,10 +31,23 @@ public partial class Model : Base {
     /// Called when the node enters the scene tree.
     /// </summary>
     public override void _Ready() {
+        if (!IsMultiplayerAuthority()) {
+            return;
+        }
+
         base._Ready();
         _state!.NormalConfig = new NormalConfig();
 
+        Dynamic!.BodyEntered += OnDynamicBodyEntered;
+
         InitSystems();
+    }
+
+    private void OnDynamicBodyEntered(Node body) {
+        if (IsInvalidHitscan(body)) { return; }
+
+        var peerId = long.Parse(body.Name);
+        GetPlayerState(peerId)?.RpcId(peerId, nameof(State.RequestHealthChange), -400);
     }
 
     /// <summary>
@@ -58,6 +82,12 @@ public partial class Model : Base {
     /// Handles player input for initiating attacks.
     /// </summary>
     private void HandleAttackInputs() {
+        if (_state!.IsAttacking) {
+            Dynamic!.Monitoring = true;
+        } else {
+            Dynamic!.Monitoring = false;
+        }
+
         if (Input.IsActionJustPressed("Signature")) {
             TryStartAttack("Signature");
         }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://cok1n2mub6m14"]
+[gd_scene load_steps=46 format=3 uid="uid://cok1n2mub6m14"]
 
 [ext_resource type="PackedScene" uid="uid://c0hqe8wpnt227" path="res://src/Assets/Hyprs/Tanger/Tanger.glb" id="1_mqy6r"]
 [ext_resource type="Texture2D" uid="uid://crguyxgce0hl2" path="res://src/Assets/Hyprs/Osage/Skillset/Bloodstain.png" id="2_jroo1"]
@@ -46,6 +46,15 @@ particles_anim_loop = false
 [sub_resource type="QuadMesh" id="QuadMesh_i3wun"]
 material = SubResource("StandardMaterial3D_x0764")
 size = Vector2(0.2, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lmt1m"]
+size = Vector3(1, 1, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jroo1"]
+size = Vector3(0.7, 0.7, 0.7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6u2gg"]
+size = Vector3(1.57905, 0.7, 0.7)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_508w8"]
 diffuse_mode = 3
@@ -156,7 +165,6 @@ transitions = ["Start", "NA1", SubResource("AnimationNodeStateMachineTransition_
 graph_offset = Vector2(-92, -243)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_jb32n"]
-graph_offset = Vector2(-327.906, -65.1993)
 nodes/Abilities/node = SubResource("AnimationNodeStateMachine_utuee")
 nodes/Abilities/position = Vector2(-88.8889, -44.4444)
 nodes/Fall/node = SubResource("AnimationNodeAnimation_tt2om")
@@ -188,26 +196,26 @@ properties/2/replication_mode = 1
 [node name="Tanger" instance=ExtResource("1_mqy6r")]
 
 [node name="Skeleton3D" parent="Tanger-Rig" index="0"]
-bones/0/position = Vector3(6.05951e-13, 0.897123, -0.0460278)
+bones/0/position = Vector3(8.13947e-10, 0.897116, -0.0425001)
 bones/0/rotation = Quaternion(0.110021, -0.633109, 0.0647054, 0.763467)
-bones/1/rotation = Quaternion(-0.0246376, -0.188492, 0.0445783, 0.980753)
-bones/2/rotation = Quaternion(-0.13881, -1.90034e-07, 3.51314e-08, 0.990319)
+bones/1/rotation = Quaternion(-0.0327941, -0.187454, 0.0592565, 0.979936)
+bones/2/rotation = Quaternion(-0.13881, -1.81844e-07, 2.91552e-08, 0.990319)
 bones/3/rotation = Quaternion(-0.0644191, -0.104596, -0.00794874, 0.992395)
 bones/4/rotation = Quaternion(0.140631, 7.14427e-05, -0.00103819, 0.990062)
 bones/5/rotation = Quaternion(0.0459236, 0.668437, -0.0724792, 0.738803)
-bones/6/position = Vector3(-3.26286e-06, 0.014927, -0.110106)
-bones/6/rotation = Quaternion(-4.58632e-06, -0.0222363, 0.999753, 2.55157e-05)
+bones/6/position = Vector3(-3.20839e-06, 0.0149258, -0.110105)
+bones/6/rotation = Quaternion(-3.05282e-06, -0.0221794, 0.999754, 1.90152e-05)
 bones/6/scale = Vector3(1, 0.998058, 1)
-bones/7/rotation = Quaternion(0.026874, 8.73199e-07, -6.00104e-06, 0.999639)
+bones/7/rotation = Quaternion(0.0268911, 5.87919e-07, -3.86026e-06, 0.999638)
 bones/7/scale = Vector3(1, 0.945102, 1)
-bones/8/rotation = Quaternion(-0.0221072, -1.39153e-06, 4.35156e-06, 0.999756)
+bones/8/rotation = Quaternion(-0.0221511, -5.76742e-07, -9.65142e-07, 0.999755)
 bones/8/scale = Vector3(1, 0.953139, 1)
-bones/9/rotation = Quaternion(0.0185007, -1.23504e-06, 4.26531e-06, 0.999829)
+bones/9/rotation = Quaternion(0.0184013, 9.41346e-07, -7.53398e-06, 0.999831)
 bones/9/scale = Vector3(1, 0.969983, 1)
 bones/10/rotation = Quaternion(-0.428476, -0.420197, -0.239047, 0.763348)
 bones/11/position = Vector3(0.00569378, 0.130125, -0.0425749)
-bones/11/rotation = Quaternion(-0.296637, 0.321896, -0.79793, 0.414365)
-bones/12/rotation = Quaternion(0.169533, -0.00394604, -0.584862, 0.793208)
+bones/11/rotation = Quaternion(-0.255314, 0.34888, -0.785374, 0.443041)
+bones/12/rotation = Quaternion(0.214363, -0.0563641, -0.627052, 0.746778)
 bones/13/rotation = Quaternion(0.0423434, 0.833845, -0.15368, 0.52848)
 bones/14/rotation = Quaternion(-0.0246986, 0.714078, 0.0386576, 0.698561)
 bones/15/position = Vector3(0.000659645, 0.0548295, 0.00342581)
@@ -228,10 +236,10 @@ bones/30/rotation = Quaternion(0.0603565, -0.0941447, 0.0214652, 0.993495)
 bones/31/rotation = Quaternion(0.257385, -0.013239, 0.0134929, 0.966124)
 bones/32/rotation = Quaternion(0.12893, -0.0312866, -0.0194893, 0.990968)
 bones/33/rotation = Quaternion(-0.602664, 0.173358, 0.235609, 0.74245)
-bones/34/position = Vector3(-0.00693808, 0.137789, -0.00658068)
-bones/34/rotation = Quaternion(-0.323482, -0.356401, 0.275729, 0.832053)
-bones/35/rotation = Quaternion(0.432268, -0.0598119, 0.295079, 0.849997)
-bones/36/rotation = Quaternion(-0.041238, 0.582332, 0.112903, 0.804016)
+bones/34/position = Vector3(-0.00693888, 0.137788, -0.00658089)
+bones/34/rotation = Quaternion(-0.323484, -0.356405, 0.275726, 0.832051)
+bones/35/rotation = Quaternion(0.490787, -0.0181278, 0.314627, 0.812286)
+bones/36/rotation = Quaternion(0.0153943, 0.6042, 0.170926, 0.778132)
 bones/38/rotation = Quaternion(0.648671, -0.0860609, -0.180996, 0.734207)
 bones/39/rotation = Quaternion(0.0802555, 0.00717243, -0.0259772, 0.99641)
 bones/41/position = Vector3(0.00335979, -0.0120167, 0.0170531)
@@ -246,21 +254,21 @@ bones/50/rotation = Quaternion(0.546477, 0.0145933, -0.105311, 0.830698)
 bones/52/rotation = Quaternion(0.0330627, -0.685177, 0.1252, 0.716774)
 bones/53/rotation = Quaternion(0.305328, 0.0857225, 0.173293, 0.932414)
 bones/56/position = Vector3(0.0854525, 0.0459399, 0.0248162)
-bones/56/rotation = Quaternion(0.933346, -0.00793939, -0.303071, 0.192226)
-bones/57/rotation = Quaternion(0.101495, 0.126778, -0.0375919, 0.986009)
-bones/58/rotation = Quaternion(-0.456113, -0.00493617, -0.0310081, 0.889368)
-bones/59/rotation = Quaternion(-1.48445e-05, 0.931455, -0.363856, 1.22485e-05)
+bones/56/rotation = Quaternion(0.9334, -0.00801686, -0.303052, 0.191987)
+bones/57/rotation = Quaternion(0.103966, 0.126746, -0.0346236, 0.985864)
+bones/58/rotation = Quaternion(-0.456079, -0.00494, -0.0310094, 0.889385)
+bones/59/rotation = Quaternion(-1.21075e-05, 0.93147, -0.363817, 1.37882e-05)
 bones/61/position = Vector3(-0.0854525, 0.0357092, -0.0140607)
-bones/61/rotation = Quaternion(0.982511, -0.0760002, 0.0135782, 0.169446)
-bones/62/rotation = Quaternion(0.199081, -0.0253949, -0.0865163, 0.975826)
-bones/63/rotation = Quaternion(-0.495896, 0.107397, 0.0443522, 0.860573)
+bones/61/rotation = Quaternion(0.982461, -0.0760009, 0.0135698, 0.169734)
+bones/62/rotation = Quaternion(0.200061, -0.0250238, -0.0823362, 0.975997)
+bones/63/rotation = Quaternion(-0.495956, 0.107392, 0.0443589, 0.860539)
 bones/64/rotation = Quaternion(0.0644131, 0.921622, -0.367467, -0.106924)
 bones/65/rotation = Quaternion(0.700657, -0.633969, 0.260649, 0.198051)
-bones/66/position = Vector3(-0.241435, 0.188106, 0.0707905)
-bones/66/rotation = Quaternion(-0.419025, -0.340623, 0.609509, 0.580424)
+bones/66/position = Vector3(-0.248406, 0.220958, 0.0611915)
+bones/66/rotation = Quaternion(-0.430051, -0.360338, 0.591644, 0.578939)
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="Tanger-Rig/Skeleton3D" index="0"]
-transform = Transform3D(-0.397027, 0.198868, -0.896003, -0.0183041, 0.974333, 0.224364, 0.917624, 0.105479, -0.383196, -0.0404677, 1.22451, -0.0299406)
+transform = Transform3D(-0.400619, 0.214702, -0.890734, 0.014957, 0.97356, 0.227939, 0.916122, 0.0779943, -0.393239, -0.0370349, 1.22473, -0.0324619)
 visible = false
 bone_name = "spine.3"
 bone_idx = 3
@@ -276,7 +284,7 @@ texture_filter = 0
 texture = ExtResource("2_jroo1")
 
 [node name="Hammer" parent="Tanger-Rig/Skeleton3D" index="1"]
-transform = Transform3D(1, 0.000146054, 0.000434965, -0.00014609, 1, 7.42124e-06, -0.000434726, -7.35698e-06, 1, -0.000165597, 3.23057e-05, -5.03659e-06)
+transform = Transform3D(0.998701, -0.0159955, -0.04837, 0.014727, 0.999541, -0.0264669, 0.0487714, 0.0257203, 0.998479, 0.00449891, 0.0305936, -0.0223322)
 
 [node name="Hammer" parent="Tanger-Rig/Skeleton3D/Hammer" index="0"]
 surface_material_override/0 = SubResource("ORMMaterial3D_tt2om")
@@ -294,6 +302,26 @@ amount = 200
 speed_scale = 0.5
 process_material = SubResource("ParticleProcessMaterial_tt2om")
 draw_pass_1 = SubResource("QuadMesh_i3wun")
+
+[node name="Big" type="Area3D" parent="Tanger-Rig/Skeleton3D/Hammer/Hammer" index="2"]
+transform = Transform3D(-0.22657, -0.818413, -0.528079, -0.751425, -0.198083, 0.629383, -0.619698, 0.539411, -0.570096, 1.00046, 1.18078, -0.371629)
+
+[node name="Collison" type="CollisionShape3D" parent="Tanger-Rig/Skeleton3D/Hammer/Hammer/Big" index="0"]
+transform = Transform3D(0.984808, -1.00779e-07, 0.173648, 1.62854e-07, 1, -4.65661e-10, -0.173648, 7.567e-10, 0.984808, 0.102566, 0.500304, 0.751633)
+shape = SubResource("BoxShape3D_lmt1m")
+
+[node name="Dynamic" type="Area3D" parent="Tanger-Rig/Skeleton3D/Hammer/Hammer" index="3"]
+transform = Transform3D(1, 2.94334e-15, 0, 1.73487e-15, 1, 0, 0, 3.55271e-15, 1, 0, 0, 0)
+
+[node name="Collison" type="CollisionShape3D" parent="Tanger-Rig/Skeleton3D/Hammer/Hammer/Dynamic" index="0"]
+transform = Transform3D(0.811049, -0.197645, 0.550578, 0.187523, 0.979367, 0.0753319, -0.554106, 0.0421487, 0.831378, 0.461864, 1.2309, -0.717532)
+shape = SubResource("BoxShape3D_jroo1")
+
+[node name="Whole" type="Area3D" parent="Tanger-Rig/Skeleton3D/Hammer/Hammer" index="4"]
+
+[node name="Collision" type="CollisionShape3D" parent="Tanger-Rig/Skeleton3D/Hammer/Hammer/Whole" index="0"]
+transform = Transform3D(0.811049, -0.197645, 0.550578, 0.187523, 0.979367, 0.0753319, -0.554106, 0.0421487, 0.831378, 0.105387, 1.14847, -0.473988)
+shape = SubResource("BoxShape3D_6u2gg")
 
 [node name="Body" parent="Tanger-Rig/Skeleton3D" index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00066328, -0.00327766, 0.000325561)

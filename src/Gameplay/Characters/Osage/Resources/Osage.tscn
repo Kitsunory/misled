@@ -95,8 +95,10 @@ corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
-[node name="Osage" type="CharacterBody3D" node_paths=PackedStringArray("Camera", "AnimationTree", "AnimationPlayer", "Particles", "AudioPlayer", "Animator", "State")]
+[node name="Osage" type="CharacterBody3D" node_paths=PackedStringArray("Dynamic", "Whole", "Camera", "AnimationTree", "AnimationPlayer", "Particles", "AudioPlayer", "Animator", "State") groups=["Players"]]
 script = ExtResource("1_rmynq")
+Dynamic = NodePath("Osage/Osage-Rig/Skeleton3D/Leg/Dynamic")
+Whole = NodePath("Osage/Osage-Rig/Skeleton3D/Spine/Whole")
 Camera = NodePath("Camera3D")
 AnimationTree = NodePath("Osage/AnimationTree")
 AnimationPlayer = NodePath("Osage/AnimationPlayer")
@@ -345,7 +347,7 @@ offset_bottom = 65.0
 scale = Vector2(1, 0.8)
 theme_override_styles/fill = SubResource("StyleBoxFlat_b0wu2")
 max_value = 1000.0
-value = 100.0
+value = 1000.0
 show_percentage = false
 
 [node name="State" type="Node" parent="."]

@@ -95,8 +95,11 @@ corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
-[node name="Tanger" type="CharacterBody3D" node_paths=PackedStringArray("Camera", "AnimationTree", "AnimationPlayer", "Particles", "AudioPlayer", "Animator", "State")]
+[node name="Tanger" type="CharacterBody3D" node_paths=PackedStringArray("Dynamic", "Whole", "Big", "Camera", "AnimationTree", "AnimationPlayer", "Particles", "AudioPlayer", "Animator", "State") groups=["Players"]]
 script = ExtResource("1_5ddt7")
+Dynamic = NodePath("Tanger/Tanger-Rig/Skeleton3D/Hammer/Hammer/Dynamic")
+Whole = NodePath("Tanger/Tanger-Rig/Skeleton3D/Hammer/Hammer/Whole")
+Big = NodePath("Tanger/Tanger-Rig/Skeleton3D/Hammer/Hammer/Big")
 Camera = NodePath("Camera3D")
 AnimationTree = NodePath("Tanger/AnimationTree")
 AnimationPlayer = NodePath("Tanger/AnimationPlayer")

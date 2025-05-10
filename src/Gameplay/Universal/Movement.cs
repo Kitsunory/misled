@@ -61,7 +61,10 @@ public class Movement {
     /// <summary>
     /// Called when the node enters the scene tree.
     /// </summary>
-    public void Ready() => _state.OnAttackStarted += HandleAttackStarted;
+    public void Ready() {
+        _state.OnAttackStarted += HandleAttackStarted;
+        _state.OnDamageReceived += HandleDamage;
+    }
 
     /// <summary>
     /// Updates the movement logic.
@@ -250,6 +253,41 @@ public class Movement {
 
         while (elapsed < duration) {
             if (!_state.IsAttacking) { return; }
+            var t = elapsed / duration;
+            var easedT = 1f - Mathf.Pow(1f - t, 3f);
+            _body.GlobalPosition = start.Lerp(targetPosition, easedT);
+            await _body.ToSignal(_body.GetTree(), "process_frame");
+            elapsed += (float)_body.GetProcessDeltaTime();
+        }
+
+        _body.GlobalPosition = targetPosition;
+    }
+
+    private async void HandleDamage(int requester) {
+        var world = _body.GetTree().Root.GetNode("World");
+
+        var enemyBody = world.GetNodeOrNull<CharacterBody3D>(requester.ToString());
+        if (enemyBody == null) {
+            GD.PrintErr("Enemy body not found");
+            return;
+        }
+
+        // Get the opposite direction of the body's forward vector
+        var bodyDirection = -enemyBody.GlobalTransform.Basis.Z;
+        bodyDirection.Y = 0;
+        bodyDirection = bodyDirection.Normalized();
+
+        // No need to rotate the character
+
+        // Calculate the target position to move back
+        var damageMoveDistance = _moveSpeed * 0.1f;
+        var targetPosition = _body.GlobalPosition + (bodyDirection * damageMoveDistance);
+
+        var start = _body.GlobalPosition;
+        var duration = 0.2f; // Shorten the duration for a quick pushback
+        var elapsed = 0f;
+
+        while (elapsed < duration) {
             var t = elapsed / duration;
             var easedT = 1f - Mathf.Pow(1f - t, 3f);
             _body.GlobalPosition = start.Lerp(targetPosition, easedT);

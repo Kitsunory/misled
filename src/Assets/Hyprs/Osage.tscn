@@ -1,10 +1,16 @@
-[gd_scene load_steps=47 format=3 uid="uid://d0b3iocwkxbqd"]
+[gd_scene load_steps=49 format=3 uid="uid://d0b3iocwkxbqd"]
 
 [ext_resource type="PackedScene" uid="uid://bkeb2l4qjntfk" path="res://src/Assets/Hyprs/Osage/Osage.glb" id="1_2jlv2"]
 [ext_resource type="Texture2D" uid="uid://c5a2sti523sf" path="res://src/Assets/Hyprs/Osage/Osage_OsageFace.png" id="2_l5nqh"]
 [ext_resource type="Texture2D" uid="uid://cly1xyijgedr1" path="res://src/Assets/Hyprs/Osage/Osage_osageHair.png" id="3_g4403"]
 [ext_resource type="Texture2D" uid="uid://caycr56061jsc" path="res://src/Assets/Hyprs/Osage/Osage_osageOutfit.png" id="4_k0ur8"]
 [ext_resource type="Script" uid="uid://dv5on01se8trg" path="res://src/Gameplay/Universal/Animator.cs" id="5_l1b3c"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ii0du"]
+size = Vector3(0.7, 1.2, 0.7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l1b3c"]
+size = Vector3(0.277191, 1.15125, 0.349976)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_k0ur8"]
 lifetime_randomness = 0.8
@@ -238,10 +244,10 @@ properties/7/replication_mode = 1
 transform = Transform3D(-1, 0, -3.89414e-07, 0, 1, 0, 3.89414e-07, 0, -1, 0, 0.0108841, 0)
 
 [node name="Skeleton3D" parent="Osage-Rig" index="0"]
-bones/0/position = Vector3(-0.000332719, 0.872878, -0.0457968)
+bones/0/position = Vector3(-0.000330036, 0.872823, -0.0457987)
 bones/0/rotation = Quaternion(0.10057, -0.615832, 0.0796728, 0.77736)
-bones/1/rotation = Quaternion(-0.0369677, -0.000635846, -0.00269016, 0.999313)
-bones/2/rotation = Quaternion(-0.147195, 0.000124736, 0.00259287, 0.989104)
+bones/1/rotation = Quaternion(-0.0368643, -0.000630252, -0.00266649, 0.999317)
+bones/2/rotation = Quaternion(-0.147291, 0.000123639, 0.00257006, 0.98909)
 bones/3/rotation = Quaternion(-0.0633185, -0.000151723, 0.00102954, 0.997993)
 bones/5/rotation = Quaternion(-0.0190303, 0.527562, -0.0118221, 0.849221)
 bones/6/position = Vector3(0.0922309, 0.0333016, 0.00655705)
@@ -256,7 +262,7 @@ bones/11/rotation = Quaternion(0.0485772, -0.00782864, 0.0700796, 0.996327)
 bones/12/rotation = Quaternion(0.169616, 0.0283436, -0.074052, 0.982315)
 bones/13/rotation = Quaternion(0.137134, -0.00187455, -0.0822332, 0.987131)
 bones/15/position = Vector3(0.00693704, 0.137791, -0.00658425)
-bones/15/rotation = Quaternion(-0.275313, 0.705763, -0.494715, 0.425862)
+bones/15/rotation = Quaternion(-0.275233, 0.705801, -0.49467, 0.425904)
 bones/16/rotation = Quaternion(0.144165, 0.0517504, -0.000604809, 0.988199)
 bones/19/rotation = Quaternion(0.103631, 0.0479043, -0.0145709, 0.993355)
 bones/20/rotation = Quaternion(0.0802104, -0.00719455, 0.0259483, 0.996414)
@@ -271,7 +277,7 @@ bones/34/rotation = Quaternion(0.060168, -0.09409, 0.0214421, 0.993513)
 bones/35/rotation = Quaternion(0.257385, -0.0132391, 0.0134929, 0.966124)
 bones/37/rotation = Quaternion(-0.547332, 0.296332, 0.385673, 0.681081)
 bones/38/position = Vector3(-0.00693703, 0.137791, -0.00658417)
-bones/38/rotation = Quaternion(-0.48539, -0.78147, 0.29195, 0.261663)
+bones/38/rotation = Quaternion(-0.485377, -0.781474, 0.29194, 0.261683)
 bones/39/rotation = Quaternion(0.627769, -0.0787729, -0.113845, 0.765989)
 bones/40/rotation = Quaternion(-0.000968269, 0.00806316, -0.0529432, 0.998564)
 bones/42/rotation = Quaternion(0.103631, -0.0479041, 0.0145709, 0.993355)
@@ -295,23 +301,46 @@ bones/62/rotation = Quaternion(0.00767244, -0.00861147, 0.00544393, 0.999919)
 bones/63/rotation = Quaternion(-0.495067, -0.0182059, 0.0362627, 0.867907)
 bones/64/rotation = Quaternion(-0.011377, 0.919531, -0.386442, 0.0706836)
 bones/66/position = Vector3(-0.0854525, 0.0459399, 0.0248161)
-bones/66/rotation = Quaternion(0.986009, 0.0270202, 0.0559259, 0.15469)
-bones/67/rotation = Quaternion(0.0774049, -0.00377268, 0.0165743, 0.996855)
-bones/68/rotation = Quaternion(-0.490307, 0.0161124, -0.025066, 0.87104)
+bones/66/rotation = Quaternion(0.986004, 0.0270145, 0.0559258, 0.154722)
+bones/66/scale = Vector3(1, 1, 1)
+bones/67/rotation = Quaternion(0.0774707, -0.00377118, 0.0165664, 0.99685)
+bones/68/rotation = Quaternion(-0.490509, 0.0160933, -0.0250445, 0.870928)
 bones/69/rotation = Quaternion(-1.48466e-07, 0.95776, -0.287567, -4.19435e-07)
 bones/71/rotation = Quaternion(0.970038, 0.239661, 0.0104621, -0.0384589)
-bones/72/position = Vector3(-0.919387, -0.301076, -0.0717433)
-bones/72/rotation = Quaternion(0.605674, -0.483882, -0.322542, 0.543124)
+bones/72/position = Vector3(-0.919407, -0.301084, -0.071724)
+bones/72/rotation = Quaternion(0.605676, -0.483875, -0.322579, 0.543107)
 bones/73/rotation = Quaternion(1.37406e-09, 1.73849e-07, 0.386188, 0.92242)
 bones/74/rotation = Quaternion(3.89106e-06, 1.33385e-06, 0.92289, -0.385063)
 bones/76/position = Vector3(0.0528581, 0.124655, 2.88982e-08)
 bones/84/position = Vector3(0.125448, -10.6886, 0.257971)
 bones/84/rotation = Quaternion(-0.408046, 0.401206, 0.779724, -0.254093)
 
-[node name="Revolver" parent="Osage-Rig/Skeleton3D" index="0"]
-transform = Transform3D(-0.118999, 0.0843244, 0.989308, -0.988349, 0.0851674, -0.126143, -0.0948938, -0.992792, 0.0732068, -0.0846154, 0.910132, -0.233309)
+[node name="Spine" type="BoneAttachment3D" parent="Osage-Rig/Skeleton3D" index="0"]
+transform = Transform3D(0.228807, 0.108959, -0.967355, -0.000333792, 0.993725, 0.11185, 0.973472, -0.0252692, 0.227408, -0.0493569, 1.09452, -0.0337064)
+bone_name = "spine.2"
+bone_idx = 2
 
-[node name="Coin" parent="Osage-Rig/Skeleton3D" index="1"]
+[node name="Whole" type="Area3D" parent="Osage-Rig/Skeleton3D/Spine" index="0"]
+
+[node name="Collision" type="CollisionShape3D" parent="Osage-Rig/Skeleton3D/Spine/Whole" index="0"]
+transform = Transform3D(1, -1.49012e-08, 1.49012e-07, 7.82311e-08, 1.00001, 2.98023e-08, 4.17233e-07, 5.66244e-07, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_ii0du")
+
+[node name="Leg" type="BoneAttachment3D" parent="Osage-Rig/Skeleton3D" index="1"]
+transform = Transform3D(0.122041, 0.103586, 0.987105, 0.00940058, -0.994614, 0.103212, 0.99248, -0.00331677, -0.122358, -0.0735503, 0.503455, -0.101281)
+bone_name = "shin.R"
+bone_idx = 67
+
+[node name="Dynamic" type="Area3D" parent="Osage-Rig/Skeleton3D/Leg" index="0"]
+
+[node name="Collision" type="CollisionShape3D" parent="Osage-Rig/Skeleton3D/Leg/Dynamic" index="0"]
+transform = Transform3D(1, -1.49012e-08, 1.49012e-07, 7.82311e-08, 1.00001, 2.98023e-08, 4.17233e-07, 5.66244e-07, 1, -0.00401275, 0.0756221, -0.0436401)
+shape = SubResource("BoxShape3D_l1b3c")
+
+[node name="Revolver" parent="Osage-Rig/Skeleton3D" index="2"]
+transform = Transform3D(-0.118998, 0.0843185, 0.989308, -0.988344, 0.0852172, -0.126145, -0.0949426, -0.992788, 0.0731948, -0.0846349, 0.910076, -0.233329)
+
+[node name="Coin" parent="Osage-Rig/Skeleton3D" index="3"]
 transform = Transform3D(-0.537872, -0.840213, -0.0688244, -0.723667, 0.418297, 0.54894, -0.432438, 0.345065, -0.833023, 0.127205, -10.7026, 0.279244)
 
 [node name="Coin" parent="Osage-Rig/Skeleton3D/Coin" index="0"]
@@ -328,16 +357,16 @@ seed = 3263879982
 process_material = SubResource("ParticleProcessMaterial_k0ur8")
 draw_pass_1 = SubResource("QuadMesh_1fkt4")
 
-[node name="Body" parent="Osage-Rig/Skeleton3D" index="2"]
+[node name="Body" parent="Osage-Rig/Skeleton3D" index="4"]
 surface_material_override/0 = SubResource("StandardMaterial3D_k0ur8")
 
-[node name="Hair" parent="Osage-Rig/Skeleton3D" index="3"]
+[node name="Hair" parent="Osage-Rig/Skeleton3D" index="5"]
 surface_material_override/0 = SubResource("StandardMaterial3D_l1b3c")
 
-[node name="Head" parent="Osage-Rig/Skeleton3D" index="4"]
+[node name="Head" parent="Osage-Rig/Skeleton3D" index="6"]
 surface_material_override/0 = SubResource("StandardMaterial3D_ii0du")
 
-[node name="Legs" parent="Osage-Rig/Skeleton3D" index="5"]
+[node name="Legs" parent="Osage-Rig/Skeleton3D" index="7"]
 surface_material_override/0 = SubResource("StandardMaterial3D_wbobw")
 surface_material_override/1 = SubResource("StandardMaterial3D_2cq3e")
 

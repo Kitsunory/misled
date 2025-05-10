@@ -148,7 +148,7 @@ public partial class NetworkManager : Node {
             return;
         }
 
-        player.Name = $"Player_{id}";
+        player.Name = $"{id}";
         (player as CharacterBody3D)?.SetMultiplayerAuthority((int)id);
 
         var world = GetTree().Root.GetNode("World");
