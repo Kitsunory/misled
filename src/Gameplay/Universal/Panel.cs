@@ -2,14 +2,13 @@ namespace Misled.Gameplay.Universal;
 
 using Godot;
 
-public partial class UI : Control {
+public partial class Panel : Sprite3D {
     [Export] public ProgressBar? HP;
     [Export] public ProgressBar? Resistance;
-    [Export] public ProgressBar? Stamina;
     private State? _state;
 
     public override void _Ready() {
-        if (!IsMultiplayerAuthority()) {
+        if (IsMultiplayerAuthority()) {
             Visible = false;
         }
 
@@ -20,9 +19,8 @@ public partial class UI : Control {
         if (_state == null) {
             return;
         }
+
         HP!.Value = _state.Health;
         Resistance!.Value = _state.Resistance;
-        Stamina!.Value = _state.Stamina;
     }
-
 }

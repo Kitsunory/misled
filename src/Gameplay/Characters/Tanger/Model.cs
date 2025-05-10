@@ -1,18 +1,31 @@
-namespace Misled.Characters.Tanger;
-using Misled.Characters.Core;
-using Misled.Characters.Universal;
+namespace Misled.Gameplay.Tanger;
+using Godot;
+using Misled.Gameplay.Core;
 using Misled.Gameplay.Model;
 
-public partial class Model : CharacterBase {
+public partial class Model : Base {
     public override string CharacterId => "Tanger";
 
     public override void _Ready() {
-        _state = new State() {
-            NormalConfig = new NormalConfig()
-        };
-
         base._Ready();
+        _state!.NormalConfig = new NormalConfig();
 
         InitSystems();
+    }
+
+    public override void _PhysicsProcess(double delta) {
+        base._PhysicsProcess(delta);
+
+        if (Input.IsActionJustPressed("Signature")) {
+            _animator?.PlayAbilities("Signature");
+        }
+
+        if (Input.IsActionJustPressed("Alternate")) {
+            _animator?.PlayAbilities("Alternate");
+        }
+
+        if (Input.IsActionJustPressed("Exclusive")) {
+            _animator?.PlayAbilities("Exclusive");
+        }
     }
 }

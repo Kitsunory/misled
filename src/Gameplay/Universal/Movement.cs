@@ -1,4 +1,4 @@
-namespace Misled.Characters.Universal;
+namespace Misled.Gameplay.Universal;
 using Godot;
 
 public class Movement(
@@ -16,6 +16,9 @@ public class Movement(
 ) {
     private int _jumpCount;
 
+    public void Ready() =>
+        state.OnAttackStarted += HandleAttackStarted;
+
     public void Update(float delta) {
         if (state == null) {
             GD.PrintErr("State system not assigned.");
@@ -26,7 +29,12 @@ public class Movement(
 
         // Apply gravity
         if (!body.IsOnFloor()) {
-            velocity += body.GetGravity() * delta;
+            if (state.IsAttacking) {
+                velocity.Y = 0f;
+            }
+            else {
+                velocity += body.GetGravity() * delta;
+            }
         }
 
         // Movement input
@@ -67,6 +75,34 @@ public class Movement(
         HandleWalkingAudio(velocity);
     }
 
+    private async void HandleAttackStarted() {
+        var cameraDirection = -camera.GlobalTransform.Basis.Z;
+        cameraDirection.Y = 0;
+        cameraDirection = cameraDirection.Normalized();
+
+        var targetBasis = Basis.LookingAt(cameraDirection, Vector3.Up);
+        body.GlobalTransform = body.GlobalTransform with { Basis = targetBasis };
+
+        var attackMoveDistance = moveSpeed * 0.1f;
+        var targetPosition = body.GlobalPosition + (cameraDirection * attackMoveDistance);
+
+        var start = body.GlobalPosition;
+        var duration = 0.5f;
+        var elapsed = 0f;
+
+        while (elapsed < duration) {
+            var t = elapsed / duration;
+            var easedT = 1f - Mathf.Pow(1f - t, 3f);
+            body.GlobalPosition = start.Lerp(targetPosition, easedT);
+            await body.ToSignal(body.GetTree(), "process_frame");
+            elapsed += (float)body.GetProcessDeltaTime();
+        }
+
+        body.GlobalPosition = targetPosition;
+    }
+
+
+
     private void HandleJump(ref Vector3 velocity) {
         if (Input.IsActionJustPressed("Jump") && _jumpCount < maxJumps) {
             velocity.Y = jumpForce;
@@ -89,7 +125,7 @@ public class Movement(
 
     private void HandleDash(ref Vector3 velocity, Vector3 direction) {
         particles.Restart();
-        state.IsResetAttack = true;
+        state.ResetAttack();
 
         var dashDirection = direction == Vector3.Zero
             ? -camera.GlobalTransform.Basis.Z with { Y = 0 }
@@ -110,14 +146,20 @@ public class Movement(
     private void ApplyMovement(ref Vector3 velocity, Vector3 direction, float delta) {
         var horizontal = velocity with { Y = 0 };
 
-        var shouldMove = direction != Vector3.Zero && !state.IsAttacking;
+        // No movement when attacking
+        if (state.IsAttacking) {
+            horizontal = Vector3.Zero;
+        }
+        else {
+            var shouldMove = direction != Vector3.Zero;
 
-        var targetVelocity = shouldMove
-            ? direction * moveSpeed
-            : Vector3.Zero;
+            var targetVelocity = shouldMove
+                ? direction * moveSpeed
+                : Vector3.Zero;
 
-        var blend = shouldMove ? acceleration : deceleration;
-        horizontal = horizontal.Lerp(targetVelocity, blend * delta);
+            var blend = shouldMove ? acceleration : deceleration;
+            horizontal = horizontal.Lerp(targetVelocity, blend * delta);
+        }
 
         velocity.X = horizontal.X;
         velocity.Z = horizontal.Z;

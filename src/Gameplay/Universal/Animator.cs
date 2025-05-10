@@ -1,4 +1,4 @@
-namespace Misled.Characters.Universal;
+namespace Misled.Gameplay.Universal;
 using Godot;
 
 public partial class Animator : Node {
@@ -12,7 +12,6 @@ public partial class Animator : Node {
     private float _moveBlend;
     private float _groundBlend = 1.0f;
     private float _physicsProcessDeltaTime;
-
     public void UpdatePhysicsProcessDeltaTime(float deltaTime) => _physicsProcessDeltaTime = deltaTime;
     public void UpdateMovementBlend(Vector3 velocity, bool isGrounded) {
         var horizontalSpeed = new Vector3(velocity.X, 0, velocity.Z).Length();
@@ -32,13 +31,15 @@ public partial class Animator : Node {
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
     private void RpcPlayAbilities(string animationName) {
-        var abilitiesStatePlayback = GetNormalStatePlayback();
+        AnimationTree!.Set("parameters/Mode/blend_amount", -1f);
+        var abilitiesStatePlayback = GetAbilitiesStatePlayback();
         abilitiesStatePlayback?.Travel(animationName);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
     private void RpcResetAbilities() {
-        var abiliesStatePlayback = GetNormalStatePlayback();
+        AnimationTree!.Set("parameters/Mode/blend_amount", 0f);
+        var abiliesStatePlayback = GetAbilitiesStatePlayback();
         abiliesStatePlayback?.Travel("Start");
     }
 
@@ -48,12 +49,14 @@ public partial class Animator : Node {
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
     private void RpcPlayNormal(string animationName) {
+        AnimationTree!.Set("parameters/Mode/blend_amount", 1f);
         var normalStatePlayback = GetNormalStatePlayback();
         normalStatePlayback?.Travel(animationName);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
     private void RpcResetNormal() {
+        AnimationTree!.Set("parameters/Mode/blend_amount", 0f);
         var normalStatePlayback = GetNormalStatePlayback();
         normalStatePlayback?.Travel("Start");
     }

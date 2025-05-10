@@ -1,4 +1,4 @@
-namespace Misled.Characters.View;
+namespace Misled.Gameplay.View;
 using Godot;
 
 public partial class Camera : Camera3D {

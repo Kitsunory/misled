@@ -1,9 +1,9 @@
-namespace Misled.Characters.Core;
+namespace Misled.Gameplay.Core;
 
 using Godot;
-using Misled.Characters.Universal;
+using Misled.Gameplay.Universal;
 
-public abstract partial class CharacterBase : CharacterBody3D {
+public abstract partial class Base : CharacterBody3D {
     public abstract string CharacterId { get; }
 
     protected State? _state;
@@ -17,6 +17,7 @@ public abstract partial class CharacterBase : CharacterBody3D {
     [Export] public GpuParticles3D? Particles;
     [Export] public AudioStreamPlayer3D? AudioPlayer;
     [Export] public Node? Animator;
+    [Export] public Node? State;
 
     [Export] public float MoveSpeed = 7.0f;
     [Export] public float JumpForce = 6.0f;
@@ -32,11 +33,13 @@ public abstract partial class CharacterBase : CharacterBody3D {
         }
 
         _animator = Animator! as Animator;
+        _state = State! as State;
 
         if (_state != null) {
             InitSystems();
         }
 
+        _movement?.Ready();
         Multiplayer.MultiplayerPeer.SetTransferMode(MultiplayerPeer.TransferModeEnum.UnreliableOrdered);
     }
 

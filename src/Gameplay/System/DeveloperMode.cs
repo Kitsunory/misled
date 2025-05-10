@@ -37,7 +37,6 @@ public partial class DeveloperMode : Window {
         if (Input.IsActionJustPressed("Debug")) {
             Visible = !Visible;
         }
-
         _updateTimer += (float)delta;
         _timeSinceLastSpike += (float)delta;
 

@@ -1,4 +1,4 @@
-namespace Misled.Characters.Universal;
+namespace Misled.Gameplay.Universal;
 
 using Godot;
 using Misled.Gameplay.Model;
@@ -20,6 +20,8 @@ public class Normal {
         _state = state;
         _animator = animator;
         _config = config;
+
+        _state.OnResetAttack += ResetAttack;
     }
 
 
@@ -37,11 +39,6 @@ public class Normal {
 
     public void Update(float delta) {
         HandleAttackInput();
-
-        if (_state.IsResetAttack) {
-            ResetAttack();
-            return;
-        }
 
         if (!_state.IsAttacking) {
             return;
@@ -74,26 +71,23 @@ public class Normal {
     }
 
     private void StartAttack(int attackIndex) {
-        _animator.AnimationTree!.Set("parameters/Mode/blend_amount", 1f);
+        _state.StartAttack();
+
         if (!_config.AnimationMap.TryGetValue(attackIndex, out var animationName) || string.IsNullOrEmpty(animationName)) {
             return;
         }
 
-        var animationLength = _animator.AnimationTree.GetAnimation(animationName).Length;
+        var animationLength = _animator.AnimationTree!.GetAnimation(animationName).Length;
         _config.AttackResetTime = animationLength;
 
         _animator.PlayNormal(animationName);
     }
 
-
-
     public void ResetAttack() {
-        _state.IsResetAttack = false;
         _state.IsAttacking = false;
         _currentAttackIndex = 0;
         _attackTimer = 0f;
 
         _animator.ResetNormal();
-        _animator.AnimationTree!.Set("parameters/Mode/blend_amount", 0f);
     }
 }

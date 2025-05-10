@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://b2035qfi2b1my"]
+[gd_scene load_steps=29 format=3 uid="uid://b2035qfi2b1my"]
 
 [ext_resource type="Script" uid="uid://dyp3f15ir1lt4" path="res://src/Gameplay/Characters/Osage/Model.cs" id="1_rmynq"]
 [ext_resource type="PackedScene" uid="uid://d0b3iocwkxbqd" path="res://src/Assets/Hyprs/Osage.tscn" id="2_rmynq"]
@@ -11,6 +11,8 @@
 [ext_resource type="AudioStream" uid="uid://slu0vuuuyg6e" path="res://src/Assets/Audio/GrassStep.wav" id="8_2y1tq"]
 [ext_resource type="Texture2D" uid="uid://cgmjo03uge10h" path="res://src/Assets/Hyprs/Osage/Panel/Osage.png" id="8_ex23g"]
 [ext_resource type="Texture2D" uid="uid://bn37xd1pnq5h8" path="res://src/Assets/Gameplay/Panel.png" id="10_ldeuu"]
+[ext_resource type="Script" uid="uid://di647fue0lvj0" path="res://src/Gameplay/Universal/Panel.cs" id="11_ldeuu"]
+[ext_resource type="Script" uid="uid://crv2fi8afdqk" path="res://src/Gameplay/Universal/State.cs" id="13_vljyo"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_r6sek"]
 size = Vector3(0.70784, 1.78745, 0.750793)
@@ -49,15 +51,15 @@ particles_anim_loop = false
 material = SubResource("StandardMaterial3D_bka7s")
 size = Vector2(0.2, 0.2)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vljyo"]
-bg_color = Color(1, 1, 1, 0.588235)
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xi2fk"]
 bg_color = Color(0.639216, 0.945098, 0.933333, 0.588235)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vljyo"]
+bg_color = Color(1, 1, 1, 0.588235)
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="Gradient" id="Gradient_1w2hk"]
 colors = PackedColorArray(0.634049, 0.578253, 0.369656, 1, 0.800068, 0.807112, 0.445078, 1)
@@ -93,7 +95,7 @@ corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
-[node name="Osage" type="CharacterBody3D" node_paths=PackedStringArray("Camera", "AnimationTree", "AnimationPlayer", "Particles", "AudioPlayer", "Animator")]
+[node name="Osage" type="CharacterBody3D" node_paths=PackedStringArray("Camera", "AnimationTree", "AnimationPlayer", "Particles", "AudioPlayer", "Animator", "State")]
 script = ExtResource("1_rmynq")
 Camera = NodePath("Camera3D")
 AnimationTree = NodePath("Osage/AnimationTree")
@@ -101,6 +103,7 @@ AnimationPlayer = NodePath("Osage/AnimationPlayer")
 Particles = NodePath("GPUParticles3D")
 AudioPlayer = NodePath("AudioStreamPlayer3D")
 Animator = NodePath("Osage/Animator")
+State = NodePath("State")
 
 [node name="Osage" parent="." instance=ExtResource("2_rmynq")]
 
@@ -123,7 +126,7 @@ draw_pass_1 = SubResource("QuadMesh_am4i2")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.24731, 2.03596)
 script = ExtResource("3_oas3s")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." node_paths=PackedStringArray("HP", "Resistance", "Stamina")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -132,6 +135,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("4_ts01c")
+HP = NodePath("UI/HP")
+Resistance = NodePath("UI/Shield")
+Stamina = NodePath("Stamina/Bar")
 metadata/_edit_lock_ = true
 
 [node name="Control" type="Control" parent="Control"]
@@ -240,20 +246,6 @@ grow_vertical = 0
 texture = ExtResource("8_ex23g")
 metadata/_edit_lock_ = true
 
-[node name="Shield" type="ProgressBar" parent="Control/UI"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 131.0
-offset_top = -23.0
-offset_right = 298.0
-offset_bottom = -14.0
-grow_vertical = 0
-theme_override_styles/fill = SubResource("StyleBoxFlat_vljyo")
-value = 100.0
-show_percentage = false
-
 [node name="HP" type="ProgressBar" parent="Control/UI"]
 layout_mode = 1
 anchors_preset = 2
@@ -265,7 +257,23 @@ offset_right = 298.0
 offset_bottom = -26.0
 grow_vertical = 0
 theme_override_styles/fill = SubResource("StyleBoxFlat_xi2fk")
-value = 100.0
+max_value = 10000.0
+value = 10000.0
+show_percentage = false
+
+[node name="Shield" type="ProgressBar" parent="Control/UI"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 131.0
+offset_top = -23.0
+offset_right = 298.0
+offset_bottom = -14.0
+grow_vertical = 0
+theme_override_styles/fill = SubResource("StyleBoxFlat_vljyo")
+max_value = 1000.0
+value = 1000.0
 show_percentage = false
 
 [node name="Stamina" type="Control" parent="Control"]
@@ -301,11 +309,14 @@ replication_config = SubResource("SceneReplicationConfig_dnjiu")
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("8_2y1tq")
 
-[node name="Panel" type="Sprite3D" parent="."]
+[node name="Panel" type="Sprite3D" parent="." node_paths=PackedStringArray("HP", "Resistance")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00474644, 2.02637, -0.00160944)
 pixel_size = 0.004
 billboard = 2
 texture = SubResource("ViewportTexture_ex23g")
+script = ExtResource("11_ldeuu")
+HP = NodePath("SubViewport/HP")
+Resistance = NodePath("SubViewport/Shield")
 
 [node name="SubViewport" type="SubViewport" parent="Panel"]
 transparent_bg = true
@@ -322,7 +333,8 @@ offset_top = 41.0
 offset_right = 198.0
 offset_bottom = 53.0
 theme_override_styles/fill = SubResource("StyleBoxFlat_582x0")
-value = 100.0
+max_value = 10000.0
+value = 10000.0
 show_percentage = false
 
 [node name="Shield" type="ProgressBar" parent="Panel/SubViewport"]
@@ -332,5 +344,9 @@ offset_right = 198.0
 offset_bottom = 65.0
 scale = Vector2(1, 0.8)
 theme_override_styles/fill = SubResource("StyleBoxFlat_b0wu2")
+max_value = 1000.0
 value = 100.0
 show_percentage = false
+
+[node name="State" type="Node" parent="."]
+script = ExtResource("13_vljyo")
