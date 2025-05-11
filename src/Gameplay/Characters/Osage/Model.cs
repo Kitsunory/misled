@@ -45,7 +45,8 @@ public partial class Model : Base {
         if (IsInvalidHitscan(body)) { return; }
 
         var peerId = long.Parse(body.Name);
-        GetPlayerState(peerId)?.RpcId(peerId, nameof(State.RequestHealthChange), -200);
+        GetPlayerState(peerId)?.RpcId(peerId, nameof(State.RequestHealthChange), -300);
+        GetPlayerState(peerId)?.RpcId(peerId, nameof(State.RequestResistanceChange), -50);
     }
 
     /// <summary>
@@ -80,11 +81,7 @@ public partial class Model : Base {
     /// Handles player input for initiating attacks.
     /// </summary>
     private void HandleAttackInputs() {
-        if (_state!.IsAttacking) {
-            Dynamic!.Monitoring = true;
-        } else {
-            Dynamic!.Monitoring = false;
-        }
+        Dynamic!.Monitoring = _state!.IsAttacking;
 
         if (Input.IsActionJustPressed("Signature")) {
             TryStartAttack("Signature");

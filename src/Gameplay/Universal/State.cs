@@ -11,17 +11,24 @@ public partial class State : Node {
 
     public Elemental? Elemental { get; set; }
 
-    public int Health = 10000;
-    public int Resistance = 1000;
-    public int Stamina = 100;
+    public float Health = 10000;
+    public float Resistance = 1000;
+    public float Stamina = 100;
 
     public bool IsAttacking { get; set; }
-    public bool IsIrrevocable { get; set; }
-    public bool IsInterruptable { get; set; }
+    public bool IsChainable { get; set; }
+    public bool IsIrrevocable { get; set; } = true;
+    public bool IsInterruptable { get; set; } = true;
 
+    public bool IsSpy { get; set; }
+
+    public Action? OnNormalAttack { get; set; }
+    public Action? OnReposture { get; set; }
     public Action? OnAttackStarted { get; set; }
     public Action? OnAttackEnded { get; set; }
     public Action<int>? OnDamageReceived { get; set; }
+    public Action? OnBlinded { get; set; }
+    public Action? OnSpyed { get; set; }
 
     public override void _Ready() => Instance = this;
 
@@ -35,26 +42,53 @@ public partial class State : Node {
         OnAttackEnded?.Invoke();
     }
 
-    // ──────────────── HEALTH ────────────────
-
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    public void RequestHealthChange(int amount) {
+    public void RequestBlind() {
         if (!IsMultiplayerAuthority()) {
             return;
         }
+        OnBlinded?.Invoke();
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void RequestSpy() {
+        if (!IsMultiplayerAuthority()) {
+            return;
+        }
+        IsSpy = true;
+        OnSpyed?.Invoke();
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void ResetSpy() {
+        if (!IsMultiplayerAuthority()) {
+            return;
+        }
+        IsSpy = false;
+    }
+
+    // ──────────────── HEALTH ────────────────
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void RequestHealthChange(float amount) {
+        if (!IsMultiplayerAuthority()) {
+            return;
+        }
+        if (Health + amount < Health) {
+            OnDamageReceived?.Invoke(Multiplayer.GetRemoteSenderId());
+        }
         Health += amount;
-        OnDamageReceived?.Invoke(Multiplayer.GetRemoteSenderId());
         Rpc(nameof(SyncHealth), Health);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    public void SyncHealth(int value) =>
+    public void SyncHealth(float value) =>
         Health = value;
 
     // ──────────────── RESISTANCE ────────────────
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    public void RequestResistanceChange(int amount) {
+    public void RequestResistanceChange(float amount) {
         if (!IsMultiplayerAuthority()) {
             return;
         }
@@ -63,13 +97,13 @@ public partial class State : Node {
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    public void SyncResistance(int value) =>
+    public void SyncResistance(float value) =>
         Resistance = value;
 
     // ──────────────── STAMINA ────────────────
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    public void RequestStaminaChange(int amount) {
+    public void RequestStaminaChange(float amount) {
         if (!IsMultiplayerAuthority()) {
             return;
         }
@@ -78,6 +112,6 @@ public partial class State : Node {
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    public void SyncStamina(int value) =>
+    public void SyncStamina(float value) =>
         Stamina = value;
 }

@@ -76,6 +76,10 @@ public class Movement {
             return;
         }
 
+        if (_state.Stamina <= 100) {
+            _state.RequestStaminaChange(10f * delta);
+        }
+
         var velocity = _body.Velocity;
 
         ApplyGravity(ref velocity, delta);
@@ -163,6 +167,8 @@ public class Movement {
     /// <param name="velocity">The character's velocity.</param>
     /// <param name="direction">The movement direction.</param>
     private void HandleDash(ref Vector3 velocity, Vector3 direction) {
+        if (_state.Stamina < 30) { return; }
+        _state.RequestStaminaChange(-30);
         _particles.Restart();
         _state.ResetAttack();
 

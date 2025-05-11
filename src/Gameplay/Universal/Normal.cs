@@ -39,6 +39,8 @@ public class Normal {
     /// </summary>
     private void HandleAttackInput() {
         if (Input.IsActionJustPressed("Normal")) {
+            _state.IsChainable = false;
+            _state.OnNormalAttack?.Invoke();
             if (!_isAttacking) {
                 StartAttackCombo();
             }
@@ -123,6 +125,10 @@ public class Normal {
 
         if (_nextAttackBuffered && CanContinueCombo()) {
             ContinueAttackCombo();
+        }
+
+        if (_attackTimer > _config.InputBufferTime) {
+            _state.IsChainable = true;
         }
 
         if (_attackTimer > _config.AttackResetTime) {

@@ -20,6 +20,7 @@ public abstract partial class Base : CharacterBody3D {
     [Export] public Camera3D? Camera;
     [Export] public AnimationTree? AnimationTree;
     [Export] public AnimationPlayer? AnimationPlayer;
+    [Export] public AnimationPlayer? UIPlayer;
     [Export] public GpuParticles3D? Particles;
     [Export] public AudioStreamPlayer3D? AudioPlayer;
     [Export] public Animator? Animator; // Enforce type here
@@ -46,6 +47,9 @@ public abstract partial class Base : CharacterBody3D {
 
         InitSystems();
         _movement?.Ready();
+
+        _state!.OnBlinded += HandleBlind;
+        _state!.OnSpyed += HandleSpy;
 
         Multiplayer.MultiplayerPeer.SetTransferMode(MultiplayerPeer.TransferModeEnum.UnreliableOrdered);
     }
@@ -76,8 +80,18 @@ public abstract partial class Base : CharacterBody3D {
         _normal?.Update(dt);
         _animator?.UpdatePhysicsProcessDeltaTime(dt);
 
-        Rpc(nameof(SendMovement), GlobalTransform.Origin, Velocity, Rotation);
+        Rpc(nameof(SendMovement), GlobalTransform.Origin, Velocity, Rotation, Camera!.GlobalTransform.Origin, Camera!.Basis);
+        if (_state!.Health < 10000) {
+            _state!.RequestHealthChange(100f * dt);
+        }
     }
+
+    private void HandleBlind() =>
+        UIPlayer!.Play("Blind");
+
+
+    private void HandleSpy() =>
+        UIPlayer!.Play("EyeSpy");
 
     /// <summary>
     /// Synchronizes the character's movement across the network.
@@ -86,10 +100,12 @@ public abstract partial class Base : CharacterBody3D {
     /// <param name="velocity">The character's velocity.</param>
     /// <param name="rotation">The character's rotation.</param>
     [Rpc(MultiplayerApi.RpcMode.Authority, CallLocal = false)] // Authority mode, don't call locally
-    public void SendMovement(Vector3 position, Vector3 velocity, Vector3 rotation) {
+    public void SendMovement(Vector3 position, Vector3 velocity, Vector3 rotation, Vector3 cameraPosition, Basis cameraRotation) {
         // Only apply transform on non-authority peer
         if (!IsMultiplayerAuthority()) {
             GlobalTransform = new Transform3D(Basis.Identity.Rotated(Vector3.Up, rotation.Y), position);
+            var camera = GetNode<Camera3D>("Camera3D");
+            camera.GlobalTransform = new Transform3D(cameraRotation, cameraPosition);
         }
     }
 
@@ -121,6 +137,24 @@ public abstract partial class Base : CharacterBody3D {
         }
 
         return enemyBody;
+    }
+
+    public Camera3D? GetPlayerCamera(long peerId) {
+        var world = GetTree().Root.GetNode("World");
+
+        var enemyBody = world.GetNodeOrNull<CharacterBody3D>(peerId.ToString());
+        if (enemyBody == null) {
+            GD.PrintErr("Enemy body not found");
+            return null;
+        }
+
+        var enemyCamera = enemyBody.GetNodeOrNull<Camera3D>("Camera3D");
+        if (enemyCamera == null) {
+            GD.PrintErr("Enemy camera not found");
+            return null;
+        }
+
+        return enemyCamera;
     }
 
     protected bool IsInvalidHitscan(Node body) =>

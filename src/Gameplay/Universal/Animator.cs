@@ -13,6 +13,7 @@ public partial class Animator : Node {
     public float BlendSpeed { get; set; } = 20f;
 
     private float _moveBlend;
+    private float _osageBlend;
     private float _groundBlend = 1.0f;
     private float _physicsProcessDeltaTime;
 
@@ -32,12 +33,15 @@ public partial class Animator : Node {
             return;
         }
 
-
         var horizontalSpeed = new Vector3(velocity.X, 0, velocity.Z).Length();
         var targetMoveBlend = Mathf.Clamp(horizontalSpeed / 5f, 0f, 1f);
 
         _moveBlend = Mathf.Lerp(_moveBlend, targetMoveBlend, BlendSpeed * _physicsProcessDeltaTime);
         AnimationTree.Set("parameters/Move/blend_position", _moveBlend);
+
+        var osageMoveBlend = Mathf.Clamp(horizontalSpeed / 5f, 0.1f, 0.9f);
+        _osageBlend = Mathf.Lerp(_moveBlend, targetMoveBlend, BlendSpeed * _physicsProcessDeltaTime);
+        AnimationTree.Set("parameters/Abilities/Alternate/State/blend_amount", _osageBlend);
 
         var targetGroundBlend = isGrounded ? 1.0f : (velocity.Y > 0 ? 0.0f : -1.0f);
         _groundBlend = Mathf.Lerp(_groundBlend, targetGroundBlend, BlendSpeed * _physicsProcessDeltaTime);
@@ -56,7 +60,6 @@ public partial class Animator : Node {
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
     private void RpcPlayAnimation(string stateMachineName, string animationName) {
         if (AnimationTree == null) {
-
             return;
         }
 
@@ -76,7 +79,9 @@ public partial class Animator : Node {
         statePlayback?.Travel("Start");
     }
 
-    public void PlayAbilities(string animationName) => PlayAnimation("Abilities", animationName);
+    public void PlayAbilities(string animationName) {
+        PlayAnimation("Abilities", animationName);
+    }
     public void ResetAbilities() => ResetAnimation("Abilities");
 
     public void PlayNormal(string animationName) => PlayAnimation("Normal", animationName);

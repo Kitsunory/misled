@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://b2035qfi2b1my"]
+[gd_scene load_steps=43 format=3 uid="uid://b2035qfi2b1my"]
 
 [ext_resource type="Script" uid="uid://dyp3f15ir1lt4" path="res://src/Gameplay/Characters/Osage/Model.cs" id="1_rmynq"]
 [ext_resource type="PackedScene" uid="uid://d0b3iocwkxbqd" path="res://src/Assets/Hyprs/Osage.tscn" id="2_rmynq"]
@@ -9,8 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://cb2015k7atpdv" path="res://src/Assets/Hyprs/Osage/Skillset/Alternate.png" id="6_btmdy"]
 [ext_resource type="Texture2D" uid="uid://b3ravdn1wlmt5" path="res://src/Assets/Hyprs/Osage/Skillset/Exclusive.png" id="7_ex23g"]
 [ext_resource type="AudioStream" uid="uid://slu0vuuuyg6e" path="res://src/Assets/Audio/GrassStep.wav" id="8_2y1tq"]
-[ext_resource type="Texture2D" uid="uid://cgmjo03uge10h" path="res://src/Assets/Hyprs/Osage/Panel/Osage.png" id="8_ex23g"]
+[ext_resource type="Texture2D" uid="uid://blywx58yv361t" path="res://src/Assets/Hyprs/Osage/Panel/OsagePanel.png" id="9_vljyo"]
+[ext_resource type="Texture2D" uid="uid://c5fqnjojv0j0q" path="res://src/Assets/Hyprs/Osage/Panel/OsageHealth.png" id="10_1w2hk"]
 [ext_resource type="Texture2D" uid="uid://bn37xd1pnq5h8" path="res://src/Assets/Gameplay/Panel.png" id="10_ldeuu"]
+[ext_resource type="Texture2D" uid="uid://b1xo5pbhcotul" path="res://src/Assets/Elemental/ResistanceBar.png" id="11_fly1n"]
 [ext_resource type="Script" uid="uid://di647fue0lvj0" path="res://src/Gameplay/Universal/Panel.cs" id="11_ldeuu"]
 [ext_resource type="Script" uid="uid://crv2fi8afdqk" path="res://src/Gameplay/Universal/State.cs" id="13_vljyo"]
 
@@ -51,15 +53,35 @@ particles_anim_loop = false
 material = SubResource("StandardMaterial3D_bka7s")
 size = Vector2(0.2, 0.2)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xi2fk"]
-bg_color = Color(0.639216, 0.945098, 0.933333, 0.588235)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
+[sub_resource type="Gradient" id="Gradient_fly1n"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vljyo"]
-bg_color = Color(1, 1, 1, 0.588235)
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_b0wu2"]
+gradient = SubResource("Gradient_fly1n")
+
+[sub_resource type="Gradient" id="Gradient_g4g65"]
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.588235)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_582x0"]
+gradient = SubResource("Gradient_g4g65")
+fill = 1
+fill_from = Vector2(0.522843, 0.513706)
+fill_to = Vector2(2, 2)
+
+[sub_resource type="Gradient" id="Gradient_582x0"]
+colors = PackedColorArray(0.560231, 0.560231, 0.560231, 1, 0.88992, 0.88992, 0.88992, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1w2hk"]
+gradient = SubResource("Gradient_582x0")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g4g65"]
+texture = ExtResource("10_1w2hk")
+axis_stretch_horizontal = 1
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_582x0"]
+texture = ExtResource("11_fly1n")
+axis_stretch_horizontal = 1
 
 [sub_resource type="Gradient" id="Gradient_1w2hk"]
 colors = PackedColorArray(0.634049, 0.578253, 0.369656, 1, 0.800068, 0.807112, 0.445078, 1)
@@ -95,13 +117,152 @@ corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
-[node name="Osage" type="CharacterBody3D" node_paths=PackedStringArray("Dynamic", "Whole", "Camera", "AnimationTree", "AnimationPlayer", "Particles", "AudioPlayer", "Animator", "State") groups=["Players"]]
+[sub_resource type="Animation" id="Animation_1w2hk"]
+resource_name = "Blind"
+length = 1.5
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Blind:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.775622, 0.775622, 0.775622, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_b0wu2"]
+resource_name = "EyeSpy"
+length = 9.0
+step = 0.2727
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("White:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.307849, 0.5454, 0.841532, 1.0908, 1.3635, 1.62448, 1.93233, 2.15817, 2.4543, 2.70357, 2.9997, 3.24897, 3.5451, 3.79437, 4.0905, 4.3632, 4.6359, 4.9086, 5.1813, 5.454, 5.7267, 5.9994, 6.2721, 6.5448, 6.82922, 7.0902, 7.37462, 7.6356, 7.9083, 8.181, 8.4537, 8.7264, 8.9991),
+"transitions": PackedFloat32Array(50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0.865882, 0.865882, 0.865881, 1), Color(1, 1, 1, 0), Color(0.865882, 0.865882, 0.865881, 1), Color(1, 1, 1, 0), Color(0.865882, 0.865882, 0.865881, 1), Color(1, 1, 1, 0), Color(0.865882, 0.865882, 0.865881, 1), Color(1, 1, 1, 0), Color(0.865882, 0.865882, 0.865881, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera3D:fov")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.8181, 1.3635, 1.9089, 2.4543, 2.9997, 3.5451, 4.0905, 4.6359, 5.1813, 5.7267, 6.2721, 6.8175, 7.3629, 7.9083, 8.4537, 8.9991),
+"transitions": PackedFloat32Array(0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01),
+"update": 0,
+"values": [120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0]
+}
+
+[sub_resource type="Animation" id="Animation_582x0"]
+resource_name = "NoUltimate"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Ultimate:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_fly1n"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Blind:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(-0.0333333),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Ultimate:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("White:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Camera3D:fov")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [75.0]
+}
+
+[sub_resource type="Animation" id="Animation_g4g65"]
+resource_name = "Ultimate"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Ultimate:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_g4g65"]
+_data = {
+&"Blind": SubResource("Animation_1w2hk"),
+&"EyeSpy": SubResource("Animation_b0wu2"),
+&"NoUltimate": SubResource("Animation_582x0"),
+&"RESET": SubResource("Animation_fly1n"),
+&"Ultimate": SubResource("Animation_g4g65")
+}
+
+[node name="Osage" type="CharacterBody3D" node_paths=PackedStringArray("Dynamic", "Whole", "Camera", "AnimationTree", "AnimationPlayer", "UIPlayer", "Particles", "AudioPlayer", "Animator", "State") groups=["Players"]]
 script = ExtResource("1_rmynq")
 Dynamic = NodePath("Osage/Osage-Rig/Skeleton3D/Leg/Dynamic")
 Whole = NodePath("Osage/Osage-Rig/Skeleton3D/Spine/Whole")
 Camera = NodePath("Camera3D")
 AnimationTree = NodePath("Osage/AnimationTree")
 AnimationPlayer = NodePath("Osage/AnimationPlayer")
+UIPlayer = NodePath("UIPlayer")
 Particles = NodePath("GPUParticles3D")
 AudioPlayer = NodePath("AudioStreamPlayer3D")
 Animator = NodePath("Osage/Animator")
@@ -127,6 +288,36 @@ draw_pass_1 = SubResource("QuadMesh_am4i2")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.24731, 2.03596)
 script = ExtResource("3_oas3s")
+
+[node name="White" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -0.000488281
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_b0wu2")
+
+[node name="Ultimate" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -0.000244141
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_582x0")
+
+[node name="Blind" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -0.00012207
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_1w2hk")
 
 [node name="Control" type="Control" parent="." node_paths=PackedStringArray("HP", "Resistance", "Stamina")]
 layout_mode = 3
@@ -245,20 +436,19 @@ anchor_bottom = 1.0
 offset_top = -148.0
 offset_right = 312.0
 grow_vertical = 0
-texture = ExtResource("8_ex23g")
-metadata/_edit_lock_ = true
+texture = ExtResource("9_vljyo")
 
 [node name="HP" type="ProgressBar" parent="Control/UI"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 131.0
-offset_top = -41.0
-offset_right = 298.0
-offset_bottom = -26.0
+offset_left = 130.0
+offset_top = -50.0001
+offset_right = 295.0
+offset_bottom = -31.0001
 grow_vertical = 0
-theme_override_styles/fill = SubResource("StyleBoxFlat_xi2fk")
+theme_override_styles/fill = SubResource("StyleBoxTexture_g4g65")
 max_value = 10000.0
 value = 10000.0
 show_percentage = false
@@ -268,12 +458,12 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 131.0
-offset_top = -23.0
-offset_right = 298.0
-offset_bottom = -14.0
+offset_left = 130.0
+offset_top = -28.0001
+offset_right = 295.0
+offset_bottom = -18.0001
 grow_vertical = 0
-theme_override_styles/fill = SubResource("StyleBoxFlat_vljyo")
+theme_override_styles/fill = SubResource("StyleBoxTexture_582x0")
 max_value = 1000.0
 value = 1000.0
 show_percentage = false
@@ -352,3 +542,8 @@ show_percentage = false
 
 [node name="State" type="Node" parent="."]
 script = ExtResource("13_vljyo")
+
+[node name="UIPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_g4g65")
+}
