@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://b7uggrpfv7dq"]
+[gd_scene load_steps=46 format=3 uid="uid://b7uggrpfv7dq"]
 
 [ext_resource type="Script" uid="uid://b0dssaqs4uo5x" path="res://src/Gameplay/Characters/Tanger/Model.cs" id="1_5ddt7"]
 [ext_resource type="PackedScene" uid="uid://cok1n2mub6m14" path="res://src/Assets/Hyprs/Tanger.tscn" id="2_bka7s"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://baj6q2g8ru35u" path="res://src/Gameplay/Universal/UI.cs" id="4_76rja"]
 [ext_resource type="Texture2D" uid="uid://dlnnt7e6vi0fj" path="res://src/Assets/Hyprs/Tanger/Skillset/Signature.png" id="4_opnio"]
 [ext_resource type="Texture2D" uid="uid://dh388abhoeera" path="res://src/Assets/Hyprs/Tanger/Skillset/Alternate.png" id="5_utroe"]
+[ext_resource type="Theme" uid="uid://gcd6i4cul14f" path="res://src/Assets/Universal.tres" id="6_jcntf"]
 [ext_resource type="Texture2D" uid="uid://7chbkifj02jh" path="res://src/Assets/Hyprs/Tanger/Skillset/Active.png" id="7_umuva"]
 [ext_resource type="AudioStream" uid="uid://slu0vuuuyg6e" path="res://src/Assets/Audio/GrassStep.wav" id="8_umuva"]
 [ext_resource type="Texture2D" uid="uid://bddxu0xq7p5xb" path="res://src/Assets/Hyprs/Tanger/Panel/TangerPanel.png" id="9_0krdv"]
@@ -150,10 +151,10 @@ tracks/0/path = NodePath("White:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.307849, 0.5454, 0.841532, 1.0908, 1.3635, 1.62448, 1.93233, 2.15817, 2.4543, 2.70357, 2.9997, 3.24897, 3.5451, 3.79437, 4.0905, 4.3632, 4.6359, 4.9086, 5.1813, 5.454, 5.7267, 5.9994, 6.2721, 6.5448, 6.82922, 7.0902, 7.37462, 7.6356, 7.9083, 8.181, 8.4537, 8.7264, 8.9991),
-"transitions": PackedFloat32Array(50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+"times": PackedFloat32Array(0, 0.307849, 0.5454, 0.841532, 1.0908, 1.3635, 1.62448, 1.93233, 2.15817, 2.4543, 2.70357, 2.9997, 3.24897, 3.5451, 3.79437, 4.0905, 4.3632, 4.6359, 4.9086, 5.1813, 5.454, 5.7267, 5.9994, 6.2721, 6.5448, 6.82922, 8.7264, 8.9991),
+"transitions": PackedFloat32Array(50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 0.3, 50, 1),
 "update": 0,
-"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0.865882, 0.865882, 0.865881, 1), Color(1, 1, 1, 0), Color(0.865882, 0.865882, 0.865881, 1), Color(1, 1, 1, 0), Color(0.865882, 0.865882, 0.865881, 1), Color(1, 1, 1, 0), Color(0.865882, 0.865882, 0.865881, 1), Color(1, 1, 1, 0), Color(0.865882, 0.865882, 0.865881, 1), Color(1, 1, 1, 0)]
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(1, 1, 1, 1), Color(0, 0, 0, 0), Color(1, 1, 1, 1), Color(0, 0, 0, 0), Color(1, 1, 1, 1), Color(0, 0, 0, 0), Color(1, 1, 1, 1), Color(0, 0, 0, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0.196078), Color(0, 0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -162,10 +163,22 @@ tracks/1/path = NodePath("Camera3D:fov")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.8181, 1.3635, 1.9089, 2.4543, 2.9997, 3.5451, 4.0905, 4.6359, 5.1813, 5.7267, 6.2721, 6.8175, 7.3629, 7.9083, 8.4537, 8.9991),
-"transitions": PackedFloat32Array(0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01),
+"times": PackedFloat32Array(0.8181, 1.3635, 1.9089, 2.4543, 2.9997, 3.5451, 4.0905, 4.6359, 5.1813, 5.7267, 6.2721, 6.8175, 8.7264, 8.9991),
+"transitions": PackedFloat32Array(0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.3, 0.01, 1),
 "update": 0,
-"values": [120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0]
+"values": [120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 120.0, 60.0, 75.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Camera3D:Distance")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(6.8175, 8.7264, 8.9991),
+"transitions": PackedFloat32Array(0.3, 1, 1),
+"update": 0,
+"values": [6.0, 8.0, 6.0]
 }
 
 [sub_resource type="Animation" id="Animation_582x0"]
@@ -320,7 +333,7 @@ _data = {
 &"Ultimate": SubResource("Animation_g4g65")
 }
 
-[node name="Tanger" type="CharacterBody3D" node_paths=PackedStringArray("Dynamic", "Whole", "Big", "Area", "Camera", "AnimationTree", "AnimationPlayer", "UIPlayer", "Particles", "AudioPlayer", "Animator", "State") groups=["Players"]]
+[node name="Tanger" type="CharacterBody3D" node_paths=PackedStringArray("Dynamic", "Whole", "Big", "Area", "Camera", "AnimationTree", "AnimationPlayer", "UIPlayer", "Particles", "AudioPlayer", "Animator", "State", "Bloodstain") groups=["Players"]]
 script = ExtResource("1_5ddt7")
 Dynamic = NodePath("Tanger/Tanger-Rig/Skeleton3D/Hammer/Hammer/Dynamic")
 Whole = NodePath("Tanger/Tanger-Rig/Skeleton3D/Hammer/Hammer/Whole")
@@ -334,6 +347,7 @@ Particles = NodePath("GPUParticles3D")
 AudioPlayer = NodePath("AudioStreamPlayer3D")
 Animator = NodePath("Tanger/Animator")
 State = NodePath("State")
+Bloodstain = NodePath("Tanger/Tanger-Rig/Skeleton3D/Spine/Bloodstain")
 
 [node name="Tanger" parent="." instance=ExtResource("2_bka7s")]
 
@@ -395,7 +409,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_jcntf")
 
-[node name="Control" type="Control" parent="." node_paths=PackedStringArray("HP", "Resistance", "Stamina")]
+[node name="Control" type="Control" parent="." node_paths=PackedStringArray("HP", "Resistance", "Stamina", "Score")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -407,7 +421,34 @@ script = ExtResource("4_76rja")
 HP = NodePath("UI/HP")
 Resistance = NodePath("UI/Shield")
 Stamina = NodePath("Stamina/Bar")
+Score = NodePath("Board/Score")
 metadata/_edit_lock_ = true
+
+[node name="Board" type="Control" parent="Control"]
+layout_mode = 1
+anchor_left = 0.758594
+anchor_right = 1.0
+anchor_bottom = 0.516667
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Score" type="RichTextLabel" parent="Control/Board"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -309.0
+offset_top = 41.0
+offset_right = -40.0
+offset_bottom = 344.0
+grow_horizontal = 0
+theme = ExtResource("6_jcntf")
+theme_override_font_sizes/normal_font_size = 14
+text = "Kitsunory: 12921120
+"
+horizontal_alignment = 2
 
 [node name="Control" type="Control" parent="Control"]
 layout_mode = 1

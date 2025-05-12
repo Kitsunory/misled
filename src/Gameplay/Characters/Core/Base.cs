@@ -25,6 +25,7 @@ public abstract partial class Base : CharacterBody3D {
     [Export] public AudioStreamPlayer3D? AudioPlayer;
     [Export] public Animator? Animator; // Enforce type here
     [Export] public State? State; // Enforce type here
+    [Export] public Sprite3D? Bloodstain;
 
     [Export] public float MoveSpeed = 7.0f;
     [Export] public float JumpForce = 6.0f;
@@ -50,6 +51,7 @@ public abstract partial class Base : CharacterBody3D {
 
         _state!.OnBlinded += HandleBlind;
         _state!.OnSpyed += HandleSpy;
+        _state!.OnBloodstained += HandleBloodstain;
 
         Multiplayer.MultiplayerPeer.SetTransferMode(MultiplayerPeer.TransferModeEnum.UnreliableOrdered);
     }
@@ -81,17 +83,29 @@ public abstract partial class Base : CharacterBody3D {
         _animator?.UpdatePhysicsProcessDeltaTime(dt);
 
         Rpc(nameof(SendMovement), GlobalTransform.Origin, Velocity, Rotation, Camera!.GlobalTransform.Origin, Camera!.Basis);
+
         if (_state!.Health < 10000) {
             _state!.RequestHealthChange(100f * dt);
         }
     }
 
+    private void HandleBloodstain() =>
+        Bloodstain!.Modulate = new Color(1, 1, 1, 1);
+
     private void HandleBlind() =>
         UIPlayer!.Play("Blind");
 
-
     private void HandleSpy() =>
         UIPlayer!.Play("EyeSpy");
+
+    protected void RequestDealDamage(long id, float amount) {
+        var state = GetNode<State>("State");
+        state.PlayersScore[Multiplayer.GetUniqueId()] -= amount;
+        GetPlayerState(id)?.RpcId(id, nameof(State.RequestHealthChange), amount);
+    }
+
+    protected void RequestDealBreak(long id, float amount) =>
+        GetPlayerState(id)?.RpcId(id, nameof(State.RequestResistanceChange), amount);
 
     /// <summary>
     /// Synchronizes the character's movement across the network.

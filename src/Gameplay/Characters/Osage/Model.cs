@@ -1,15 +1,14 @@
 namespace Misled.Gameplay.Osage;
 
+using System.Threading.Tasks;
 using Godot;
 using Misled.Gameplay.Core;
 using Misled.Gameplay.Model;
 
 public partial class Model : Base {
-    [Export]
-    public Area3D? Dynamic;
-
-    [Export]
-    public Area3D? Whole;
+    [Export] public Area3D? Dynamic;
+    [Export] public Area3D? Whole;
+    [Export] public Area3D? Area;
 
     private bool _isAttacking;
     private float _attackTimer;
@@ -23,12 +22,10 @@ public partial class Model : Base {
         }
 
         base._Ready();
-        _state!.NormalConfig = new NormalConfig() {
+        _state!.NormalConfig = new NormalConfig {
             InputBufferTime = 0.4f,
             MaxComboCount = 4,
-
-            AnimationMap = new()
-            {
+            AnimationMap = new() {
                 { 1, "NA1" },
                 { 2, "NA2" },
                 { 3, "NA3" },
@@ -37,22 +34,34 @@ public partial class Model : Base {
         };
 
         Dynamic!.BodyEntered += OnDynamicBodyEntered;
+        Whole!.BodyEntered += OnWholeBodyEntered;
+
+        _state.OnNormalAttack += HandleNormalAttack;
 
         InitSystems();
     }
 
     private void OnDynamicBodyEntered(Node body) {
-        if (IsInvalidHitscan(body)) { return; }
+        if (IsInvalidHitscan(body)) {
+            return;
+        }
 
         var peerId = long.Parse(body.Name);
-        GetPlayerState(peerId)?.RpcId(peerId, nameof(State.RequestHealthChange), -300);
-        GetPlayerState(peerId)?.RpcId(peerId, nameof(State.RequestResistanceChange), -50);
+        RequestDealDamage(peerId, -300);
+        RequestDealBreak(peerId, -50);
     }
 
-    /// <summary>
-    /// Called during the physics processing step of the main loop.
-    /// </summary>
-    /// <param name="delta">The time elapsed since the previous physics update.</param>
+    private void OnWholeBodyEntered(Node body) {
+        if (IsInvalidHitscan(body)) {
+            return;
+        }
+
+        var peerId = long.Parse(body.Name);
+        GetPlayerState(peerId)?.RpcId(peerId, nameof(State.RequestBloodstain));
+        RequestDealDamage(peerId, -500);
+        RequestDealBreak(peerId, -75);
+    }
+
     public override void _PhysicsProcess(double delta) {
         if (!IsMultiplayerAuthority()) {
             return;
@@ -63,32 +72,33 @@ public partial class Model : Base {
         HandleAttackInputs();
     }
 
-    /// <summary>
-    /// Updates the attack timer and resets the attack if necessary.
-    /// </summary>
-    /// <param name="delta">The time elapsed since the previous physics update.</param>
-    private void UpdateAttackTimer(double delta) {
-        if (_isAttacking) {
-            _attackTimer += (float)delta;
+    private void HandleNormalAttack() =>
+        Dynamic!.Monitoring = true;
 
-            if (_attackTimer > _attackResetTime) {
-                ResetAttackState();
-            }
+    private void UpdateAttackTimer(double delta) {
+        if (!_isAttacking) {
+            return;
+        }
+
+        _attackTimer += (float)delta;
+
+        if (_attackTimer > _attackResetTime) {
+            ResetAttackState();
         }
     }
 
-    /// <summary>
-    /// Handles player input for initiating attacks.
-    /// </summary>
     private void HandleAttackInputs() {
-        Dynamic!.Monitoring = _state!.IsAttacking;
+
+        if (_state!.IsAttacking && _state.IsChainable) {
+            Dynamic!.Monitoring = false;
+        }
 
         if (Input.IsActionJustPressed("Signature")) {
-            TryStartAttack("Signature");
+            TryStartAttack("Signature", reach: false, isSignature: true);
         }
 
         if (Input.IsActionJustPressed("Alternate")) {
-            TryStartAttack("Alternate");
+            TryStartAttack("Alternate", skipAttackState: true);
         }
 
         if (Input.IsActionJustPressed("Exclusive")) {
@@ -96,48 +106,80 @@ public partial class Model : Base {
         }
     }
 
-    /// <summary>
-    /// Attempts to start an attack with the given animation name.
-    /// </summary>
-    /// <param name="animationName">The name of the attack animation.</param>
-    private void TryStartAttack(string animationName) {
-        if (_state!.IsAttacking) {
+    private void TryStartAttack(string animationName, bool skipAttackState = false, bool reach = true, bool isSignature = false) {
+        if (_state!.IsAttacking && !skipAttackState) {
             return;
         }
 
-        StartAttack(animationName);
+        StartAttack(animationName, skipAttackState, reach, isSignature);
     }
 
-    /// <summary>
-    /// Starts the attack animation and sets the attack state.
-    /// </summary>
-    /// <param name="animationName">The name of the attack animation.</param>
-    private void StartAttack(string animationName) {
+    private void StartAttack(string animationName, bool skipAttackState = false, bool reach = true, bool isSignature = false) {
         _attackTimer = 0f;
         _isAttacking = true;
-        _state!.StartAttack();
+        _state!.IsChainable = false;
+
+        Dynamic!.Monitoring = false;
+
+        if (!skipAttackState) {
+            _state!.StartAttack(reach);
+        }
 
         var animationLength = _animator!.AnimationTree!.GetAnimation(animationName).Length;
         _attackResetTime = animationLength;
 
         _animator.PlayAbilities(animationName);
+
+        if (isSignature) {
+            _ = HandleSignatureDash(5f, 1f);
+        }
+        else {
+            // Re-enable monitoring after normal skill
+            _ = RestoreCollisionMonitoring(animationLength);
+        }
     }
 
-    /// <summary>
-    /// Resets the attack state.
-    /// </summary>
+    private async Task HandleSignatureDash(float distance, float duration) {
+        Whole!.Monitoring = true;
+
+        var start = GlobalPosition;
+        var forward = -GlobalTransform.Basis.Z;
+        var target = start + forward * distance;
+
+        var time = 0f;
+        while (time < duration) {
+            time += (float)GetProcessDeltaTime();
+            var t = Mathf.Clamp(time / duration, 0f, 1f);
+            var easedT = EaseOutExpo(t);
+            GlobalPosition = start.Lerp(target, easedT);
+            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+        }
+
+        GlobalPosition = target;
+        Whole!.Monitoring = false;
+        Dynamic!.Monitoring = true;
+    }
+
+    private async Task RestoreCollisionMonitoring(float delay) {
+        await Task.Delay((int)(delay * 1000));
+        Dynamic!.Monitoring = true;
+    }
+
+    private static float EaseOutExpo(float t) =>
+        (t == 1f) ? 1f : 1 - Mathf.Pow(2, -10 * t);
+
     private void ResetAttackState() {
         _state!.ResetAttack();
         ResetAttack();
     }
 
-    /// <summary>
-    /// Resets the attack flags and animator.
-    /// </summary>
     public void ResetAttack() {
+        _state!.IsChainable = true;
         _isAttacking = false;
         _attackTimer = 0f;
 
         _animator!.ResetAbilities();
+        Whole!.Monitoring = false;
+        Dynamic!.Monitoring = false;
     }
 }

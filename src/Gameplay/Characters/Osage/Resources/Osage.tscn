@@ -1,12 +1,14 @@
-[gd_scene load_steps=43 format=3 uid="uid://b2035qfi2b1my"]
+[gd_scene load_steps=46 format=3 uid="uid://b2035qfi2b1my"]
 
 [ext_resource type="Script" uid="uid://dyp3f15ir1lt4" path="res://src/Gameplay/Characters/Osage/Model.cs" id="1_rmynq"]
 [ext_resource type="PackedScene" uid="uid://d0b3iocwkxbqd" path="res://src/Assets/Hyprs/Osage.tscn" id="2_rmynq"]
 [ext_resource type="Script" uid="uid://cpsugaks0eg73" path="res://src/Gameplay/View/Camera.cs" id="3_oas3s"]
+[ext_resource type="Shader" uid="uid://vmjnmenm1f2y" path="res://src/Assets/Shader/Grayscale.gdshader" id="4_fly1n"]
 [ext_resource type="Texture2D" uid="uid://d05ie5oohjb8w" path="res://src/Assets/Hyprs/Osage/Skillset/NA.png" id="4_rmynq"]
 [ext_resource type="Script" uid="uid://baj6q2g8ru35u" path="res://src/Gameplay/Universal/UI.cs" id="4_ts01c"]
 [ext_resource type="Texture2D" uid="uid://bms2imwrhlrcy" path="res://src/Assets/Hyprs/Osage/Skillset/Signature.png" id="5_rmynq"]
 [ext_resource type="Texture2D" uid="uid://cb2015k7atpdv" path="res://src/Assets/Hyprs/Osage/Skillset/Alternate.png" id="6_btmdy"]
+[ext_resource type="Theme" uid="uid://gcd6i4cul14f" path="res://src/Assets/Universal.tres" id="6_g4g65"]
 [ext_resource type="Texture2D" uid="uid://b3ravdn1wlmt5" path="res://src/Assets/Hyprs/Osage/Skillset/Exclusive.png" id="7_ex23g"]
 [ext_resource type="AudioStream" uid="uid://slu0vuuuyg6e" path="res://src/Assets/Audio/GrassStep.wav" id="8_2y1tq"]
 [ext_resource type="Texture2D" uid="uid://blywx58yv361t" path="res://src/Assets/Hyprs/Osage/Panel/OsagePanel.png" id="9_vljyo"]
@@ -52,6 +54,10 @@ particles_anim_loop = false
 [sub_resource type="QuadMesh" id="QuadMesh_am4i2"]
 material = SubResource("StandardMaterial3D_bka7s")
 size = Vector2(0.2, 0.2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g4g65"]
+shader = ExtResource("4_fly1n")
+shader_parameter/alpha = 0.0
 
 [sub_resource type="Gradient" id="Gradient_fly1n"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
@@ -131,7 +137,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5, 1.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(0.775622, 0.775622, 0.775622, 1), Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 1), Color(0.87068, 0.87068, 0.87068, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_b0wu2"]
@@ -145,10 +151,10 @@ tracks/0/path = NodePath("White:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.307849, 0.5454, 0.841532, 1.0908, 1.3635, 1.62448, 1.93233, 2.15817, 2.4543, 2.70357, 2.9997, 3.24897, 3.5451, 3.79437, 4.0905, 4.3632, 4.6359, 4.9086, 5.1813, 5.454, 5.7267, 5.9994, 6.2721, 6.5448, 6.82922, 7.0902, 7.37462, 7.6356, 7.9083, 8.181, 8.4537, 8.7264, 8.9991),
-"transitions": PackedFloat32Array(50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+"times": PackedFloat32Array(0, 0.307849, 0.5454, 0.841532, 1.0908, 1.3635, 1.62448, 1.93233, 2.15817, 2.4543, 2.70357, 2.9997, 3.24897, 3.5451, 3.79437, 4.0905, 4.3632, 4.6359, 4.9086, 5.1813, 5.454, 5.7267, 5.9994, 6.2721, 6.5448, 6.82922, 8.7264, 8.9991),
+"transitions": PackedFloat32Array(50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 0.3, 50, 1),
 "update": 0,
-"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0.865882, 0.865882, 0.865881, 1), Color(1, 1, 1, 0), Color(0.865882, 0.865882, 0.865881, 1), Color(1, 1, 1, 0), Color(0.865882, 0.865882, 0.865881, 1), Color(1, 1, 1, 0), Color(0.865882, 0.865882, 0.865881, 1), Color(1, 1, 1, 0), Color(0.865882, 0.865882, 0.865881, 1), Color(1, 1, 1, 0)]
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(1, 1, 1, 1), Color(0, 0, 0, 0), Color(1, 1, 1, 1), Color(0, 0, 0, 0), Color(1, 1, 1, 1), Color(0, 0, 0, 0), Color(1, 1, 1, 1), Color(0, 0, 0, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0.196078), Color(0, 0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -157,10 +163,22 @@ tracks/1/path = NodePath("Camera3D:fov")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.8181, 1.3635, 1.9089, 2.4543, 2.9997, 3.5451, 4.0905, 4.6359, 5.1813, 5.7267, 6.2721, 6.8175, 7.3629, 7.9083, 8.4537, 8.9991),
-"transitions": PackedFloat32Array(0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01),
+"times": PackedFloat32Array(0.8181, 1.3635, 1.9089, 2.4543, 2.9997, 3.5451, 4.0905, 4.6359, 5.1813, 5.7267, 6.2721, 6.8175, 8.7264, 8.9991),
+"transitions": PackedFloat32Array(0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.3, 0.01, 1),
 "update": 0,
-"values": [120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0]
+"values": [120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 75.0, 120.0, 120.0, 60.0, 75.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Camera3D:Distance")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(6.8175, 8.7264, 8.9991),
+"transitions": PackedFloat32Array(0.3, 1, 1),
+"update": 0,
+"values": [6.0, 8.0, 6.0]
 }
 
 [sub_resource type="Animation" id="Animation_582x0"]
@@ -229,6 +247,30 @@ tracks/3/keys = {
 "update": 0,
 "values": [75.0]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Camera3D:Distance")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [6.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ColorRect:material:shader_parameter/alpha")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_g4g65"]
 resource_name = "Ultimate"
@@ -245,6 +287,42 @@ tracks/0/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera3D:fov")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [90.0, 75.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Camera3D:Distance")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [5.0, 6.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ColorRect:material:shader_parameter/alpha")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_g4g65"]
 _data = {
@@ -255,7 +333,7 @@ _data = {
 &"Ultimate": SubResource("Animation_g4g65")
 }
 
-[node name="Osage" type="CharacterBody3D" node_paths=PackedStringArray("Dynamic", "Whole", "Camera", "AnimationTree", "AnimationPlayer", "UIPlayer", "Particles", "AudioPlayer", "Animator", "State") groups=["Players"]]
+[node name="Osage" type="CharacterBody3D" node_paths=PackedStringArray("Dynamic", "Whole", "Camera", "AnimationTree", "AnimationPlayer", "UIPlayer", "Particles", "AudioPlayer", "Animator", "State", "Bloodstain") groups=["Players"]]
 script = ExtResource("1_rmynq")
 Dynamic = NodePath("Osage/Osage-Rig/Skeleton3D/Leg/Dynamic")
 Whole = NodePath("Osage/Osage-Rig/Skeleton3D/Spine/Whole")
@@ -267,6 +345,7 @@ Particles = NodePath("GPUParticles3D")
 AudioPlayer = NodePath("AudioStreamPlayer3D")
 Animator = NodePath("Osage/Animator")
 State = NodePath("State")
+Bloodstain = NodePath("Osage/Osage-Rig/Skeleton3D/Spine/Bloodstain")
 
 [node name="Osage" parent="." instance=ExtResource("2_rmynq")]
 
@@ -288,6 +367,14 @@ draw_pass_1 = SubResource("QuadMesh_am4i2")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.24731, 2.03596)
 script = ExtResource("3_oas3s")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_g4g65")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="White" type="TextureRect" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -319,7 +406,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_1w2hk")
 
-[node name="Control" type="Control" parent="." node_paths=PackedStringArray("HP", "Resistance", "Stamina")]
+[node name="Control" type="Control" parent="." node_paths=PackedStringArray("HP", "Resistance", "Stamina", "Score")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -331,7 +418,34 @@ script = ExtResource("4_ts01c")
 HP = NodePath("UI/HP")
 Resistance = NodePath("UI/Shield")
 Stamina = NodePath("Stamina/Bar")
+Score = NodePath("Board/Score")
 metadata/_edit_lock_ = true
+
+[node name="Board" type="Control" parent="Control"]
+layout_mode = 1
+anchor_left = 0.758594
+anchor_right = 1.0
+anchor_bottom = 0.516667
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Score" type="RichTextLabel" parent="Control/Board"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -309.0
+offset_top = 41.0
+offset_right = -40.0
+offset_bottom = 344.0
+grow_horizontal = 0
+theme = ExtResource("6_g4g65")
+theme_override_font_sizes/normal_font_size = 18
+text = "Kitsunory: 12921120
+"
+horizontal_alignment = 2
 
 [node name="Control" type="Control" parent="Control"]
 layout_mode = 1

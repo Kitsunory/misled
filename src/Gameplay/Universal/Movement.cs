@@ -242,7 +242,7 @@ public class Movement {
     /// <param name="velocity">The character's velocity.</param>
     private void UpdateAnimator(Vector3 velocity) => _animator.UpdateMovementBlend(velocity, _body.IsOnFloor());
 
-    private async void HandleAttackStarted() {
+    private async void HandleAttackStarted(bool reach) {
         var cameraDirection = -_camera.GlobalTransform.Basis.Z;
         cameraDirection.Y = 0;
         cameraDirection = cameraDirection.Normalized();
@@ -250,23 +250,25 @@ public class Movement {
         var targetBasis = Basis.LookingAt(cameraDirection, Vector3.Up);
         _body.GlobalTransform = _body.GlobalTransform with { Basis = targetBasis };
 
-        var attackMoveDistance = _moveSpeed * 0.1f;
-        var targetPosition = _body.GlobalPosition + (cameraDirection * attackMoveDistance);
+        if (reach) {
+            var attackMoveDistance = _moveSpeed * 0.1f;
+            var targetPosition = _body.GlobalPosition + (cameraDirection * attackMoveDistance);
 
-        var start = _body.GlobalPosition;
-        var duration = 0.5f;
-        var elapsed = 0f;
+            var start = _body.GlobalPosition;
+            var duration = 0.5f;
+            var elapsed = 0f;
 
-        while (elapsed < duration) {
-            if (!_state.IsAttacking) { return; }
-            var t = elapsed / duration;
-            var easedT = 1f - Mathf.Pow(1f - t, 3f);
-            _body.GlobalPosition = start.Lerp(targetPosition, easedT);
-            await _body.ToSignal(_body.GetTree(), "process_frame");
-            elapsed += (float)_body.GetProcessDeltaTime();
+            while (elapsed < duration) {
+                if (!_state.IsAttacking) { return; }
+                var t = elapsed / duration;
+                var easedT = 1f - Mathf.Pow(1f - t, 3f);
+                _body.GlobalPosition = start.Lerp(targetPosition, easedT);
+                await _body.ToSignal(_body.GetTree(), "process_frame");
+                elapsed += (float)_body.GetProcessDeltaTime();
+            }
+
+            _body.GlobalPosition = targetPosition;
         }
-
-        _body.GlobalPosition = targetPosition;
     }
 
     private async void HandleDamage(int requester) {

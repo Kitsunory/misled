@@ -51,8 +51,8 @@ public partial class Model : Base {
         if (IsInvalidHitscan(body)) { return; }
 
         var peerId = long.Parse(body.Name);
-        GetPlayerState(peerId)?.RpcId(peerId, nameof(State.RequestHealthChange), -400);
-        GetPlayerState(peerId)?.RpcId(peerId, nameof(State.RequestResistanceChange), -50);
+        RequestDealDamage(peerId, -400);
+        RequestDealBreak(peerId, -50);
     }
 
     public override void _PhysicsProcess(double delta) {
@@ -230,8 +230,8 @@ public partial class Model : Base {
             }
 
             var peerId = long.Parse(body.Name);
-            GetPlayerState(peerId)?.RpcId(peerId, nameof(State.RequestHealthChange), -400);
-            GetPlayerState(peerId)?.RpcId(peerId, nameof(State.RequestResistanceChange), -25);
+            RequestDealDamage(peerId, -400);
+            RequestDealBreak(peerId, -50);
         }
     }
 }

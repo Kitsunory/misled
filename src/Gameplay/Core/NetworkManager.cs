@@ -1,4 +1,5 @@
 namespace Misled.Gameplay.Core;
+
 using Godot;
 using Godot.Collections;
 

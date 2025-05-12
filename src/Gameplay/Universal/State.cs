@@ -1,11 +1,15 @@
 namespace Misled.Gameplay.Universal;
 
 using System;
+using System.Collections.Generic;
 using Godot;
+using Misled.Gameplay.Core;
 using Misled.Gameplay.Model;
 
 public partial class State : Node {
     public static State? Instance { get; private set; }
+
+    public Dictionary<long, float> PlayersScore = [];
 
     public NormalConfig? NormalConfig { get; set; }
 
@@ -21,20 +25,30 @@ public partial class State : Node {
     public bool IsInterruptable { get; set; } = true;
 
     public bool IsSpy { get; set; }
+    public bool IsBloodstained { get; set; }
 
     public Action? OnNormalAttack { get; set; }
     public Action? OnReposture { get; set; }
-    public Action? OnAttackStarted { get; set; }
+    public Action<bool>? OnAttackStarted { get; set; }
     public Action? OnAttackEnded { get; set; }
     public Action<int>? OnDamageReceived { get; set; }
+
     public Action? OnBlinded { get; set; }
     public Action? OnSpyed { get; set; }
+    public Action? OnBloodstained { get; set; }
+    public Action? OnBloodstainReset { get; set; }
 
-    public override void _Ready() => Instance = this;
+    public override void _Ready() {
+        Instance = this;
 
-    public void StartAttack() {
+        foreach (var playerId in NetworkManager.Instance!.GetAllPlayers().Keys) {
+            PlayersScore[playerId] = 0;
+        }
+    }
+
+    public void StartAttack(bool reach = true) {
         IsAttacking = true;
-        OnAttackStarted?.Invoke();
+        OnAttackStarted?.Invoke(reach);
     }
 
     public void ResetAttack() {
@@ -57,6 +71,7 @@ public partial class State : Node {
         }
         IsSpy = true;
         OnSpyed?.Invoke();
+        Rpc(nameof(SyncSpy), IsSpy);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
@@ -65,7 +80,36 @@ public partial class State : Node {
             return;
         }
         IsSpy = false;
+        Rpc(nameof(SyncSpy), IsSpy);
     }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void SyncSpy(bool value) =>
+            IsSpy = value;
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void RequestBloodstain() {
+        if (!IsMultiplayerAuthority()) {
+            return;
+        }
+        IsBloodstained = true;
+        OnBloodstained?.Invoke();
+        Rpc(nameof(SyncBloodstain), IsSpy);
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void ResetBloodstain() {
+        if (!IsMultiplayerAuthority()) {
+            return;
+        }
+        IsBloodstained = false;
+        OnBloodstainReset?.Invoke();
+        Rpc(nameof(SyncBloodstain), IsSpy);
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void SyncBloodstain(bool value) =>
+        IsBloodstained = value;
 
     // ──────────────── HEALTH ────────────────
 
@@ -76,6 +120,7 @@ public partial class State : Node {
         }
         if (Health + amount < Health) {
             OnDamageReceived?.Invoke(Multiplayer.GetRemoteSenderId());
+            PlayersScore[Multiplayer.GetRemoteSenderId()] -= amount;
         }
         Health += amount;
         Rpc(nameof(SyncHealth), Health);
