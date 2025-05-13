@@ -2,6 +2,7 @@ namespace Misled.Gameplay.Core;
 
 using System;
 using Godot;
+using Misled.Gameplay.Universal;
 
 public partial class DeveloperMode : Window {
     [Export] public Button? Host;
@@ -24,6 +25,7 @@ public partial class DeveloperMode : Window {
     private float _updateTimer;
     private float _spikeTimer;
     private bool _isSpikeActive;
+    private State? _state;
 
     public override void _Ready() {
         _networkManager = (NetworkManager)NetworkManager!;
@@ -69,6 +71,9 @@ public partial class DeveloperMode : Window {
 
     private void OnOutputPressed() =>
         _networkManager!.SpawnAllPlayers();
+
+    private void OnResetPressed() =>
+        _state?.ChangeSkillCooldown("Exclusive", 0f);
 
     private void OnHostPressed() {
         _networkManager!.DefaultServer = Address!.Text;

@@ -1,8 +1,9 @@
-[gd_scene load_steps=46 format=3 uid="uid://b2035qfi2b1my"]
+[gd_scene load_steps=53 format=3 uid="uid://b2035qfi2b1my"]
 
 [ext_resource type="Script" uid="uid://dyp3f15ir1lt4" path="res://src/Gameplay/Characters/Osage/Model.cs" id="1_rmynq"]
 [ext_resource type="PackedScene" uid="uid://d0b3iocwkxbqd" path="res://src/Assets/Hyprs/Osage.tscn" id="2_rmynq"]
 [ext_resource type="Script" uid="uid://cpsugaks0eg73" path="res://src/Gameplay/View/Camera.cs" id="3_oas3s"]
+[ext_resource type="Texture2D" uid="uid://bpbovtuj5e5uu" path="res://src/Assets/Hyprs/Osage/Skillset/Marker.png" id="4_582x0"]
 [ext_resource type="Shader" uid="uid://vmjnmenm1f2y" path="res://src/Assets/Shader/Grayscale.gdshader" id="4_fly1n"]
 [ext_resource type="Texture2D" uid="uid://d05ie5oohjb8w" path="res://src/Assets/Hyprs/Osage/Skillset/NA.png" id="4_rmynq"]
 [ext_resource type="Script" uid="uid://baj6q2g8ru35u" path="res://src/Gameplay/Universal/UI.cs" id="4_ts01c"]
@@ -55,6 +56,21 @@ particles_anim_loop = false
 material = SubResource("StandardMaterial3D_bka7s")
 size = Vector2(0.2, 0.2)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g4g65"]
+transparency = 1
+cull_mode = 1
+diffuse_mode = 3
+specular_mode = 1
+disable_ambient_light = true
+disable_fog = true
+albedo_color = Color(0.694118, 0.713726, 0.721569, 0)
+disable_receive_shadows = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_582x0"]
+material = SubResource("StandardMaterial3D_g4g65")
+radius = 1.0
+height = 2.0
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g4g65"]
 shader = ExtResource("4_fly1n")
 shader_parameter/alpha = 0.0
@@ -81,6 +97,14 @@ colors = PackedColorArray(0.560231, 0.560231, 0.560231, 1, 0.88992, 0.88992, 0.8
 gradient = SubResource("Gradient_582x0")
 fill_from = Vector2(1, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yqctl"]
+bg_color = Color(0.829452, 0, 0.15823, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+corner_detail = 2
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g4g65"]
 texture = ExtResource("10_1w2hk")
 axis_stretch_horizontal = 1
@@ -105,12 +129,28 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath("AudioStreamPlayer3D:playing")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+properties/2/path = NodePath("Marker:modulate")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath(".:visible")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+properties/4/path = NodePath("Panel/SubViewport/Name:text")
+properties/4/spawn = true
+properties/4/replication_mode = 1
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_ex23g"]
 viewport_path = NodePath("Panel/SubViewport")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ib1b"]
+bg_color = Color(0.925135, 0.000459432, 0.102303, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_582x0"]
-bg_color = Color(0.405577, 0.644085, 0.696062, 1)
+bg_color = Color(0.622918, 0.575617, 0.564117, 1)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -181,6 +221,23 @@ tracks/2/keys = {
 "values": [6.0, 8.0, 6.0]
 }
 
+[sub_resource type="Animation" id="Animation_3ib1b"]
+resource_name = "Marker"
+length = 0.5
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Marker:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_582x0"]
 resource_name = "NoUltimate"
 step = 0.1
@@ -195,6 +252,35 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_jcntf"]
+resource_name = "Parry"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Parry:mesh:material:albedo_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(0.2, 0.2),
+"update": 0,
+"values": [Color(0.694118, 0.713726, 0.721569, 0.392157), Color(0.694118, 0.713726, 0.721569, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Parry:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(0.2, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1.5, 1.5, 1.5)]
 }
 
 [sub_resource type="Animation" id="Animation_fly1n"]
@@ -271,6 +357,42 @@ tracks/5/keys = {
 "update": 0,
 "values": [0.0]
 }
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Parry:mesh:material:albedo_color")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.694118, 0.713726, 0.721569, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Parry:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Marker:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_g4g65"]
 resource_name = "Ultimate"
@@ -328,15 +450,19 @@ tracks/3/keys = {
 _data = {
 &"Blind": SubResource("Animation_1w2hk"),
 &"EyeSpy": SubResource("Animation_b0wu2"),
+&"Marker": SubResource("Animation_3ib1b"),
 &"NoUltimate": SubResource("Animation_582x0"),
+&"Parry": SubResource("Animation_jcntf"),
 &"RESET": SubResource("Animation_fly1n"),
 &"Ultimate": SubResource("Animation_g4g65")
 }
 
-[node name="Osage" type="CharacterBody3D" node_paths=PackedStringArray("Dynamic", "Whole", "Camera", "AnimationTree", "AnimationPlayer", "UIPlayer", "Particles", "AudioPlayer", "Animator", "State", "Bloodstain") groups=["Players"]]
+[node name="Osage" type="CharacterBody3D" node_paths=PackedStringArray("Dynamic", "Whole", "Area", "Camera", "AnimationTree", "AnimationPlayer", "UIPlayer", "Particles", "AudioPlayer", "Animator", "State", "Bloodstain", "SFX") groups=["Players"]]
+collision_layer = 2
 script = ExtResource("1_rmynq")
 Dynamic = NodePath("Osage/Osage-Rig/Skeleton3D/Leg/Dynamic")
 Whole = NodePath("Osage/Osage-Rig/Skeleton3D/Spine/Whole")
+Area = NodePath("Osage/Osage-Rig/Skeleton3D/Area")
 Camera = NodePath("Camera3D")
 AnimationTree = NodePath("Osage/AnimationTree")
 AnimationPlayer = NodePath("Osage/AnimationPlayer")
@@ -346,6 +472,8 @@ AudioPlayer = NodePath("AudioStreamPlayer3D")
 Animator = NodePath("Osage/Animator")
 State = NodePath("State")
 Bloodstain = NodePath("Osage/Osage-Rig/Skeleton3D/Spine/Bloodstain")
+SFX = NodePath("SFX")
+MaxJumps = 1
 
 [node name="Osage" parent="." instance=ExtResource("2_rmynq")]
 
@@ -366,7 +494,20 @@ draw_pass_1 = SubResource("QuadMesh_am4i2")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.24731, 2.03596)
+current = true
 script = ExtResource("3_oas3s")
+
+[node name="Parry" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0314819, 0.882459, 0.0278454)
+mesh = SubResource("SphereMesh_582x0")
+
+[node name="Marker" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3116, -0.586648)
+modulate = Color(1, 1, 1, 0)
+pixel_size = 0.004
+billboard = 1
+no_depth_test = true
+texture = ExtResource("4_582x0")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_g4g65")
@@ -406,7 +547,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_1w2hk")
 
-[node name="Control" type="Control" parent="." node_paths=PackedStringArray("HP", "Resistance", "Stamina", "Score")]
+[node name="Control" type="Control" parent="." node_paths=PackedStringArray("HP", "HPText", "HPMark", "Monocoins", "Resistance", "Stamina", "Score", "Signature", "Alternate", "Exclusive", "SICD", "ALCD", "EXCD", "Control")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -416,9 +557,19 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("4_ts01c")
 HP = NodePath("UI/HP")
+HPText = NodePath("UI/HPText")
+HPMark = NodePath("UI/HPMark")
+Monocoins = NodePath("UI/Coin")
 Resistance = NodePath("UI/Shield")
 Stamina = NodePath("Stamina/Bar")
 Score = NodePath("Board/Score")
+Signature = NodePath("Control/Signature")
+Alternate = NodePath("Control/Alternate")
+Exclusive = NodePath("Control/Exclusive")
+SICD = NodePath("Control/Signature/SICD")
+ALCD = NodePath("Control/Alternate/ALCD")
+EXCD = NodePath("Control/Exclusive/EXCD")
+Control = NodePath("Control")
 metadata/_edit_lock_ = true
 
 [node name="Board" type="Control" parent="Control"]
@@ -442,7 +593,7 @@ offset_right = -40.0
 offset_bottom = 344.0
 grow_horizontal = 0
 theme = ExtResource("6_g4g65")
-theme_override_font_sizes/normal_font_size = 18
+theme_override_font_sizes/normal_font_size = 14
 text = "Kitsunory: 12921120
 "
 horizontal_alignment = 2
@@ -496,6 +647,19 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_use_anchors_ = true
 
+[node name="SICD" type="RichTextLabel" parent="Control/Control/Signature"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("6_g4g65")
+theme_override_font_sizes/normal_font_size = 14
+text = "10s"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Alternate" type="TextureRect" parent="Control/Control"]
 modulate = Color(1, 1, 1, 0.784314)
 layout_mode = 1
@@ -514,6 +678,19 @@ texture = ExtResource("6_btmdy")
 expand_mode = 1
 stretch_mode = 5
 metadata/_edit_use_anchors_ = true
+
+[node name="ALCD" type="RichTextLabel" parent="Control/Control/Alternate"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("6_g4g65")
+theme_override_font_sizes/normal_font_size = 14
+text = "10s"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Exclusive" type="TextureRect" parent="Control/Control"]
 modulate = Color(1, 1, 1, 0.784314)
@@ -534,6 +711,21 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_use_anchors_ = true
 
+[node name="EXCD" type="RichTextLabel" parent="Control/Control/Exclusive"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -9.15527e-05
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("6_g4g65")
+theme_override_font_sizes/normal_font_size = 14
+text = "90%"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
 [node name="UI" type="Control" parent="Control"]
 layout_mode = 1
 anchor_left = 0.0257812
@@ -552,6 +744,21 @@ offset_right = 312.0
 grow_vertical = 0
 texture = ExtResource("9_vljyo")
 
+[node name="HPMark" type="ProgressBar" parent="Control/UI"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 130.0
+offset_top = -50.0001
+offset_right = 295.0
+offset_bottom = -32.0001
+grow_vertical = 0
+theme_override_styles/fill = SubResource("StyleBoxFlat_yqctl")
+max_value = 10000.0
+value = 10000.0
+show_percentage = false
+
 [node name="HP" type="ProgressBar" parent="Control/UI"]
 layout_mode = 1
 anchors_preset = 2
@@ -560,7 +767,7 @@ anchor_bottom = 1.0
 offset_left = 130.0
 offset_top = -50.0001
 offset_right = 295.0
-offset_bottom = -31.0001
+offset_bottom = -32.0001
 grow_vertical = 0
 theme_override_styles/fill = SubResource("StyleBoxTexture_g4g65")
 max_value = 10000.0
@@ -573,7 +780,7 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 130.0
-offset_top = -28.0001
+offset_top = -27.0001
 offset_right = 295.0
 offset_bottom = -18.0001
 grow_vertical = 0
@@ -581,6 +788,39 @@ theme_override_styles/fill = SubResource("StyleBoxTexture_582x0")
 max_value = 1000.0
 value = 1000.0
 show_percentage = false
+
+[node name="HPText" type="RichTextLabel" parent="Control/UI"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 130.0
+offset_top = -94.0001
+offset_right = 211.0
+offset_bottom = -54.0001
+grow_vertical = 0
+theme = ExtResource("6_g4g65")
+theme_override_colors/default_color = Color(0.576471, 0.67451, 0.654902, 1)
+theme_override_font_sizes/normal_font_size = 12
+text = "9800"
+vertical_alignment = 2
+
+[node name="Coin" type="RichTextLabel" parent="Control/UI"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 194.0
+offset_top = -95.0001
+offset_right = 275.0
+offset_bottom = -55.0001
+grow_vertical = 0
+theme = ExtResource("6_g4g65")
+theme_override_colors/default_color = Color(0.576471, 0.67451, 0.654902, 1)
+theme_override_font_sizes/normal_font_size = 10
+text = "12"
+horizontal_alignment = 2
+vertical_alignment = 2
 
 [node name="Stamina" type="Control" parent="Control"]
 layout_mode = 1
@@ -612,32 +852,46 @@ show_percentage = false
 replication_interval = 0.3
 replication_config = SubResource("SceneReplicationConfig_dnjiu")
 
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
+
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("8_2y1tq")
 
-[node name="Panel" type="Sprite3D" parent="." node_paths=PackedStringArray("HP", "Resistance")]
+[node name="Panel" type="Sprite3D" parent="." node_paths=PackedStringArray("HP", "HPMark", "Resistance", "PlayerName")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00474644, 2.02637, -0.00160944)
 pixel_size = 0.004
 billboard = 2
 texture = SubResource("ViewportTexture_ex23g")
 script = ExtResource("11_ldeuu")
 HP = NodePath("SubViewport/HP")
+HPMark = NodePath("SubViewport/HPMark")
 Resistance = NodePath("SubViewport/Shield")
+PlayerName = NodePath("SubViewport/Name")
 
 [node name="SubViewport" type="SubViewport" parent="Panel"]
 transparent_bg = true
-size = Vector2i(210, 75)
+size = Vector2i(210, 85)
 
 [node name="Panel" type="TextureRect" parent="Panel/SubViewport"]
 offset_right = 210.0
-offset_bottom = 75.0
+offset_bottom = 85.0
 texture = ExtResource("10_ldeuu")
 
+[node name="HPMark" type="ProgressBar" parent="Panel/SubViewport"]
+offset_left = 11.0
+offset_top = 50.0
+offset_right = 199.0
+offset_bottom = 62.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_3ib1b")
+max_value = 10000.0
+value = 10000.0
+show_percentage = false
+
 [node name="HP" type="ProgressBar" parent="Panel/SubViewport"]
-offset_left = 10.0
-offset_top = 41.0
-offset_right = 198.0
-offset_bottom = 53.0
+offset_left = 11.0
+offset_top = 50.0
+offset_right = 199.0
+offset_bottom = 62.0
 theme_override_styles/fill = SubResource("StyleBoxFlat_582x0")
 max_value = 10000.0
 value = 10000.0
@@ -645,14 +899,23 @@ show_percentage = false
 
 [node name="Shield" type="ProgressBar" parent="Panel/SubViewport"]
 offset_left = 11.0
-offset_top = 57.0
+offset_top = 65.0
 offset_right = 198.0
-offset_bottom = 65.0
+offset_bottom = 73.0
 scale = Vector2(1, 0.8)
 theme_override_styles/fill = SubResource("StyleBoxFlat_b0wu2")
 max_value = 1000.0
 value = 1000.0
 show_percentage = false
+
+[node name="Name" type="RichTextLabel" parent="Panel/SubViewport"]
+offset_right = 210.0
+offset_bottom = 51.0
+theme = ExtResource("6_g4g65")
+theme_override_font_sizes/normal_font_size = 16
+text = "Norinoyaki"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="State" type="Node" parent="."]
 script = ExtResource("13_vljyo")

@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://x1qqbubmnlyp"]
+
+[ext_resource type="PackedScene" uid="uid://cok1n2mub6m14" path="res://src/Assets/Hyprs/Tanger.tscn" id="2_sgy33"]
+[ext_resource type="Theme" uid="uid://gcd6i4cul14f" path="res://src/Assets/Universal.tres" id="6_dftw6"]
+[ext_resource type="Texture2D" uid="uid://bn37xd1pnq5h8" path="res://src/Assets/Gameplay/Panel.png" id="16_ba0a6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r6sek"]
+size = Vector3(0.70784, 1.78745, 0.750793)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_umuva"]
+viewport_path = NodePath("Panel/SubViewport")
+
+[node name="Tanger" type="CharacterBody3D" groups=["Players"]]
+collision_layer = 2
+collision_mask = 5
+
+[node name="Tanger" parent="." instance=ExtResource("2_sgy33")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0129368, 0.891708, 0.034033)
+shape = SubResource("BoxShape3D_r6sek")
+
+[node name="Panel" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0118698, 2.02637, -0.00160944)
+pixel_size = 0.004
+billboard = 2
+texture = SubResource("ViewportTexture_umuva")
+
+[node name="SubViewport" type="SubViewport" parent="Panel"]
+transparent_bg = true
+size = Vector2i(210, 85)
+
+[node name="Panel" type="TextureRect" parent="Panel/SubViewport"]
+offset_right = 210.0
+offset_bottom = 85.0
+texture = ExtResource("16_ba0a6")
+
+[node name="Name" type="RichTextLabel" parent="Panel/SubViewport"]
+offset_top = 16.0
+offset_right = 210.0
+offset_bottom = 67.0
+theme = ExtResource("6_dftw6")
+theme_override_font_sizes/normal_font_size = 16
+text = "Norinoyaki"
+horizontal_alignment = 1
+vertical_alignment = 1

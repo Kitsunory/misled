@@ -13,25 +13,103 @@ public partial class State : Node {
 
     public NormalConfig? NormalConfig { get; set; }
 
+    public string? CurrentName { get; set; }
     public Elemental? Elemental { get; set; }
+    public Dictionary<string, float> SkillCooldowns { get; set; } = [];
 
-    public float Health = 10000;
-    public float Resistance = 1000;
-    public float Stamina = 100;
+    public void ChangeSkillCooldown(string skillName, float amount) {
+        if (SkillCooldowns.TryGetValue(skillName, out var value)) {
+            SkillCooldowns[skillName] = Mathf.Max(value + amount, 0f);
+        }
+        else {
+            SkillCooldowns[skillName] = amount;
+        }
+    }
+
+
+    public float? CheckCooldownOrNull(string skillName) {
+        if (SkillCooldowns.TryGetValue(skillName, out var remaining) && remaining > 0f) {
+            return remaining;
+        }
+        return null;
+    }
+
+    private float _health = 10000;
+    public float Health {
+        get => _health;
+        set {
+            if (IsMultiplayerAuthority()) {
+                _health = value;
+                Rpc(nameof(SyncHealth), _health);
+            }
+        }
+    }
+
+    private float _resistance = 1000;
+    public float Resistance {
+        get => _resistance;
+        set {
+            if (IsMultiplayerAuthority()) {
+                _resistance = value;
+                Rpc(nameof(SyncResistance), _resistance);
+            }
+        }
+    }
+    private float _stamina = 100;
+    public float Stamina {
+        get => _stamina;
+        set {
+            if (IsMultiplayerAuthority()) {
+                _stamina = value;
+                Rpc(nameof(SyncStamina), _stamina);
+            }
+        }
+    }
 
     public bool IsAttacking { get; set; }
     public bool IsChainable { get; set; }
     public bool IsIrrevocable { get; set; } = true;
     public bool IsInterruptable { get; set; } = true;
 
+    private bool _isImmobilized;
+    public bool IsImmobilized {
+        get => _isImmobilized;
+        set {
+            if (_isImmobilized == value) {
+                return;
+            }
+
+            _isImmobilized = value;
+
+            if (IsMultiplayerAuthority()) {
+                Rpc(nameof(SyncImmobilized), _isImmobilized);
+            }
+        }
+    }
+
+    private bool _isParrying;
+    public bool IsParrying {
+        get => _isParrying;
+        set {
+            _isParrying = value;
+            Rpc(nameof(SyncParry), _isParrying);
+        }
+    }
+
     public bool IsSpy { get; set; }
     public bool IsBloodstained { get; set; }
+    public int Monocoins { get; set; }
 
     public Action? OnNormalAttack { get; set; }
+    public Action? OnNormalAttackEnded { get; set; }
     public Action? OnReposture { get; set; }
     public Action<bool>? OnAttackStarted { get; set; }
     public Action? OnAttackEnded { get; set; }
     public Action<int>? OnDamageReceived { get; set; }
+    public Action<int>? OnBreakCallback { get; set; }
+    public Action<int>? OnBreak { get; set; }
+    public Action<int>? OnParry { get; set; }
+    public Action? OnDeath { get; set; }
 
     public Action? OnBlinded { get; set; }
     public Action? OnSpyed { get; set; }
@@ -54,6 +132,14 @@ public partial class State : Node {
     public void ResetAttack() {
         IsAttacking = false;
         OnAttackEnded?.Invoke();
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void RequestBreakCallback(int requester) {
+        if (!IsMultiplayerAuthority()) {
+            return;
+        }
+        OnBreakCallback?.Invoke(requester);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
@@ -88,13 +174,32 @@ public partial class State : Node {
             IsSpy = value;
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public async void RequestImmobilized(float time) {
+        if (!IsMultiplayerAuthority()) {
+            return;
+        }
+
+        IsImmobilized = true;
+        Rpc(nameof(SyncImmobilized), IsImmobilized);
+
+        await ToSignal(GetTree().CreateTimer(time), "timeout");
+
+        IsImmobilized = false;
+        Rpc(nameof(SyncImmobilized), IsImmobilized);
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void SyncImmobilized(bool value) =>
+        _isImmobilized = value;
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
     public void RequestBloodstain() {
         if (!IsMultiplayerAuthority()) {
             return;
         }
         IsBloodstained = true;
         OnBloodstained?.Invoke();
-        Rpc(nameof(SyncBloodstain), IsSpy);
+        Rpc(nameof(SyncBloodstain), IsBloodstained);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
@@ -104,12 +209,17 @@ public partial class State : Node {
         }
         IsBloodstained = false;
         OnBloodstainReset?.Invoke();
-        Rpc(nameof(SyncBloodstain), IsSpy);
+        Rpc(nameof(SyncBloodstain), IsBloodstained);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
     public void SyncBloodstain(bool value) =>
         IsBloodstained = value;
+
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void SyncParry(bool value) =>
+        IsParrying = value;
 
     // ──────────────── HEALTH ────────────────
 
@@ -118,17 +228,23 @@ public partial class State : Node {
         if (!IsMultiplayerAuthority()) {
             return;
         }
+        if (IsParrying) {
+            OnParry?.Invoke(Multiplayer.GetRemoteSenderId());
+            return;
+        }
         if (Health + amount < Health) {
             OnDamageReceived?.Invoke(Multiplayer.GetRemoteSenderId());
             PlayersScore[Multiplayer.GetRemoteSenderId()] -= amount;
         }
         Health += amount;
-        Rpc(nameof(SyncHealth), Health);
+        if (Health <= 0) {
+            OnDeath?.Invoke();
+        }
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
     public void SyncHealth(float value) =>
-        Health = value;
+        _health = value;
 
     // ──────────────── RESISTANCE ────────────────
 
@@ -137,13 +253,16 @@ public partial class State : Node {
         if (!IsMultiplayerAuthority()) {
             return;
         }
+        var init = Resistance;
         Resistance += amount;
-        Rpc(nameof(SyncResistance), Resistance);
+        if (Resistance <= 0 && init > 0) {
+            OnBreak?.Invoke(Multiplayer.GetRemoteSenderId());
+        }
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
     public void SyncResistance(float value) =>
-        Resistance = value;
+        _resistance = value;
 
     // ──────────────── STAMINA ────────────────
 
@@ -153,10 +272,9 @@ public partial class State : Node {
             return;
         }
         Stamina += amount;
-        Rpc(nameof(SyncStamina), Stamina);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
     public void SyncStamina(float value) =>
-        Stamina = value;
+        _stamina = value;
 }

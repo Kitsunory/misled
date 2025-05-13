@@ -40,7 +40,6 @@ public class Normal {
     private void HandleAttackInput() {
         if (Input.IsActionJustPressed("Normal")) {
             _state.IsChainable = false;
-            _state.OnNormalAttack?.Invoke();
             if (!_isAttacking) {
                 StartAttackCombo();
             }
@@ -96,6 +95,7 @@ public class Normal {
         _config.AttackResetTime = animationLength;
 
         _animator.PlayNormal(animationName);
+        _state.OnNormalAttack?.Invoke();
     }
 
     /// <summary>
@@ -106,6 +106,7 @@ public class Normal {
         _currentAttackIndex = 0;
         _attackTimer = 0f;
         _nextAttackBuffered = false;
+        _state.OnNormalAttackEnded?.Invoke();
 
         _animator.ResetNormal();
     }
@@ -115,6 +116,10 @@ public class Normal {
     /// </summary>
     /// <param name="delta">The time elapsed since the previous frame.</param>
     public void Update(float delta) {
+        if (!_state.IsInterruptable || _state.IsImmobilized) {
+            return;
+        }
+
         HandleAttackInput();
 
         if (!_isAttacking) {

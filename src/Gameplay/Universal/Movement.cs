@@ -79,8 +79,13 @@ public class Movement {
         if (_state.Stamina <= 100) {
             _state.RequestStaminaChange(10f * delta);
         }
-
         var velocity = _body.Velocity;
+        var horizontal = velocity with { Y = 0 };
+
+        if (_state.IsImmobilized) {
+            horizontal = Vector3.Zero;
+            return;
+        }
 
         ApplyGravity(ref velocity, delta);
 
@@ -276,7 +281,7 @@ public class Movement {
 
         var enemyBody = world.GetNodeOrNull<CharacterBody3D>(requester.ToString());
         if (enemyBody == null) {
-            GD.PrintErr("Enemy body not found");
+            GD.PrintErr("Enemy body not found: 5");
             return;
         }
 

@@ -79,9 +79,9 @@ public partial class Animator : Node {
         statePlayback?.Travel("Start");
     }
 
-    public void PlayAbilities(string animationName) {
+    public void PlayAbilities(string animationName) =>
         PlayAnimation("Abilities", animationName);
-    }
+
     public void ResetAbilities() => ResetAnimation("Abilities");
 
     public void PlayNormal(string animationName) => PlayAnimation("Normal", animationName);

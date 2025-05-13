@@ -1,13 +1,17 @@
-[gd_scene load_steps=24 format=3 uid="uid://doln8mdo418y0"]
+[gd_scene load_steps=32 format=3 uid="uid://doln8mdo418y0"]
 
 [ext_resource type="ArrayMesh" uid="uid://c3lvx0asbupb0" path="res://src/Assets/Level/Serbian/Serbian.obj" id="1_0k8ew"]
+[ext_resource type="PackedScene" uid="uid://c5qdk4qoi1urj" path="res://src/Menu/Osage.tscn" id="1_75gv3"]
+[ext_resource type="PackedScene" uid="uid://x1qqbubmnlyp" path="res://src/Menu/Tanger.tscn" id="2_3kloa"]
 [ext_resource type="PackedScene" uid="uid://b7uggrpfv7dq" path="res://src/Gameplay/Characters/Tanger/Resources/Tanger.tscn" id="2_fdacg"]
 [ext_resource type="Script" uid="uid://cc8p2e1c7lf3c" path="res://src/Gameplay/Core/DeveloperMode.cs" id="2_s3464"]
 [ext_resource type="Theme" uid="uid://gcd6i4cul14f" path="res://src/Assets/Universal.tres" id="3_ak8tf"]
+[ext_resource type="Script" uid="uid://d21pcc2nxijyx" path="res://src/Gameplay/Core/LobbyManager.cs" id="4_7m7by"]
 [ext_resource type="Script" uid="uid://ckfr3q8ybprsl" path="res://src/Gameplay/Core/NetworkManager.cs" id="4_75gv3"]
 [ext_resource type="AudioStream" uid="uid://bx6vkk0olperh" path="res://src/Assets/Audio/Firecrack.wav" id="6_s0om0"]
 [ext_resource type="PackedScene" uid="uid://b2035qfi2b1my" path="res://src/Gameplay/Characters/Osage/Resources/Osage.tscn" id="6_s3464"]
 [ext_resource type="AudioStream" uid="uid://cqu50wphx0ls2" path="res://src/Assets/Audio/Night.mp3" id="7_6i4pf"]
+[ext_resource type="Texture2D" uid="uid://j21u4pmdagg4" path="res://src/Assets/TheMisled.png" id="11_yiqu8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7xwko"]
 sky_top_color = Color(0.063928, 0.118461, 0.20204, 1)
@@ -91,7 +95,19 @@ material = SubResource("StandardMaterial3D_im5pd")
 size = Vector2(1000, 1000)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ynf36"]
-size = Vector3(93.9215, 0.53125, 78.5117)
+size = Vector3(93.9215, 0.53125, 113.769)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_75gv3"]
+size = Vector3(0.690763, 15.214, 78.5117)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s3464"]
+size = Vector3(93.9215, 16.0538, 0.613766)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3kloa"]
+size = Vector3(93.9215, 15.2973, 0.610466)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yiqu8"]
+size = Vector3(0.603817, 16.1442, 78.5117)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fdacg"]
 bg_color = Color(0.0887341, 0.0887341, 0.088734, 1)
@@ -109,11 +125,36 @@ shadow_size = 5
 
 [node name="World" type="Node3D"]
 
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.996573, -0.0731443, 0.0386295, -0.0706307, 0.99552, 0.0628549, -0.0430539, 0.0599111, -0.997275, -48.514, 1.7703, 84.8015)
+fov = 100.0
+size = 0.1
+
+[node name="Subpoint1" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.1644, 0.5, 86.899)
+
+[node name="Osage" parent="Subpoint1" instance=ExtResource("1_75gv3")]
+
+[node name="Subpoint2" type="Node3D" parent="."]
+transform = Transform3D(0.819872, 0, 0.572547, 0, 1, 0, -0.572547, 0, 0.819872, -50.1808, 0.5, 88.219)
+
+[node name="Tanger" parent="Subpoint2" instance=ExtResource("2_3kloa")]
+
+[node name="Subpoint3" type="Node3D" parent="."]
+transform = Transform3D(0.972606, 0, -0.232461, 0, 1, 0, 0.232461, 0, 0.972606, -45.3574, 0.5, 88.1329)
+
+[node name="Tanger" parent="Subpoint3" instance=ExtResource("2_3kloa")]
+
+[node name="Subpoint4" type="Node3D" parent="."]
+transform = Transform3D(0.244478, 0, 0.969655, 0, 1, 0, -0.969655, 0, 0.244478, -54.2967, 0.5, 89.6929)
+
+[node name="Tanger" parent="Subpoint4" instance=ExtResource("2_3kloa")]
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_km1yn")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
-transform = Transform3D(0.544856, 0.748133, 0.37872, -0.676665, 0.12554, 0.725509, 0.495233, -0.651565, 0.574637, 22.5984, 14.669, 2.56851)
+transform = Transform3D(0.222858, -0.904216, 0.364317, -0.676665, 0.12554, 0.725509, -0.701753, -0.408207, -0.583874, 22.5984, 14.669, 2.56851)
 light_color = Color(0.113725, 0.192157, 0.376471, 1)
 shadow_enabled = true
 shadow_opacity = 0.7
@@ -125,7 +166,6 @@ mesh = ExtResource("1_0k8ew")
 surface_material_override/2 = SubResource("StandardMaterial3D_s0om0")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="MapTheForest"]
-visible = false
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="MapTheForest/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.348803, 5.07489, 10.558)
@@ -348,17 +388,140 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 mesh = SubResource("PlaneMesh_im5pd")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="MapTheForest/MeshInstance3D"]
-visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MapTheForest/MeshInstance3D/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.645, -0.2, 36.148)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.645, -0.2, 53.7767)
 shape = SubResource("BoxShape3D_ynf36")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="MapTheForest/MeshInstance3D/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.9704, 7.14137, 36.148)
+shape = SubResource("BoxShape3D_75gv3")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="MapTheForest/MeshInstance3D/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.645, 7.56129, -2.80097)
+shape = SubResource("BoxShape3D_s3464")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="MapTheForest/MeshInstance3D/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.645, 7.18303, 75.0986)
+shape = SubResource("BoxShape3D_3kloa")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="MapTheForest/MeshInstance3D/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.3038, 7.60646, 36.148)
+shape = SubResource("BoxShape3D_yiqu8")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_7m7by")
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+layout_mode = 0
+offset_left = -32.0
+offset_top = 8.0
+offset_right = 262.0
+offset_bottom = 155.0
+texture = ExtResource("11_yiqu8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="TextEdit" parent="Control"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -75.0
+offset_right = 265.0
+offset_bottom = -35.0
+grow_vertical = 0
+theme = ExtResource("3_ak8tf")
+placeholder_text = "Name"
+
+[node name="Code" type="TextEdit" parent="Control"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -63.0
+offset_top = -78.0
+offset_right = 56.0
+offset_bottom = -33.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("3_ak8tf")
+theme_override_font_sizes/font_size = 16
+text = "31415"
+placeholder_text = "Code
+"
+scroll_fit_content_height = true
+scroll_fit_content_width = true
+
+[node name="Hyprs" type="OptionButton" parent="Control"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 29.0
+offset_top = -126.0
+offset_right = 263.0
+offset_bottom = -86.0
+grow_vertical = 0
+theme = ExtResource("3_ak8tf")
+selected = 0
+item_count = 2
+popup/item_0/text = "Tanger"
+popup/item_0/id = 0
+popup/item_1/text = "Osage"
+popup/item_1/id = 1
+
+[node name="RTCode" type="RichTextLabel" parent="Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -58.0
+offset_top = -100.0
+offset_right = 1.0
+offset_bottom = -82.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("3_ak8tf")
+text = "Code"
+
+[node name="Button" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -126.0
+offset_top = -93.0
+offset_right = -30.0
+offset_bottom = -32.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("3_ak8tf")
+theme_override_font_sizes/font_size = 14
+text = "Join"
 
 [node name="Window" type="Window" parent="." node_paths=PackedStringArray("Host", "Join", "Output", "DebugTitle", "Frame", "FPS", "ConnectionStatus", "PlayerName", "Address", "Port", "Hyprs", "NetworkManager")]
 disable_3d = true
 transparent_bg = true
 position = Vector2i(20, 72)
 size = Vector2i(300, 600)
+visible = false
 transient = true
 unresizable = true
 always_on_top = true
@@ -373,7 +536,7 @@ DebugTitle = NodePath("ScrollContainer/VBoxContainer/Title")
 Frame = NodePath("ScrollContainer/VBoxContainer/Frame")
 FPS = NodePath("ScrollContainer/VBoxContainer/FPS")
 ConnectionStatus = NodePath("ScrollContainer/VBoxContainer/ConnStatus")
-PlayerName = NodePath("ScrollContainer/VBoxContainer/Name")
+PlayerName = NodePath("../Control/Name")
 Address = NodePath("ScrollContainer/VBoxContainer/Address")
 Port = NodePath("ScrollContainer/VBoxContainer/Port")
 Hyprs = NodePath("ScrollContainer/VBoxContainer/Hyprs")
@@ -491,12 +654,6 @@ text = "Connection Status:
 Offline
 "
 fit_content = true
-
-[node name="Name" type="TextEdit" parent="Window/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-theme = ExtResource("3_ak8tf")
-placeholder_text = "Name"
 
 [node name="Address" type="TextEdit" parent="Window/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)

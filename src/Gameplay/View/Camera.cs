@@ -1,5 +1,7 @@
 namespace Misled.Gameplay.View;
 
+using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 /// <summary>
@@ -21,19 +23,17 @@ public partial class Camera : Camera3D {
     private float _yaw;
     private float _pitch = 10.0f;
 
-    /// <summary>
-    /// Called when the node enters the scene tree.
-    /// </summary>
+    // 🌟 Touch tracking
+    private Dictionary<int, Vector2> _activeTouches = new();
+    private float _initialPinchDistance = 0f;
+    private float _initialDistance = 0f;
+
     public override void _Ready() {
         _target = GetParent<CharacterBody3D>();
         SetAsTopLevel(true);
         Current = IsMultiplayerAuthority();
     }
 
-    /// <summary>
-    /// Handles input events that are not handled by other controls.
-    /// </summary>
-    /// <param name="event">The input event.</param>
     public override void _UnhandledInput(InputEvent @event) {
         if (!IsMultiplayerAuthority()) {
             return;
@@ -41,23 +41,42 @@ public partial class Camera : Camera3D {
 
         switch (@event) {
             case InputEventMouseMotion motion:
-                HandleMouseMotion(motion);
+                if (Input.MouseMode == Input.MouseModeEnum.Captured) {
+                    HandleMouseMotion(motion);
+                }
                 break;
+
             case InputEventMouseButton { Pressed: true } button:
                 HandleMouseButton(button);
                 break;
+
             case InputEventKey { Pressed: true, Keycode: Key.Escape }:
                 ToggleMouseMode();
                 break;
-            default:
+
+            // 🌟 Touch input
+            case InputEventScreenTouch touch:
+                if (touch.Pressed) {
+                    _activeTouches[touch.Index] = touch.Position;
+                }
+                else {
+                    _activeTouches.Remove(touch.Index);
+                    _initialPinchDistance = 0f; // reset pinch state
+                }
+                break;
+
+            case InputEventScreenDrag drag:
+                _activeTouches[drag.Index] = drag.Position;
+
+                if (_activeTouches.Count == 1) {
+                    Vector2 delta = drag.Relative;
+                    _yaw -= delta.X * HorizontalRotationSpeed * 0.5f;
+                    _pitch = Mathf.Clamp(_pitch + delta.Y * VerticalRotationSpeed * 0.5f, MinPitch, MaxPitch);
+                }
                 break;
         }
     }
 
-    /// <summary>
-    /// Called during the processing step of the main loop.
-    /// </summary>
-    /// <param name="delta">The time elapsed since the previous frame.</param>
     public override void _Process(double delta) {
         if (_target == null) {
             return;
@@ -71,38 +90,45 @@ public partial class Camera : Camera3D {
             return;
         }
 
+        HandleTouchPinchZoom();
         UpdateCameraPosition((float)delta);
     }
 
-    /// <summary>
-    /// Updates the camera position.
-    /// </summary>
-    /// <param name="delta">The time elapsed since the previous frame.</param>
+    private void HandleTouchPinchZoom() {
+        if (_activeTouches.Count == 2) {
+            var touches = _activeTouches.Values.ToArray();
+            float currentDistance = touches[0].DistanceTo(touches[1]);
+
+            if (_initialPinchDistance == 0f) {
+                _initialPinchDistance = currentDistance;
+                _initialDistance = Distance;
+            }
+            else {
+                float deltaDistance = currentDistance - _initialPinchDistance;
+                Distance = Mathf.Clamp(_initialDistance - deltaDistance * 0.01f, MinDistance, MaxDistance);
+            }
+        }
+        else {
+            _initialPinchDistance = 0f;
+        }
+    }
+
     private void UpdateCameraPosition(float delta) {
         var pivot = _target!.GlobalTransform.Origin + PivotOffset;
         var cameraRotation = GetCameraRotation();
         var desiredPosition = pivot + (cameraRotation.Z * -Distance);
 
         var finalPosition = AdjustForObstacles(pivot, desiredPosition);
-
         var smoothedPosition = GlobalTransform.Origin.Lerp(finalPosition, delta * FollowSpeed);
         GlobalTransform = new Transform3D(cameraRotation, smoothedPosition);
         LookAt(pivot, Vector3.Up);
     }
 
-    /// <summary>
-    /// Handles mouse motion events for camera rotation.
-    /// </summary>
-    /// <param name="motion">The mouse motion event.</param>
     private void HandleMouseMotion(InputEventMouseMotion motion) {
         _yaw -= motion.Relative.X * HorizontalRotationSpeed;
         _pitch = Mathf.Clamp(_pitch + (motion.Relative.Y * VerticalRotationSpeed), MinPitch, MaxPitch);
     }
 
-    /// <summary>
-    /// Handles mouse button events for camera zoom.
-    /// </summary>
-    /// <param name="button">The mouse button event.</param>
     private void HandleMouseButton(InputEventMouseButton button) {
         if (button.ButtonIndex == MouseButton.WheelUp) {
             Distance = Mathf.Clamp(Distance - ZoomSpeed, MinDistance, MaxDistance);
@@ -112,28 +138,15 @@ public partial class Camera : Camera3D {
         }
     }
 
-    /// <summary>
-    /// Toggles the mouse capture mode.
-    /// </summary>
     private static void ToggleMouseMode() =>
         Input.MouseMode = Input.MouseMode == Input.MouseModeEnum.Captured
             ? Input.MouseModeEnum.Visible
             : Input.MouseModeEnum.Captured;
 
-    /// <summary>
-    /// Gets the camera rotation as a Basis.
-    /// </summary>
-    /// <returns>The camera rotation.</returns>
     private Basis GetCameraRotation() =>
         new Basis(Vector3.Up, Mathf.DegToRad(_yaw)) *
         new Basis(Vector3.Right, Mathf.DegToRad(_pitch));
 
-    /// <summary>
-    /// Adjusts the camera position to avoid obstacles.
-    /// </summary>
-    /// <param name="from">The starting position.</param>
-    /// <param name="to">The desired position.</param>
-    /// <returns>The adjusted position.</returns>
     private Vector3 AdjustForObstacles(Vector3 from, Vector3 to) {
         var spaceState = GetWorld3D().DirectSpaceState;
         var query = PhysicsRayQueryParameters3D.Create(from, to);
@@ -150,9 +163,5 @@ public partial class Camera : Camera3D {
         return to;
     }
 
-    /// <summary>
-    /// Determines whether this node has multiplayer authority.
-    /// </summary>
-    /// <returns><c>true</c> if this node has multiplayer authority; otherwise, <c>false</c>.</returns>
     private new bool IsMultiplayerAuthority() => _target?.IsMultiplayerAuthority() == true;
 }
