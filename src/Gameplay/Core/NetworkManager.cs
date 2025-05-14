@@ -1,20 +1,19 @@
 namespace Misled.Gameplay.Core;
 
+using System;
 using Godot;
 using Godot.Collections;
 
 public partial class NetworkManager : Node {
     public static NetworkManager? Instance { get; private set; }
 
-    [Signal]
-    public delegate void PlayerConnectedEventHandler(int peerId, Dictionary<string, string> playerInfo);
-    [Signal]
-    public delegate void PlayerDisconnectedEventHandler(int peerId);
+    public event Action<long, Dictionary<string, string>>? PlayerConnected;
+    public event Action<long>? PlayerDisconnected;
 
     [Export]
     public Dictionary<string, PackedScene> CharacterScenes = [];
 
-    public string DefaultServer { get; set; } = "0.0.0.0";
+    public string Address { get; set; } = "127.0.0.1";
     public int Port { get; set; } = 31415;
 
     private Dictionary<long, Dictionary<string, string>> _players = [];
@@ -44,13 +43,13 @@ public partial class NetworkManager : Node {
 
         Multiplayer.MultiplayerPeer = peer;
         _players[1] = _playerInfo;
-        EmitSignal(SignalName.PlayerConnected, 1, _playerInfo);
+        PlayerConnected?.Invoke(1, _playerInfo);
         return Error.Ok;
     }
 
     public Error Join() {
         var peer = new ENetMultiplayerPeer();
-        var error = peer.CreateClient(DefaultServer, Port);
+        var error = peer.CreateClient(Address, Port);
         if (error != Error.Ok) {
             return error;
         }
@@ -62,7 +61,8 @@ public partial class NetworkManager : Node {
     private void OnConnectedToServer() {
         var myId = Multiplayer.GetUniqueId();
         _players[myId] = _playerInfo;
-        EmitSignal(SignalName.PlayerConnected, myId, _playerInfo);
+        PlayerConnected?.Invoke(myId, _playerInfo);
+
     }
 
     private void OnServerDisconnected() {
@@ -77,12 +77,12 @@ public partial class NetworkManager : Node {
     private void RegisterPlayer(Dictionary<string, string> newPlayerInfo) {
         var senderId = Multiplayer.GetRemoteSenderId();
         _players[senderId] = newPlayerInfo;
-        EmitSignal(SignalName.PlayerConnected, senderId, newPlayerInfo);
+        PlayerConnected?.Invoke(senderId, newPlayerInfo);
     }
 
     private void OnPlayerDisconnected(long id) {
         _players.Remove(id);
-        EmitSignal(SignalName.PlayerDisconnected, id);
+        PlayerDisconnected?.Invoke(id);
         RemovePlayerNode(id);
     }
 
@@ -139,4 +139,6 @@ public partial class NetworkManager : Node {
     public void SetPlayerInfo(string key, string value) => _playerInfo[key] = value;
 
     public string? GetPlayerInfo(string key) => _playerInfo.TryGetValue(key, out var value) ? value : null;
+
+    public bool IsServer() => Multiplayer.IsServer();
 }

@@ -76,14 +76,14 @@ public partial class DeveloperMode : Window {
         _state?.ChangeSkillCooldown("Exclusive", 0f);
 
     private void OnHostPressed() {
-        _networkManager!.DefaultServer = Address!.Text;
+        _networkManager!.Address = Address!.Text;
         _networkManager!.Port = Convert.ToInt16(Port!.Text);
         _networkManager!.SetPlayerInfo("Name", PlayerName!.Text);
         _networkManager!.SetPlayerInfo("Hyprs", Hyprs!.GetItemText(Hyprs!.GetSelectedId()));
         _networkManager!.Host();
     }
     private void OnJoinPressed() {
-        _networkManager!.DefaultServer = Address!.Text;
+        _networkManager!.Address = Address!.Text;
         _networkManager!.Port = Convert.ToInt16(Port!.Text);
         _networkManager!.SetPlayerInfo("Name", PlayerName!.Text);
         _networkManager!.SetPlayerInfo("Hyprs", Hyprs!.GetItemText(Hyprs!.GetSelectedId()));

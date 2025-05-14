@@ -92,7 +92,7 @@ public abstract partial class Base : CharacterBody3D {
             HandleParry();
 
             if (_state!.Health < 10000) {
-                _state.RequestHealthChange(100f * dt);
+                _state.RequestHealthChange(10f * dt);
             }
 
             if (Input.IsPhysicalKeyPressed(Key.F10)) {
